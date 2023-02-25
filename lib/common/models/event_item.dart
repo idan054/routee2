@@ -13,9 +13,9 @@ part 'event_item.g.dart';
 class EventItem with _$EventItem {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory EventItem({
-    String? imagePngName,
+    // String? imagePngName,
     String? title,
-    // EventCategory? eventCategory,
+    EventCategory? eventCategory,
     @DateTimeStampConv() DateTime? timestamp,
     String? latitude,
     String? longitude,

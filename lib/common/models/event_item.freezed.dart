@@ -20,9 +20,9 @@ EventItem _$EventItemFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$EventItem {
-  String? get imagePngName => throw _privateConstructorUsedError;
-  String? get title =>
-      throw _privateConstructorUsedError; // EventCategory? eventCategory,
+// String? imagePngName,
+  String? get title => throw _privateConstructorUsedError;
+  EventCategory? get eventCategory => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
   String? get latitude => throw _privateConstructorUsedError;
@@ -42,13 +42,15 @@ abstract class $EventItemCopyWith<$Res> {
       _$EventItemCopyWithImpl<$Res, EventItem>;
   @useResult
   $Res call(
-      {String? imagePngName,
-      String? title,
+      {String? title,
+      EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? timestamp,
       String? latitude,
       String? longitude,
       String? address,
       String? phone});
+
+  $EventCategoryCopyWith<$Res>? get eventCategory;
 }
 
 /// @nodoc
@@ -64,8 +66,8 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? imagePngName = freezed,
     Object? title = freezed,
+    Object? eventCategory = freezed,
     Object? timestamp = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
@@ -73,14 +75,14 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? phone = freezed,
   }) {
     return _then(_value.copyWith(
-      imagePngName: freezed == imagePngName
-          ? _value.imagePngName
-          : imagePngName // ignore: cast_nullable_to_non_nullable
-              as String?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      eventCategory: freezed == eventCategory
+          ? _value.eventCategory
+          : eventCategory // ignore: cast_nullable_to_non_nullable
+              as EventCategory?,
       timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -103,6 +105,18 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
               as String?,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $EventCategoryCopyWith<$Res>? get eventCategory {
+    if (_value.eventCategory == null) {
+      return null;
+    }
+
+    return $EventCategoryCopyWith<$Res>(_value.eventCategory!, (value) {
+      return _then(_value.copyWith(eventCategory: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -113,13 +127,16 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? imagePngName,
-      String? title,
+      {String? title,
+      EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? timestamp,
       String? latitude,
       String? longitude,
       String? address,
       String? phone});
+
+  @override
+  $EventCategoryCopyWith<$Res>? get eventCategory;
 }
 
 /// @nodoc
@@ -133,8 +150,8 @@ class __$$_EventItemCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? imagePngName = freezed,
     Object? title = freezed,
+    Object? eventCategory = freezed,
     Object? timestamp = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
@@ -142,14 +159,14 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? phone = freezed,
   }) {
     return _then(_$_EventItem(
-      imagePngName: freezed == imagePngName
-          ? _value.imagePngName
-          : imagePngName // ignore: cast_nullable_to_non_nullable
-              as String?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      eventCategory: freezed == eventCategory
+          ? _value.eventCategory
+          : eventCategory // ignore: cast_nullable_to_non_nullable
+              as EventCategory?,
       timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -179,8 +196,8 @@ class __$$_EventItemCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_EventItem implements _EventItem {
   const _$_EventItem(
-      {this.imagePngName,
-      this.title,
+      {this.title,
+      this.eventCategory,
       @DateTimeStampConv() this.timestamp,
       this.latitude,
       this.longitude,
@@ -190,11 +207,11 @@ class _$_EventItem implements _EventItem {
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
       _$$_EventItemFromJson(json);
 
-  @override
-  final String? imagePngName;
+// String? imagePngName,
   @override
   final String? title;
-// EventCategory? eventCategory,
+  @override
+  final EventCategory? eventCategory;
   @override
   @DateTimeStampConv()
   final DateTime? timestamp;
@@ -209,7 +226,7 @@ class _$_EventItem implements _EventItem {
 
   @override
   String toString() {
-    return 'EventItem(imagePngName: $imagePngName, title: $title, timestamp: $timestamp, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone)';
+    return 'EventItem(title: $title, eventCategory: $eventCategory, timestamp: $timestamp, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone)';
   }
 
   @override
@@ -217,9 +234,9 @@ class _$_EventItem implements _EventItem {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EventItem &&
-            (identical(other.imagePngName, imagePngName) ||
-                other.imagePngName == imagePngName) &&
             (identical(other.title, title) || other.title == title) &&
+            (identical(other.eventCategory, eventCategory) ||
+                other.eventCategory == eventCategory) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.latitude, latitude) ||
@@ -232,7 +249,7 @@ class _$_EventItem implements _EventItem {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, imagePngName, title, timestamp,
+  int get hashCode => Object.hash(runtimeType, title, eventCategory, timestamp,
       latitude, longitude, address, phone);
 
   @JsonKey(ignore: true)
@@ -251,8 +268,8 @@ class _$_EventItem implements _EventItem {
 
 abstract class _EventItem implements EventItem {
   const factory _EventItem(
-      {final String? imagePngName,
-      final String? title,
+      {final String? title,
+      final EventCategory? eventCategory,
       @DateTimeStampConv() final DateTime? timestamp,
       final String? latitude,
       final String? longitude,
@@ -262,11 +279,11 @@ abstract class _EventItem implements EventItem {
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
 
-  @override
-  String? get imagePngName;
-  @override
+  @override // String? imagePngName,
   String? get title;
-  @override // EventCategory? eventCategory,
+  @override
+  EventCategory? get eventCategory;
+  @override
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override

@@ -7,8 +7,11 @@ part of 'event_item.dart';
 // **************************************************************************
 
 _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
-      imagePngName: json['imagePngName'] as String?,
       title: json['title'] as String?,
+      eventCategory: json['eventCategory'] == null
+          ? null
+          : EventCategory.fromJson(
+              json['eventCategory'] as Map<String, dynamic>),
       timestamp:
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
       latitude: json['latitude'] as String?,
@@ -19,8 +22,8 @@ _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
 
 Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
     <String, dynamic>{
-      'imagePngName': instance.imagePngName,
       'title': instance.title,
+      'eventCategory': instance.eventCategory?.toJson(),
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
       'latitude': instance.latitude,
       'longitude': instance.longitude,

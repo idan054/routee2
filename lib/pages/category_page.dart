@@ -29,7 +29,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: bgColor,
         // centerTitle: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
@@ -56,19 +56,24 @@ class _CategoryPageState extends State<CategoryPage> {
           //     : 'הצטרף לקבוצות קרובות שמיועדות לך (גיל 18)')
           //     .toText(fontSize: 14, color: Colors.grey, bold: true)
           //     .px(15),
-          'כל ה'
-                  '${widget.eventCategory.categoryName}'
-              .toText(fontSize: 14, color: Colors.white, bold: true).px(5),
+          Row(
+            children: [
+              const Spacer(),
+              'כל ה'
+                      '${widget.eventCategory.categoryName}'
+                  .toText(fontSize: 16, color: Colors.white, bold: true).px(5),
+              const SizedBox(width: 5),
+              CircleAvatar(backgroundColor: widget.eventCategory.categoryColor, radius: 3).pOnly(top: 5).testContainer,
+            ],
+          ),
           const SizedBox(height: 10),
           ListView.builder(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
             itemCount: 9,
             itemBuilder: (context, i) {
-              var subSize = 12.0;
-              var titleSize = 14.5;
 
-              return buildEventCard(context, titleSize, subSize, categories[i]);
+              return buildEventCard(context, sampleEvent);
             },
           ),
           const SizedBox(height: 15),

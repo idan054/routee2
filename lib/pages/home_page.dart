@@ -51,23 +51,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
           (isShowLastedEvents
                   // ? 'קבוצות עדכניות אליהם הזמינו אותך'
-                  ? 'הזמנות עדכניות בשבילך'
-                  : 'הזמנות קרובות בשבילך')
+                  ? 'קבוצות עדכניות בשבילך'
+                  : 'קבוצות קרובות בשבילך')
               .toText(fontSize: 22, color: Colors.white38, bold: true)
               .px(15),
 
           Row(
             children: [
-              'לחץ לעדכון'
+              'עדכון'
                   .toText(
-                      fontSize: 14, color: Colors.white38, bold: true, underline: true)
+                      fontSize: 14, color: Colors.white38, bold: true, underline: false)
                   .px(15)
                   .onTap(() {
                 showUpdateDetailsDialog(context);
               }),
               const Spacer(),
-              'קבוצות לגלאי 18, באיזור גדרה'
-                  .toText(fontSize: 14, color: Colors.white38, bold: true)
+              'לגלאי 18, באיזור גדרה'
+                  .toText(fontSize: 14, color: Colors.white38, bold: false)
                   .px(15),
             ],
           ),
@@ -107,9 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ).px(15).onTap(() {
                     _handleGoToCategory(i, color);
                   }),
-                  buildEventCard(context, sampleEvent),
-                  buildEventCard(context, sampleEvent),
-                  buildEventCard(context, sampleEvent),
+                  buildEventCard(context, sampleEvent).px(5),
+                  buildEventCard(context, sampleEvent).px(5),
+                  buildEventCard(context, sampleEvent).px(5),
                 ],
               );
             },

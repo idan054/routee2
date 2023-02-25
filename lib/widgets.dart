@@ -40,7 +40,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
   return Card(
     color: Colors.white12,
     elevation: 0,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
     child: Column(
       children: [
         ListTile(
@@ -73,7 +73,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                'הצטרף'.toText(color: Colors.grey, fontSize: subSize, underline: true),
+                'הצטרף'.toText(color: Colors.grey, fontSize: subSize, bold: true),
                 const SizedBox(width: 5),
                 // Icons.near_me_outlined.icon(color: Colors.grey, size: subSize),
                 const Opacity(

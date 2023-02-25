@@ -24,64 +24,80 @@ void showUpdateDetailsDialog(BuildContext context) {
       var messageController = TextEditingController();
       return AlertDialog(
         backgroundColor: bgColor,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 5),
         content: Directionality(
           textDirection: TextDirection.rtl,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              'ב Around ניתן להזמין ולקבל הזמנות בקלות'
-                  ' של קבוצות מסביבך'
-                  .toText(bold: true, maxLines: 5)
-                  .centerRight,
-              const SizedBox(height: 20),
-              'הפרטים שלך (להתאמה אישית)'.toText().centerRight,
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 55,
-                child: Row(
-                  // shrinkWrap: true,
-                  // scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
+                'ב Around תיצרו ותצטרפו '
+                    'לקבוצות מסביבך'
+                    .toText(bold: true, maxLines: 5)
+                    .centerRight,
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 10,
                   children: [
-                    TextFormField(
-                      controller: emailController,
-                      style: const TextStyle(color: Colors.white70),
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                        counterText: '',
-                        hintText: 'גיל',
-                        hintStyle: const TextStyle(color: Colors.white30),
-                        fillColor: Colors.white,
-                        enabledBorder: fieldBorderDeco,
+                    for (var cat in categories)
+                      Chip(
+                        side: BorderSide(color: cat.categoryColor!, width: 2),
+                        label: '${cat.categoryName}'.toText(fontSize: 12, bold: true),
+                        backgroundColor: bgColor,
                       ),
-                    ).expanded(flex: 30),
-                    const SizedBox(width: 7),
-                    TextFormField(
-                      controller: messageController,
-                      style: const TextStyle(color: Colors.white70),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                        hintText: 'עיר מגורים',
-                        hintStyle: const TextStyle(color: Colors.white30),
-                        fillColor: Colors.white,
-                        enabledBorder: fieldBorderDeco,
-                      ),
-                    ).expanded(flex: 70),
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  // Send them to your email maybe?
-                  var email = emailController.text;
-                  var message = messageController.text;
-                  Navigator.pop(context);
-                },
-                child: 'המשך'.toText(bold: true, color: Colors.purple[500]!),
-              ).centerRight,
-            ],
+                const SizedBox(height: 10),
+                'הפרטים שלך (להתאמה אישית)'.toText().centerRight,
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 55,
+                  child: Row(
+                    // shrinkWrap: true,
+                    // scrollDirection: Axis.horizontal,
+                    children: [
+                      TextFormField(
+                        controller: emailController,
+                        style: const TextStyle(color: Colors.white70),
+                        keyboardType: TextInputType.number,
+                        maxLength: 2,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                          counterText: '',
+                          hintText: 'גיל',
+                          hintStyle: const TextStyle(color: Colors.white30),
+                          fillColor: Colors.white,
+                          enabledBorder: fieldBorderDeco,
+                        ),
+                      ).expanded(flex: 30),
+                      const SizedBox(width: 7),
+                      TextFormField(
+                        controller: messageController,
+                        style: const TextStyle(color: Colors.white70),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                          hintText: 'עיר מגורים',
+                          hintStyle: const TextStyle(color: Colors.white30),
+                          fillColor: Colors.white,
+                          enabledBorder: fieldBorderDeco,
+                        ),
+                      ).expanded(flex: 70),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: () {
+                    // Send them to your email maybe?
+                    var email = emailController.text;
+                    var message = messageController.text;
+                    Navigator.pop(context);
+                  },
+                  child: 'המשך'.toText(bold: true, color: Colors.purple[500]!),
+                ).centerRight,
+              ],
+            ),
           ),
         ),
       );

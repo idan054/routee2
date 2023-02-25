@@ -63,7 +63,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       '${widget.eventCategory.categoryName}'
                   .toText(fontSize: 16, color: Colors.white, bold: true).px(5),
               const SizedBox(width: 5),
-              CircleAvatar(backgroundColor: widget.eventCategory.categoryColor, radius: 3).pOnly(top: 5).testContainer,
+              CircleAvatar(backgroundColor: widget.eventCategory.categoryColor, radius: 3).pOnly(top: 5),
             ],
           ),
           const SizedBox(height: 10),

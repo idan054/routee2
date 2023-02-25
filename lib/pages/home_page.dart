@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           const SizedBox(height: 15),
 
+
           (isShowLastedEvents
           // ? 'קבוצות עדכניות אליהם הזמינו אותך'
               ? 'הצטרף לקבוצות עדכניות שמיועדות לך (גיל 18)'

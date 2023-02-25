@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 
 var fieldBorderDeco = OutlineInputBorder(
     borderSide: const BorderSide(color: Colors.white38, width: 2),
-    borderRadius: BorderRadius.circular(5));
+    borderRadius: BorderRadius.circular(8));
+
+var fieldDisableDeco = OutlineInputBorder(
+    borderSide: const BorderSide(color: Colors.transparent, width: 0),
+    borderRadius: BorderRadius.circular(8));
 
 // var fieldFocusBorderDeco = OutlineInputBorder(
 //     borderSide: const BorderSide(color: Colors.grey, width: 2.5),
@@ -27,26 +31,30 @@ void showUpdateDetailsDialog(BuildContext context) {
         insetPadding: const EdgeInsets.symmetric(horizontal: 5),
         content: Directionality(
           textDirection: TextDirection.rtl,
-          child: SingleChildScrollView(
+          child:
+          SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
                 'ב Around תיצרו ותצטרפו '
                     'לקבוצות מסביבך'
-                    .toText(bold: true, maxLines: 5)
+                    .toText(bold: true, maxLines: 5, fontSize: 16)
                     .centerRight,
                 const SizedBox(height: 10),
-                Wrap(
-                  spacing: 10,
-                  children: [
-                    for (var cat in categories)
-                      Chip(
-                        side: BorderSide(color: cat.categoryColor!, width: 2),
-                        label: '${cat.categoryName}'.toText(fontSize: 12, bold: true),
-                        backgroundColor: bgColor,
-                      ),
-                  ],
+                Opacity(
+                  opacity: .8,
+                  child: Wrap(
+                    spacing: 10,
+                    children: [
+                      for (var cat in categories)
+                        Chip(
+                          side: BorderSide(color: cat.categoryColor!, width: 2),
+                          label: '${cat.categoryName}'.toText(fontSize: 12, bold: true),
+                          backgroundColor: bgColor,
+                        ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 'הפרטים שלך (להתאמה אישית)'.toText().centerRight,

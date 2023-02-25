@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "197030308228",
+    "project_id": "around-proj",
+    "storage_bucket": "around-proj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197030308228:android:8435e452e66ee473ca15d1",
+        "android_client_info": {
+          "package_name": "com.biton.around.around"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197030308228-1kp2sptipei3sstaid7quj0ve8q56lc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-9fkVAC-k5CJKF6FgHlv3_HwOlfFYNYc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197030308228-1kp2sptipei3sstaid7quj0ve8q56lc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

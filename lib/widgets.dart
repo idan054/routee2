@@ -28,14 +28,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
   var subSize = 12.0;
   var titleSize = 14.5;
   var eventCategory = eventItem.eventCategory;
-
-  // var time = intl.DateFormat('MMMM d, y',).format(eventItem.timestamp!);
-  var time = intl.DateFormat('EEEE ב ' 'hh:mm' ' (dd/MM)',).format(eventItem.timestamp!);
-  if (eventItem.timestamp!.day == DateTime.now().day &&
-      eventItem.timestamp!.month == DateTime.now().month &&
-      eventItem.timestamp!.year == DateTime.now().year) {
-    time = intl.DateFormat('היום ב ' 'hh:mm',).format(eventItem.timestamp!);
-  }
+  var time = timeFormat(eventItem.timestamp!).toString();
 
   return Card(
     color: Colors.white12,
@@ -107,4 +100,22 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
     // Todo Add Go To Whatsapp
     print(eventItem.phone);
   }, radius: 5);
+}
+
+String? timeFormat(DateTime timestamp, {bool withDay = true}) {
+  var time = intl.DateFormat(withDay
+          ? 'EEEE ב '
+              'HH:mm'
+              ' (dd/MM)'
+          : 'dd/MM ' 'ב HH:mm ')
+      .format(timestamp);
+  if (timestamp.day == DateTime.now().day &&
+      timestamp.month == DateTime.now().month &&
+      timestamp.year == DateTime.now().year) {
+    time = intl.DateFormat(
+      'היום ב ' 'HH:mm',
+    ).format(timestamp);
+    return time;
+  }
+  return time;
 }

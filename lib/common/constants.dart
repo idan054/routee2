@@ -35,7 +35,7 @@ var categories = [
   EventCategory(
       categoryType: CategoryType.weekend,
       // categoryName: 'קבוצות 18-24 ליציאה בסופש',
-      categoryName: 'ליציאה בסופש',
+      categoryName: 'ליציאות בסופש',
       categoryColor: categoryColors[0],
       coverImagePath: 'assets/covers/weekend.png'),
   EventCategory(

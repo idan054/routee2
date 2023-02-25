@@ -7,6 +7,7 @@ import '../gen/assets.gen.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'category_page.dart';
+import 'create_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -28,13 +29,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
-            const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
-            'Around'.toText(bold: true, fontSize: 18),
-            const Spacer(),
-            // 'קבוצות עדכניות'.toText(bold: true, fontSize: 18),
-            // const SizedBox(width: 5),
-            //
             buildModeButton(
               isShowLastedEvents,
               onPressed: () {
@@ -42,6 +36,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {});
               },
             ).rtl,
+            // 'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
+            const Spacer(),
+            const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
+            'Around'.toText(bold: true, fontSize: 18),
+            // 'קבוצות עדכניות'.toText(bold: true, fontSize: 18),
+            // const SizedBox(width: 5),
+            //
           ],
         ),
       ),
@@ -119,7 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: bgColor,
         child: Assets.addOnlyWhite.image(),
-        onPressed: () {},
+        onPressed: () {
+          _handleCreateEvent();
+        },
       ),
     );
   }
@@ -130,6 +133,13 @@ class _MyHomePageState extends State<MyHomePage> {
       MaterialPageRoute(
           builder: (context) =>
               CategoryPage(categories[i].copyWith(categoryColor: color))),
+    );
+  }
+
+  void _handleCreateEvent() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreatePage()),
     );
   }
 }

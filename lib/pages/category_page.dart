@@ -26,59 +26,67 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: bgColor,
-      appBar: AppBar(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
         backgroundColor: bgColor,
-        // centerTitle: true,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 30),
-            // 'Around'.toText(bold: true, fontSize: 14),
-            const Spacer(),
-            buildModeButton(
-              isShowLastedEvents,
-              onPressed: () {
-                isShowLastedEvents = !isShowLastedEvents;
-                setState(() {});
-              },
-            ).rtl,
-          ],
-        ),
-      ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 15),
-          // (isShowLastedEvents
-          // // ? 'קבוצות עדכניות אליהם הזמינו אותך'
-          //     ? 'הצטרף לקבוצות עדכניות שמיועדות לך (גיל 18)'
-          //     : 'הצטרף לקבוצות קרובות שמיועדות לך (גיל 18)')
-          //     .toText(fontSize: 14, color: Colors.grey, bold: true)
-          //     .px(15),
-          Row(
+        appBar: AppBar(
+          backgroundColor: bgColor,
+          // centerTitle: true,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 30),
+              // 'Around'.toText(bold: true, fontSize: 14),
+              // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
               const Spacer(),
-              'כל ה'
-                      '${widget.eventCategory.categoryName}'
-                  .toText(fontSize: 16, color: Colors.white, bold: true).px(5),
-              const SizedBox(width: 5),
-              CircleAvatar(backgroundColor: widget.eventCategory.categoryColor, radius: 3).pOnly(top: 5),
+              buildModeButton(
+                isShowLastedEvents,
+                onPressed: () {
+                  isShowLastedEvents = !isShowLastedEvents;
+                  setState(() {});
+                },
+              ).rtl,
+              // const SizedBox(width: 5),
             ],
           ),
-          const SizedBox(height: 10),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            itemCount: 9,
-            itemBuilder: (context, i) {
+        ),
+        body: Directionality(
+          textDirection: TextDirection.ltr,
+          child: ListView(
+            children: [
+              const SizedBox(height: 15),
+              // (isShowLastedEvents
+              // // ? 'קבוצות עדכניות אליהם הזמינו אותך'
+              //     ? 'הצטרף לקבוצות עדכניות שמיועדות לך (גיל 18)'
+              //     : 'הצטרף לקבוצות קרובות שמיועדות לך (גיל 18)')
+              //     .toText(fontSize: 14, color: Colors.grey, bold: true)
+              //     .px(15),
+              Row(
+                children: [
+                  const Spacer(),
+                  'כל הקבוצות '
+                          '${widget.eventCategory.categoryName}'
+                      .toText(fontSize: 16, color: Colors.white, bold: true).px(5),
+                  const SizedBox(width: 5),
+                  CircleAvatar(backgroundColor: widget.eventCategory.categoryColor, radius: 3).pOnly(top: 5),
+                ],
+              ),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemCount: 9,
+                itemBuilder: (context, i) {
 
-              return buildEventCard(context, sampleEvent);
-            },
-          ),
-          const SizedBox(height: 15),
-        ],
-      ).px(15),
+                  return buildEventCard(context, sampleEvent);
+                },
+              ),
+              const SizedBox(height: 15),
+            ],
+          ).px(15),
+        ),
+      ),
     );
   }
 }

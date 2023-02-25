@@ -157,12 +157,12 @@ class _CreatePageState extends State<CreatePage> {
       style: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white70)),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-        hintText: hintText,
-        hintStyle: GoogleFonts.openSans(
+        labelText: hintText,
+        labelStyle: GoogleFonts.openSans(
             textStyle:
                 const TextStyle(color: Colors.white54, fontWeight: FontWeight.bold)),
         fillColor: Colors.white12,
-        filled: !enabled,
+        // filled: !enabled,
         disabledBorder: fieldDisableDeco,
         enabledBorder: fieldBorderDeco,
       ),

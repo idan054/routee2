@@ -8,7 +8,8 @@ var fieldBorderDeco = OutlineInputBorder(
     borderRadius: BorderRadius.circular(8));
 
 var fieldDisableDeco = OutlineInputBorder(
-    borderSide: const BorderSide(color: Colors.transparent, width: 0),
+    // borderSide: const BorderSide(color: Colors.transparent, width: 0),
+    borderSide: const BorderSide(color: Colors.white38, width: 2),
     borderRadius: BorderRadius.circular(8));
 
 // var fieldFocusBorderDeco = OutlineInputBorder(

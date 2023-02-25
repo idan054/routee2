@@ -3,6 +3,7 @@ import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
 import 'package:flutter/material.dart';
 import '../common/constants.dart';
+import '../common/models/event_category.dart';
 import '../gen/assets.gen.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
@@ -18,6 +19,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isShowLastedEvents = true;
+  int? sValue;
+  int? catIndex;
+  EventCategory? selectedCategory;
+  ScrollController tagsController = ScrollController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => tagsController.jumpTo(999.0));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +87,39 @@ class _MyHomePageState extends State<MyHomePage> {
           // 'קבוצות שהזמינו אותך להצטרף אליהם (:'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
           // 'הזמנות קרובות אלייך לבני גיל 19'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
           // 'הזמנות לקבוצות עבורך'.toText(fontSize: 16),
+          const SizedBox(height: 15),
+
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: tagsController,
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: List<Widget>.generate(
+                  categories.length,
+                  (int i) {
+                    var cat = categories[i];
+                    return ChoiceChip(
+                      label: '${cat.categoryName}'
+                          .toText(fontSize: 14, bold: true, color: Colors.white),
+                      side: BorderSide(color: cat.categoryColor!, width: 2),
+                      selected: sValue == i,
+                      backgroundColor: bgColor,
+                      selectedColor: cat.categoryColor!,
+                      onSelected: (bool selected) {
+                        // sValue = selected ? i : null;
+                        selectedCategory = cat;
+                        // setState(() {});
+                        _handleGoToCategory(null, null, eventCategory: selectedCategory);
+                      },
+                    ).px(3.5);
+                  },
+                ).toList(),
+              ).px(15),
+            ),
+          ),
+
           ListView.builder(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
@@ -127,12 +171,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _handleGoToCategory(int i, Color color) {
+  void _handleGoToCategory(int? i, Color? color, {EventCategory? eventCategory}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              CategoryPage(categories[i].copyWith(categoryColor: color))),
+          builder: (context) => CategoryPage(
+              eventCategory ?? categories[i!].copyWith(categoryColor: color))),
     );
   }
 

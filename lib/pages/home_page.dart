@@ -4,6 +4,7 @@ import 'package:around/common/widget_ext.dart';
 import 'package:flutter/material.dart';
 import '../common/constants.dart';
 import '../gen/assets.gen.dart';
+import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'category_page.dart';
 
@@ -50,11 +51,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
           (isShowLastedEvents
                   // ? 'קבוצות עדכניות אליהם הזמינו אותך'
-                  ? 'הזמנות עדכניות בשבילך (גיל 18)'
-                  : 'הזמנות קרובות בשבילך (גיל 18)')
-              .toText(fontSize: 20, color: Colors.grey, bold: true)
-              .px(15)
-              .py(5),
+                  ? 'הזמנות עדכניות בשבילך'
+                  : 'הזמנות קרובות בשבילך')
+              .toText(fontSize: 22, color: Colors.white38, bold: true)
+              .px(15),
+
+          Row(
+            children: [
+              'לחץ לעדכון'
+                  .toText(
+                      fontSize: 14, color: Colors.white38, bold: true, underline: true)
+                  .px(15)
+                  .onTap(() {
+                showUpdateDetailsDialog(context);
+              }),
+              const Spacer(),
+              'קבוצות לגלאי 18, באיזור גדרה'
+                  .toText(fontSize: 14, color: Colors.white38, bold: true)
+                  .px(15),
+            ],
+          ),
 
           // 'קבוצות שהזמינו אותך להצטרף אליהם (:'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
           // 'הזמנות קרובות אלייך לבני גיל 19'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),

@@ -24,11 +24,15 @@ mixin _$EventItem {
   String? get title => throw _privateConstructorUsedError;
   EventCategory? get eventCategory => throw _privateConstructorUsedError;
   @DateTimeStampConv()
-  DateTime? get timestamp => throw _privateConstructorUsedError;
+  DateTime? get eventAt => throw _privateConstructorUsedError;
+  @DateTimeStampConv()
+  DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get latitude => throw _privateConstructorUsedError;
   String? get longitude => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
+  int? get maxAge => throw _privateConstructorUsedError;
+  int? get minAge => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,11 +48,14 @@ abstract class $EventItemCopyWith<$Res> {
   $Res call(
       {String? title,
       EventCategory? eventCategory,
-      @DateTimeStampConv() DateTime? timestamp,
+      @DateTimeStampConv() DateTime? eventAt,
+      @DateTimeStampConv() DateTime? createdAt,
       String? latitude,
       String? longitude,
       String? address,
-      String? phone});
+      String? phone,
+      int? maxAge,
+      int? minAge});
 
   $EventCategoryCopyWith<$Res>? get eventCategory;
 }
@@ -68,11 +75,14 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   $Res call({
     Object? title = freezed,
     Object? eventCategory = freezed,
-    Object? timestamp = freezed,
+    Object? eventAt = freezed,
+    Object? createdAt = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
     Object? address = freezed,
     Object? phone = freezed,
+    Object? maxAge = freezed,
+    Object? minAge = freezed,
   }) {
     return _then(_value.copyWith(
       title: freezed == title
@@ -83,9 +93,13 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.eventCategory
           : eventCategory // ignore: cast_nullable_to_non_nullable
               as EventCategory?,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
+      eventAt: freezed == eventAt
+          ? _value.eventAt
+          : eventAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       latitude: freezed == latitude
           ? _value.latitude
@@ -103,6 +117,14 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
+      maxAge: freezed == maxAge
+          ? _value.maxAge
+          : maxAge // ignore: cast_nullable_to_non_nullable
+              as int?,
+      minAge: freezed == minAge
+          ? _value.minAge
+          : minAge // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -129,11 +151,14 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
   $Res call(
       {String? title,
       EventCategory? eventCategory,
-      @DateTimeStampConv() DateTime? timestamp,
+      @DateTimeStampConv() DateTime? eventAt,
+      @DateTimeStampConv() DateTime? createdAt,
       String? latitude,
       String? longitude,
       String? address,
-      String? phone});
+      String? phone,
+      int? maxAge,
+      int? minAge});
 
   @override
   $EventCategoryCopyWith<$Res>? get eventCategory;
@@ -152,11 +177,14 @@ class __$$_EventItemCopyWithImpl<$Res>
   $Res call({
     Object? title = freezed,
     Object? eventCategory = freezed,
-    Object? timestamp = freezed,
+    Object? eventAt = freezed,
+    Object? createdAt = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
     Object? address = freezed,
     Object? phone = freezed,
+    Object? maxAge = freezed,
+    Object? minAge = freezed,
   }) {
     return _then(_$_EventItem(
       title: freezed == title
@@ -167,9 +195,13 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.eventCategory
           : eventCategory // ignore: cast_nullable_to_non_nullable
               as EventCategory?,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
+      eventAt: freezed == eventAt
+          ? _value.eventAt
+          : eventAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       latitude: freezed == latitude
           ? _value.latitude
@@ -187,6 +219,14 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
+      maxAge: freezed == maxAge
+          ? _value.maxAge
+          : maxAge // ignore: cast_nullable_to_non_nullable
+              as int?,
+      minAge: freezed == minAge
+          ? _value.minAge
+          : minAge // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -198,11 +238,14 @@ class _$_EventItem implements _EventItem {
   const _$_EventItem(
       {this.title,
       this.eventCategory,
-      @DateTimeStampConv() this.timestamp,
+      @DateTimeStampConv() this.eventAt,
+      @DateTimeStampConv() this.createdAt,
       this.latitude,
       this.longitude,
       this.address,
-      this.phone});
+      this.phone,
+      this.maxAge,
+      this.minAge});
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
       _$$_EventItemFromJson(json);
@@ -214,7 +257,10 @@ class _$_EventItem implements _EventItem {
   final EventCategory? eventCategory;
   @override
   @DateTimeStampConv()
-  final DateTime? timestamp;
+  final DateTime? eventAt;
+  @override
+  @DateTimeStampConv()
+  final DateTime? createdAt;
   @override
   final String? latitude;
   @override
@@ -223,10 +269,14 @@ class _$_EventItem implements _EventItem {
   final String? address;
   @override
   final String? phone;
+  @override
+  final int? maxAge;
+  @override
+  final int? minAge;
 
   @override
   String toString() {
-    return 'EventItem(title: $title, eventCategory: $eventCategory, timestamp: $timestamp, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone)';
+    return 'EventItem(title: $title, eventCategory: $eventCategory, eventAt: $eventAt, createdAt: $createdAt, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone, maxAge: $maxAge, minAge: $minAge)';
   }
 
   @override
@@ -237,20 +287,23 @@ class _$_EventItem implements _EventItem {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.eventCategory, eventCategory) ||
                 other.eventCategory == eventCategory) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp) &&
+            (identical(other.eventAt, eventAt) || other.eventAt == eventAt) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
             (identical(other.address, address) || other.address == address) &&
-            (identical(other.phone, phone) || other.phone == phone));
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.maxAge, maxAge) || other.maxAge == maxAge) &&
+            (identical(other.minAge, minAge) || other.minAge == minAge));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, eventCategory, timestamp,
-      latitude, longitude, address, phone);
+  int get hashCode => Object.hash(runtimeType, title, eventCategory, eventAt,
+      createdAt, latitude, longitude, address, phone, maxAge, minAge);
 
   @JsonKey(ignore: true)
   @override
@@ -270,11 +323,14 @@ abstract class _EventItem implements EventItem {
   const factory _EventItem(
       {final String? title,
       final EventCategory? eventCategory,
-      @DateTimeStampConv() final DateTime? timestamp,
+      @DateTimeStampConv() final DateTime? eventAt,
+      @DateTimeStampConv() final DateTime? createdAt,
       final String? latitude,
       final String? longitude,
       final String? address,
-      final String? phone}) = _$_EventItem;
+      final String? phone,
+      final int? maxAge,
+      final int? minAge}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -285,7 +341,10 @@ abstract class _EventItem implements EventItem {
   EventCategory? get eventCategory;
   @override
   @DateTimeStampConv()
-  DateTime? get timestamp;
+  DateTime? get eventAt;
+  @override
+  @DateTimeStampConv()
+  DateTime? get createdAt;
   @override
   String? get latitude;
   @override
@@ -294,6 +353,10 @@ abstract class _EventItem implements EventItem {
   String? get address;
   @override
   String? get phone;
+  @override
+  int? get maxAge;
+  @override
+  int? get minAge;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

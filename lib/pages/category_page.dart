@@ -84,7 +84,9 @@ class _CategoryPageState extends State<CategoryPage> {
               ),
               const SizedBox(height: 15),
             ],
-          ).px(15),
+          )
+              .px(12)
+          ,
         ),
       ),
     );

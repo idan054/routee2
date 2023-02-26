@@ -28,7 +28,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
   var subSize = 12.0;
   var titleSize = 14.5;
   var eventCategory = eventItem.eventCategory;
-  var time = timeFormat(eventItem.timestamp!).toString();
+  var time = timeFormat(eventItem.eventAt!).toString();
 
   return Card(
     color: Colors.white12,
@@ -59,7 +59,9 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
                 image: AssetImage('${eventCategory?.coverImagePath}'), fit: BoxFit.cover),
           ).rounded(radius: 7),
           // isThreeLine: true,
-        ),
+        )
+            // .sizedBox(null, 60)
+        ,
         Row(
           children: [
             const SizedBox(width: 15),
@@ -86,7 +88,8 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
               children: [
                 eventItem.address
                     .toString()
-                    .toText(color: Colors.grey, fontSize: subSize),
+                    .toText(color: Colors.grey, fontSize: subSize)
+                    .sizedBox(160, null),
                 const SizedBox(width: 3),
                 Icons.place_outlined.icon(color: Colors.grey, size: subSize),
               ],
@@ -95,7 +98,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
           ],
         ),
       ],
-    ).pOnly(bottom: 10, top: 10),
+    ).pOnly(bottom: 10),
   ).onTap(() {
     // Todo Add Go To Whatsapp
     print(eventItem.phone);

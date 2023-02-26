@@ -2,10 +2,14 @@ import 'dart:math';
 import 'package:around/common/models/event_category.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../common/constants.dart';
+import '../common/database.dart';
+import '../common/google_location_complete.dart';
+import '../common/models/address_result.dart';
 import '../common/models/event_item.dart';
 import '../gen/assets.gen.dart';
 import '../update_details_dialog.dart';
@@ -20,13 +24,18 @@ class CreatePage extends StatefulWidget {
 }
 
 class _CreatePageState extends State<CreatePage> {
+  RangeValues _currentRangeValues = const RangeValues(16, 24);
   var titleController = TextEditingController();
   var dateTimeController = TextEditingController();
   var phoneController = TextEditingController();
+  var locationController = TextEditingController();
+  bool isErrFound = false;
   int? sValue;
   int? catIndex;
   EventCategory? selectedCategory;
   DateTime? selectedDateTime;
+  AddressResult? selectedAddress;
+  List<AddressResult> suggestions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +50,18 @@ class _CreatePageState extends State<CreatePage> {
             children: [
               // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
               // 'ב Around תיצרו ותצטרפו ' 'לקבוצות מסביבך'.toText(bold: true, maxLines: 5, fontSize: 16).centerRight,
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
+              if (isErrFound)
+                'אנא מלא את כל הפרטים'
+                    .toText(bold: true, fontSize: 16, color: Colors.red)
+                    .center,
+              const SizedBox(height: 15),
 
-              _buildTextFormField('מה בתכנון?', titleController),
+              buildTextFormField('מה בתכנון?', titleController),
               const SizedBox(height: 15),
               Row(
                 children: [
-                  _buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
+                  buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
                       .onTap(() async {
                     selectedDateTime = await showOmniDateTimePicker(
                       context: context,
@@ -60,42 +74,75 @@ class _CreatePageState extends State<CreatePage> {
                     setState(() {});
                   }).expanded(),
                   const SizedBox(width: 10),
-                  _buildTextFormField('איפה נפגש?', null).expanded(),
+                  buildTextFormField(
+                    'איפה נפגש?',
+                    locationController,
+                    onChanged: (value) async {
+                      suggestions = await searchAddress(value) ?? [];
+                      setState(() {});
+                    },
+                  ).expanded(),
                 ],
               ),
+
+              Column(
+                children: [
+                  if (suggestions.isNotEmpty) const SizedBox(height: 10),
+                  for (var sug in suggestions)
+                    Card(
+                      color: Colors.white38,
+                      child: ListTile(title: '${sug.name}'.toText(bold: true)),
+                    ).onTap(() async {
+                      suggestions = [];
+                      locationController.text = sug.name.toString();
+                      FocusScope.of(context).unfocus();
+                      setState(() {});
+                      selectedAddress = await getDetailsFromPlaceId(sug);
+                    }),
+                ],
+              ),
+
               const SizedBox(height: 15),
-              _buildTextFormField('ווטאספ לבקשות הצטרפות', phoneController),
+              buildTextFormField(
+                'ווטאספ לבקשות הצטרפות',
+                phoneController,
+                keyboardType: TextInputType.number,
+              ),
               const SizedBox(height: 5),
               " לדוגמא: 0545551234"
                   .toText(color: Colors.white54, fontSize: 13)
                   .centerRight,
+              const SizedBox(height: 25),
+              Row(
+                children: [
+                  (" מיועד לגיל ${_currentRangeValues.start.round()}")
+                      .toText(color: Colors.white54, fontSize: 13, bold: true),
+                  const Spacer(),
+                  (" עד ${_currentRangeValues.end.round()}")
+                      .toText(color: Colors.white54, fontSize: 13, bold: true),
+                ],
+              ).px(22),
+              RangeSlider(
+                values: _currentRangeValues,
+                min: 10,
+                max: 60,
+                divisions: 25,
+                // labels: RangeLabels(
+                //   _currentRangeValues.start.round().toString(),
+                //   _currentRangeValues.end.round().toString(),
+                // ),
+                onChanged: (RangeValues values) {
+                  setState(() {
+                    _currentRangeValues = values;
+                  });
+                },
+              ),
               const SizedBox(height: 15),
               'מטרת הקבוצה'.toText(bold: true, fontSize: 16).centerRight,
               const SizedBox(height: 15),
               buildTags(),
+              // const SizedBox(height: 10),
               const SizedBox(height: 10),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  if (selectedDateTime == null ||
-                      selectedCategory == null ||
-                      phoneController.text.length != 10 ||
-                      titleController.text.isEmpty) {
-                    return;
-                  }
-                  var newEvent = EventItem(
-                    title: titleController.text,
-                    timestamp: selectedDateTime,
-                    phone: phoneController.text,
-                    eventCategory: selectedCategory,
-                    address: 'חבקוק 114, גדרה',
-                    latitude: '433224',
-                    longitude: '334241',
-                  );
-                  Navigator.pop(context);
-                },
-                child: 'צור קבוצה'.toText(bold: true, color: Colors.purple[500]!),
-              ),
             ],
           ).px(10),
         ),
@@ -118,6 +165,41 @@ class _CreatePageState extends State<CreatePage> {
           'קבוצה חדשה'.toText(bold: true, fontSize: 18),
           const Spacer(),
           const SizedBox(width: 50),
+
+          TextButton(
+            onPressed: () {
+              if (selectedDateTime == null ||
+                  selectedCategory == null ||
+                  selectedAddress == null ||
+                  phoneController.text.length != 10 ||
+                  locationController.text.isEmpty ||
+                  titleController.text.isEmpty) {
+                isErrFound = true;
+                setState(() {});
+                return;
+              }
+              var newEvent = EventItem(
+                title: titleController.text,
+                eventAt: selectedDateTime,
+                createdAt: DateTime.now(),
+                phone: phoneController.text,
+                eventCategory: selectedCategory,
+                address: selectedAddress?.name.toString(),
+                latitude: selectedAddress?.lat,
+                longitude: selectedAddress?.lng,
+                minAge: _currentRangeValues.start.round(),
+                maxAge: _currentRangeValues.start.round(),
+              );
+
+              print('newEvent.toJson() ${newEvent.toJson()}');
+              Database.updateFirestore(
+                collection: 'events',
+                toJson: newEvent.toJson(),
+              );
+              Navigator.pop(context);
+            },
+            child: 'יצירה'.toText(bold: true, color: Colors.purple[500]!),
+          ),
           //
         ],
       ),
@@ -148,24 +230,34 @@ class _CreatePageState extends State<CreatePage> {
       ).toList(),
     );
   }
+}
 
-  Widget _buildTextFormField(String hintText, TextEditingController? controller,
-      {bool enabled = true}) {
-    return TextFormField(
-      enabled: enabled,
-      controller: controller,
-      style: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white70)),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-        labelText: hintText,
-        labelStyle: GoogleFonts.openSans(
-            textStyle:
-                const TextStyle(color: Colors.white54, fontWeight: FontWeight.bold)),
-        fillColor: Colors.white12,
-        // filled: !enabled,
-        disabledBorder: fieldDisableDeco,
-        enabledBorder: fieldBorderDeco,
-      ),
-    );
-  }
+InputDecoration fieldInputDeco(hintText) {
+  return InputDecoration(
+    contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+    labelText: hintText,
+    labelStyle: GoogleFonts.openSans(
+        textStyle: const TextStyle(color: Colors.white54, fontWeight: FontWeight.bold)),
+    fillColor: Colors.white12,
+    // filled: !enabled,
+    disabledBorder: fieldDisableDeco,
+    enabledBorder: fieldBorderDeco,
+  );
+}
+
+Widget buildTextFormField(
+  String hintText,
+  TextEditingController? controller, {
+  bool enabled = true,
+  ValueChanged<String>? onChanged,
+  TextInputType? keyboardType,
+}) {
+  return TextFormField(
+    keyboardType: keyboardType,
+    enabled: enabled,
+    controller: controller,
+    onChanged: onChanged,
+    style: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white70)),
+    decoration: fieldInputDeco(hintText),
+  );
 }

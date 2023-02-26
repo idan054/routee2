@@ -67,12 +67,20 @@ class Assets {
       AssetGenImage('assets/add-with-bg.png');
   static const AssetGenImage appIcon = AssetGenImage('assets/app_icon.png');
   static const $AssetsCoversGen covers = $AssetsCoversGen();
+  static const AssetGenImage tagsX = AssetGenImage('assets/tagsX.png');
   static const AssetGenImage whatsappXxl =
       AssetGenImage('assets/whatsapp-xxl.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [gPSIconWhite, addOnlyX, addOnlyWhite, addWithBg, appIcon, whatsappXxl];
+  List<AssetGenImage> get values => [
+        gPSIconWhite,
+        addOnlyX,
+        addOnlyWhite,
+        addWithBg,
+        appIcon,
+        tagsX,
+        whatsappXxl
+      ];
 }
 
 class AssetGenImage {

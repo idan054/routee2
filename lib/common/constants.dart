@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
 const bgColor = Color(0xff1d1b31);
+
+class UserData {
+  int? age;
+  AddressResult? address;
+
+  UserData(
+    this.age,
+    this.address,
+  );
+}
 
 var categoryColors = const [
   Color(0xffCC59E9),
@@ -13,7 +24,6 @@ var categoryColors = const [
   Color(0xffFFA800),
   Color(0xff00B4D3),
   Color(0xffA80292),
-
   Color(0xff7ADA00),
 ];
 
@@ -90,7 +100,8 @@ var categories = [
 
 var sampleEvent = EventItem(
   title: 'באולינג בקניון של רחובות כולם מוזמנים',
-  timestamp: DateTime.now(),
+  eventAt: DateTime.now(),
+  createdAt: DateTime.now(),
   address: 'חבקוק 114, גדרה',
   eventCategory: categories.first,
   latitude: '433224',

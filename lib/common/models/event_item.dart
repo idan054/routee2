@@ -16,11 +16,14 @@ class EventItem with _$EventItem {
     // String? imagePngName,
     String? title,
     EventCategory? eventCategory,
-    @DateTimeStampConv() DateTime? timestamp,
+    @DateTimeStampConv() DateTime? eventAt,
+    @DateTimeStampConv() DateTime? createdAt,
     String? latitude,
     String? longitude,
     String? address,
     String? phone,
+    int? maxAge,
+    int? minAge,
 
   }) = _EventItem;
 

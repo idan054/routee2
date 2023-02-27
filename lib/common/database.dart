@@ -44,6 +44,7 @@ class FsAdvanced {
 
   //~ The 3 start soon events of each category:
   static Future<List<EventItem>> getHomeEvents(int age) async {
+    print('START: getHomeEvents()');
     List eventDocs = [];
     List<EventItem> events = [];
     for (var category in categories) {
@@ -52,6 +53,7 @@ class FsAdvanced {
           .orderBy('eventAt', descending: true)
           .where('eventAt', isGreaterThanOrEqualTo: DateTime.now()) // Hide DONE events
           .where('eventCategory.categoryType', isEqualTo: category.categoryType?.name)
+          .where('ageRange', arrayContains: age)
           .limit(3)
           .get();
       eventDocs.addAll(snap.docs);

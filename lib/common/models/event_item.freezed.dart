@@ -31,8 +31,7 @@ mixin _$EventItem {
   String? get longitude => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
-  int? get maxAge => throw _privateConstructorUsedError;
-  int? get minAge => throw _privateConstructorUsedError;
+  List<dynamic>? get ageRange => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,8 +53,7 @@ abstract class $EventItemCopyWith<$Res> {
       String? longitude,
       String? address,
       String? phone,
-      int? maxAge,
-      int? minAge});
+      List<dynamic>? ageRange});
 
   $EventCategoryCopyWith<$Res>? get eventCategory;
 }
@@ -81,8 +79,7 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? longitude = freezed,
     Object? address = freezed,
     Object? phone = freezed,
-    Object? maxAge = freezed,
-    Object? minAge = freezed,
+    Object? ageRange = freezed,
   }) {
     return _then(_value.copyWith(
       title: freezed == title
@@ -117,14 +114,10 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
-      maxAge: freezed == maxAge
-          ? _value.maxAge
-          : maxAge // ignore: cast_nullable_to_non_nullable
-              as int?,
-      minAge: freezed == minAge
-          ? _value.minAge
-          : minAge // ignore: cast_nullable_to_non_nullable
-              as int?,
+      ageRange: freezed == ageRange
+          ? _value.ageRange
+          : ageRange // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
     ) as $Val);
   }
 
@@ -157,8 +150,7 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
       String? longitude,
       String? address,
       String? phone,
-      int? maxAge,
-      int? minAge});
+      List<dynamic>? ageRange});
 
   @override
   $EventCategoryCopyWith<$Res>? get eventCategory;
@@ -183,8 +175,7 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? longitude = freezed,
     Object? address = freezed,
     Object? phone = freezed,
-    Object? maxAge = freezed,
-    Object? minAge = freezed,
+    Object? ageRange = freezed,
   }) {
     return _then(_$_EventItem(
       title: freezed == title
@@ -219,14 +210,10 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
-      maxAge: freezed == maxAge
-          ? _value.maxAge
-          : maxAge // ignore: cast_nullable_to_non_nullable
-              as int?,
-      minAge: freezed == minAge
-          ? _value.minAge
-          : minAge // ignore: cast_nullable_to_non_nullable
-              as int?,
+      ageRange: freezed == ageRange
+          ? _value._ageRange
+          : ageRange // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
     ));
   }
 }
@@ -244,8 +231,8 @@ class _$_EventItem implements _EventItem {
       this.longitude,
       this.address,
       this.phone,
-      this.maxAge,
-      this.minAge});
+      final List<dynamic>? ageRange})
+      : _ageRange = ageRange;
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
       _$$_EventItemFromJson(json);
@@ -269,14 +256,19 @@ class _$_EventItem implements _EventItem {
   final String? address;
   @override
   final String? phone;
+  final List<dynamic>? _ageRange;
   @override
-  final int? maxAge;
-  @override
-  final int? minAge;
+  List<dynamic>? get ageRange {
+    final value = _ageRange;
+    if (value == null) return null;
+    if (_ageRange is EqualUnmodifiableListView) return _ageRange;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'EventItem(title: $title, eventCategory: $eventCategory, eventAt: $eventAt, createdAt: $createdAt, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone, maxAge: $maxAge, minAge: $minAge)';
+    return 'EventItem(title: $title, eventCategory: $eventCategory, eventAt: $eventAt, createdAt: $createdAt, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone, ageRange: $ageRange)';
   }
 
   @override
@@ -296,14 +288,22 @@ class _$_EventItem implements _EventItem {
                 other.longitude == longitude) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.phone, phone) || other.phone == phone) &&
-            (identical(other.maxAge, maxAge) || other.maxAge == maxAge) &&
-            (identical(other.minAge, minAge) || other.minAge == minAge));
+            const DeepCollectionEquality().equals(other._ageRange, _ageRange));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, eventCategory, eventAt,
-      createdAt, latitude, longitude, address, phone, maxAge, minAge);
+  int get hashCode => Object.hash(
+      runtimeType,
+      title,
+      eventCategory,
+      eventAt,
+      createdAt,
+      latitude,
+      longitude,
+      address,
+      phone,
+      const DeepCollectionEquality().hash(_ageRange));
 
   @JsonKey(ignore: true)
   @override
@@ -329,8 +329,7 @@ abstract class _EventItem implements EventItem {
       final String? longitude,
       final String? address,
       final String? phone,
-      final int? maxAge,
-      final int? minAge}) = _$_EventItem;
+      final List<dynamic>? ageRange}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -354,9 +353,7 @@ abstract class _EventItem implements EventItem {
   @override
   String? get phone;
   @override
-  int? get maxAge;
-  @override
-  int? get minAge;
+  List<dynamic>? get ageRange;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

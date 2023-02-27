@@ -20,8 +20,7 @@ _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
       longitude: json['longitude'] as String?,
       address: json['address'] as String?,
       phone: json['phone'] as String?,
-      maxAge: json['maxAge'] as int?,
-      minAge: json['minAge'] as int?,
+      ageRange: json['ageRange'] as List<dynamic>?,
     );
 
 Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
@@ -34,6 +33,5 @@ Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
       'longitude': instance.longitude,
       'address': instance.address,
       'phone': instance.phone,
-      'maxAge': instance.maxAge,
-      'minAge': instance.minAge,
+      'ageRange': instance.ageRange,
     };

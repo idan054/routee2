@@ -43,11 +43,8 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
           title: eventItem.title.toString().toText(bold: true, fontSize: titleSize),
           leading: Container(
                   color: bgColor.withOpacity(0.5),
-                  child: '${eventItem.minAge}-${eventItem.maxAge}'
-                      .toText(
-                        fontSize: subSize,
-                        color: Colors.grey,
-                      )
+                  child: '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}'
+                      .toText(fontSize: subSize, color: Colors.grey)
                       .px(7)
                       .py(5))
               .roundedFull,
@@ -120,27 +117,36 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
     openWhatsapp(context, number: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באפליקציית Around ואשמח להצטרף!
 
-לפי הפרטים הקבוצה עבור בני ${eventItem.maxAge}-${eventItem.minAge}
+לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address} ב $time
     ''');
   }, radius: 5);
 }
 
 String? timeFormat(DateTime timestamp, {bool withDay = true}) {
-  var time = intl.DateFormat(withDay
-          ? 'EEEE ב '
-              'HH:mm'
-              ' (dd/MM)'
-          : 'dd/MM ' 'ב HH:mm ')
-      .format(timestamp);
+  var time =
+      intl.DateFormat(withDay ? 'EEEE ב ' 'HH:mm' ' (dd/MM)' : 'dd/MM ' 'ב HH:mm ', 'he')
+          .format(timestamp);
+
+  if (timestamp.day == DateTime.now().day + 1 &&
+      timestamp.month == DateTime.now().month &&
+      timestamp.year == DateTime.now().year) {
+    time = intl.DateFormat('מחר (EEEE) ב ' 'HH:mm', 'he').format(timestamp);
+    time = time.replaceAll('יום ', '');
+    return time;
+  }
+
   if (timestamp.day == DateTime.now().day &&
       timestamp.month == DateTime.now().month &&
       timestamp.year == DateTime.now().year) {
-    time = intl.DateFormat(
-      'היום ב ' 'HH:mm',
-    ).format(timestamp);
+    time = intl.DateFormat('(EEEE) ב ' 'HH:mm', 'he').format(timestamp);
+    time = time.replaceAll('יום ', '');
+    time = 'היום $time';
     return time;
   }
+
+  // var time = DateFormat('EEEE, dd MMMM yyyy, h:mm:ss a', 'he').format(timestamp);
+  time = time.replaceAll('יום ', '');
   return time;
 }
 

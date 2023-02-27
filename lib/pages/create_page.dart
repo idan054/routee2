@@ -25,6 +25,7 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
   RangeValues _currentRangeValues = const RangeValues(16, 24);
+  var ageRange = [16, 17, 18, 19, 20, 21, 22, 23, 24];
   var titleController = TextEditingController();
   var dateTimeController = TextEditingController();
   var phoneController = TextEditingController();
@@ -70,7 +71,7 @@ class _CreatePageState extends State<CreatePage> {
                     );
                     if (selectedDateTime == null) return;
                     dateTimeController.text =
-                        timeFormat(selectedDateTime!, withDay: false).toString();
+                        timeFormat(selectedDateTime!).toString();
                     setState(() {});
                   }).expanded(),
                   const SizedBox(width: 10),
@@ -132,9 +133,14 @@ class _CreatePageState extends State<CreatePage> {
                 //   _currentRangeValues.end.round().toString(),
                 // ),
                 onChanged: (RangeValues values) {
-                  setState(() {
-                    _currentRangeValues = values;
-                  });
+                  print('START: onChanged()');
+                  ageRange = [];
+                  for (int i = values.start.round(); i <= values.end; i++) {
+                    ageRange.add(i);
+                    // print(i);
+                  }
+                  _currentRangeValues = values;
+                  setState(() {});
                 },
               ),
               const SizedBox(height: 15),
@@ -187,8 +193,9 @@ class _CreatePageState extends State<CreatePage> {
                 address: selectedAddress?.name.toString(),
                 latitude: selectedAddress?.lat,
                 longitude: selectedAddress?.lng,
-                minAge: _currentRangeValues.start.round(),
-                maxAge: _currentRangeValues.end.round(),
+                ageRange: ageRange,
+                // minAge: _currentRangeValues.start.round(),
+                // maxAge: _currentRangeValues.end.round(),
               );
 
               print('newEvent.toJson() ${newEvent.toJson()}');
@@ -257,7 +264,7 @@ Widget buildTextFormField(
     enabled: enabled,
     controller: controller,
     onChanged: onChanged,
-    style: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white70)),
+    style: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white70, fontSize: 14)),
     decoration: fieldInputDeco(hintText),
   );
 }

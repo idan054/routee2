@@ -33,7 +33,7 @@ Future showUpdateDetailsDialog(
 }) {
   return showDialog(
     context: context,
-    barrierColor: Colors.white12,
+    barrierColor: fromUpdateButton ? Colors.white12 : bgColor,
     barrierDismissible: false,
     builder: (_) {
       return updateInfoDialog(
@@ -61,6 +61,7 @@ Widget updateInfoDialog(
       return false;
     },
     child: AlertDialog(
+      elevation: 0,
       backgroundColor: bgColor,
       insetPadding: const EdgeInsets.symmetric(horizontal: 5),
       content: Directionality(
@@ -70,6 +71,7 @@ Widget updateInfoDialog(
             builder: (context, setState) => Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Assets.appIcon.image().sizedBox(70, 70).py(20),
                 // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
                 'ב Around תיצרו ותצטרפו'
                         '\nלקבוצות מסביבך'
@@ -81,10 +83,11 @@ Widget updateInfoDialog(
                     )
                     .center,
                 const SizedBox(height: 10),
-                Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
+                if (!fromUpdateButton)
+                  Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
                 const SizedBox(height: 10),
-                'הפרטים שלך'
-                    .toText(bold: true, color: isErr ? Colors.red : Colors.white70)
+                (fromUpdateButton ? 'עדכן פרטים' : 'הפרטים שלך')
+                    .toText(color: isErr ? Colors.red : Colors.white70)
                     .centerRight,
                 const SizedBox(height: 10),
                 SizedBox(
@@ -102,7 +105,7 @@ Widget updateInfoDialog(
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                           counterText: '',
-                          labelText: fromUpdateButton ? 'עדכן גיל' : 'גיל',
+                          labelText: 'גיל',
                           labelStyle: const TextStyle(
                               color: Colors.white70, fontWeight: FontWeight.bold),
                           fillColor: Colors.white,
@@ -124,7 +127,7 @@ Widget updateInfoDialog(
                       // )
 
                       buildTextFormField(
-                        fromUpdateButton ? 'עדכן עיר מגורים' : 'עיר מגורים',
+                        'עיר מגורים',
                         locationController,
                         onChanged: (value) async {
                           suggestions = await searchAddress(value) ?? [];

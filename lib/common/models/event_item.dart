@@ -22,8 +22,9 @@ class EventItem with _$EventItem {
     String? longitude,
     String? address,
     String? phone,
-    int? maxAge,
-    int? minAge,
+    List? ageRange,
+    // int? maxAge,
+    // int? minAge,
 
   }) = _EventItem;
 

@@ -41,39 +41,36 @@ class _MyHomePageState extends State<MyHomePage> {
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // if (mounted)
-      getUserData();
+      setUserData();
     });
     super.didChangeDependencies();
   }
 
-  void getUserData() async {
+  void setUserData() async {
     var box = Hive.box('uniBox');
     var userAge = box.get('userAge');
     var userAddress = box.get('userAddress');
-    print('userAge ${userAge}');
-    print('userAddress ${userAddress}');
-    print('userAddress ${userAddress.runtimeType}');
+    print('userAge $userAge');
+    print('userAddress $userAddress');
 
     if (userAge == null || userAddress == null) {
       showUpdateDetailsDialog(
         context,
-        onConfirm: (UserData userData) {
+        onConfirm: (UserData userData) async {
           print('userData ${userData.age}');
           print('userData ${userData.address?.name}');
           user = userData;
-          // setState(() {});
           fetchEvents();
         },
       );
     } else {
       var jsonData = Map<String, dynamic>.from(userAddress);
       user = UserData(userAge, AddressResult.fromJson(jsonData));
-      // setState(() {});
+      fetchEvents();
     }
   }
 
   void fetchEvents() async {
-    getUserData();
     events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
     setState(() {});
   }
@@ -81,6 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     titlesExist = [];
+
+    if (user == null) const Scaffold(backgroundColor: bgColor);
 
     return Scaffold(
       backgroundColor: bgColor,

@@ -5,6 +5,7 @@ import 'package:around/common/widget_ext.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../common/constants.dart';
 import '../common/database.dart';
@@ -39,6 +40,13 @@ class _CreatePageState extends State<CreatePage> {
   List<AddressResult> suggestions = [];
 
   @override
+  void initState() {
+    var box = Hive.box('uniBox');
+    phoneController.text = box.get('userPhone') ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -70,8 +78,7 @@ class _CreatePageState extends State<CreatePage> {
                       startFirstDate: DateTime.now(),
                     );
                     if (selectedDateTime == null) return;
-                    dateTimeController.text =
-                        timeFormat(selectedDateTime!).toString();
+                    dateTimeController.text = timeFormat(selectedDateTime!).toString();
                     setState(() {});
                   }).expanded(),
                   const SizedBox(width: 10),
@@ -108,6 +115,10 @@ class _CreatePageState extends State<CreatePage> {
                 'ווטאספ לבקשות הצטרפות',
                 phoneController,
                 keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  var box = Hive.box('uniBox');
+                  box.put('userPhone', phoneController.text);
+                },
               ),
               const SizedBox(height: 5),
               " לדוגמא: 0545551234"
@@ -258,13 +269,16 @@ Widget buildTextFormField(
   bool enabled = true,
   ValueChanged<String>? onChanged,
   TextInputType? keyboardType,
+  FocusNode? focusNode,
 }) {
   return TextFormField(
+    focusNode: focusNode,
     keyboardType: keyboardType,
     enabled: enabled,
     controller: controller,
     onChanged: onChanged,
-    style: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white70, fontSize: 14)),
+    style: GoogleFonts.openSans(
+        textStyle: const TextStyle(color: Colors.white70, fontSize: 14)),
     decoration: fieldInputDeco(hintText),
   );
 }

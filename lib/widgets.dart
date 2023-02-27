@@ -46,13 +46,28 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
       children: [
         ListTile(
           title: eventItem.title.toString().toText(bold: true, fontSize: titleSize),
-          leading: Container(
-                  color: bgColor.withOpacity(0.5),
-                  child: (distanceMode ? distanceKm : ageRange)
-                      .toText(fontSize: subSize, color: Colors.grey)
-                      .px(7)
-                      .py(5))
-              .roundedFull,
+          leading: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!distanceMode) const SizedBox(height: 4),
+              Container(
+                      color: bgColor.withOpacity(distanceMode ? 0.5 : 0.5),
+                      child: (distanceMode ? distanceKm : ageRange)
+                          .toText(fontSize: subSize, color: Colors.grey)
+                          .px(7)
+                          .py(5))
+                  .rounded(radius: distanceMode ? 20 : 20),
+              const SizedBox(height: 4),
+              // if(distanceMode)
+              // Container(
+              //     color: bgColor.withOpacity(0.3),
+              //     child: (ageRange)
+              //         .toText(fontSize: subSize, color: Colors.grey)
+              //         .px(7)
+              //         .py(5))
+              //     .rounded(radius: 20)
+            ],
+          ),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -79,40 +94,45 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
         Row(
           children: [
             const SizedBox(width: 15),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // ('הצטרף ')
-                ('לקבוצה ').toText(color: Colors.white70, fontSize: subSize, bold: true),
-                const SizedBox(width: 5),
-                // Icons.near_me_outlined.icon(color: Colors.grey, size: subSize),
-                const Opacity(
-                  opacity: 0.8,
-                  child: SizedBox(
-                    height: 13,
-                    width: 13,
-                    child: Image(
-                        image: AssetImage('assets/whatsapp-xxl.png'), fit: BoxFit.cover),
-                  ),
-                )
-              ],
-            ),
+            if (!distanceMode) buildWhatsappJoin(subSize),
             const Spacer(),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                (distanceMode ? 'לגלאי $ageRange' : eventItem.address)
+                eventItem.address
                     .toString()
                     .toText(color: Colors.grey, fontSize: subSize)
-                    .sizedBox(120, null),
+                    .sizedBox(110, null),
                 const SizedBox(width: 3),
-                (distanceMode ? Icons.group_outlined : Icons.place_outlined)
+                Icons.place_outlined
                     .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
               ],
             ),
             const SizedBox(width: 75),
           ],
         ),
+        const SizedBox(height: 5),
+        if (distanceMode)
+          Row(
+            children: [
+              const SizedBox(width: 15),
+              buildWhatsappJoin(subSize),
+              const Spacer(),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  'גילאים $ageRange'
+                      .toString()
+                      .toText(color: Colors.grey, fontSize: subSize)
+                      .sizedBox(110, null),
+                  const SizedBox(width: 3),
+                  Icons.group_outlined.icon(
+                      color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+                ],
+              ),
+              const SizedBox(width: 75),
+            ],
+          ),
       ],
     ).pOnly(bottom: 10),
   ).onTap(() {
@@ -127,6 +147,28 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
  ונפגש ב${eventItem.address} ב $time
     ''');
   }, radius: 5);
+}
+
+Widget buildWhatsappJoin(double subSize) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      // ('הצטרף ')
+      // if (distanceMode)
+      //   '($ageRange)'.toText(color: Colors.grey, fontSize: subSize),
+      ('לקבוצה ').toText(color: Colors.grey, fontSize: subSize, bold: true),
+      const SizedBox(width: 5),
+      // Icons.near_me_outlined.icon(color: Colors.grey, size: subSize),
+      const Opacity(
+        opacity: 0.6,
+        child: SizedBox(
+          height: 13,
+          width: 13,
+          child: Image(image: AssetImage('assets/whatsapp-xxl.png'), fit: BoxFit.cover),
+        ),
+      )
+    ],
+  );
 }
 
 String? timeFormat(DateTime timestamp, {bool withDay = true}) {

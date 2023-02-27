@@ -34,8 +34,16 @@ class _MyHomePageState extends State<MyHomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       tagsController.jumpTo(999.0);
     });
-    fetchEvents();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // if (mounted)
+      getUserData();
+    });
+    super.didChangeDependencies();
   }
 
   void getUserData() async {
@@ -53,7 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
           print('userData ${userData.age}');
           print('userData ${userData.address?.name}');
           user = userData;
-          setState(() {});
+          // setState(() {});
+          fetchEvents();
         },
       );
     } else {
@@ -66,18 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void fetchEvents() async {
     getUserData();
     events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
-    titlesExist = [];
     setState(() {});
   }
 
   @override
-  void didChangeDependencies() {
-    fetchEvents();
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    titlesExist = [];
+
     return Scaffold(
       backgroundColor: bgColor,
       appBar: buildHomeAppBar(),

@@ -1,4 +1,5 @@
 import 'package:around/pages/home_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/date_symbol_data_file.dart';
@@ -14,6 +15,7 @@ void main() async {
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
   await Hive.openBox('uniBox');
+  if (kDebugMode) await Hive.box('uniBox').clear();
   runApp(const MyApp());
 }
 

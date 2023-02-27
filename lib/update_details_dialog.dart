@@ -34,6 +34,7 @@ Future showUpdateDetailsDialog(
   return showDialog(
     context: context,
     barrierColor: Colors.white12,
+    barrierDismissible: false,
     builder: (_) {
       return updateInfoDialog(
         context,
@@ -55,120 +56,138 @@ Widget updateInfoDialog(
   var locationController = TextEditingController();
   bool isErr = false;
 
-  return AlertDialog(
-    backgroundColor: bgColor,
-    insetPadding: const EdgeInsets.symmetric(horizontal: 5),
-    content: Directionality(
-      textDirection: TextDirection.rtl,
-      child: SingleChildScrollView(
-        child: StatefulBuilder(
-          builder: (context, setState) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
-              'ב Around תיצרו ותצטרפו'
-                      '\nלקבוצות מסביבך'
-                  .toText(
-                    bold: true,
-                    maxLines: 5,
-                    fontSize: 18,
-                    textAlign: TextAlign.center,
-                  )
-                  .center,
-              const SizedBox(height: 10),
-              Assets.tagsX.image().scale(scale: 1.1),
-              const SizedBox(height: 10),
-              'פרטים להתאמת הקבוצות בשבילך'
-                  .toText(bold: true, color: isErr ? Colors.red : Colors.white)
-                  .centerRight,
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 55,
-                child: Row(
-                  // shrinkWrap: true,
-                  // scrollDirection: Axis.horizontal,
-                  children: [
-                    TextFormField(
-                      controller: ageController,
-                      style: const TextStyle(color: Colors.white70),
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                        counterText: '',
-                        labelText: fromUpdateButton ? 'עדכן גיל' : 'גיל',
-                        labelStyle: const TextStyle(
-                            color: Colors.white70, fontWeight: FontWeight.bold),
-                        fillColor: Colors.white,
-                        enabledBorder: fieldBorderDeco,
-                      ),
-                    ).expanded(flex: 30),
-                    const SizedBox(width: 7),
-                    // TextFormField(
-                    //   controller: messageController,
-                    //   style: const TextStyle(color: Colors.white70),
-                    //   decoration: InputDecoration(
-                    //     contentPadding:
-                    //         const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                    //     hintText: 'עיר מגורים',
-                    //     hintStyle: const TextStyle(color: Colors.white30),
-                    //     fillColor: Colors.white,
-                    //     enabledBorder: fieldBorderDeco,
-                    //   ),
-                    // )
+  return WillPopScope(
+    onWillPop: () async {
+      return false;
+    },
+    child: AlertDialog(
+      backgroundColor: bgColor,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 5),
+      content: Directionality(
+        textDirection: TextDirection.rtl,
+        child: SingleChildScrollView(
+          child: StatefulBuilder(
+            builder: (context, setState) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
+                'ב Around תיצרו ותצטרפו'
+                        '\nלקבוצות מסביבך'
+                    .toText(
+                      bold: true,
+                      maxLines: 5,
+                      fontSize: 18,
+                      textAlign: TextAlign.center,
+                    )
+                    .center,
+                const SizedBox(height: 10),
+                Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
+                const SizedBox(height: 10),
+                'הפרטים שלך'
+                    .toText(bold: true, color: isErr ? Colors.red : Colors.white70)
+                    .centerRight,
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 55,
+                  child: Row(
+                    // shrinkWrap: true,
+                    // scrollDirection: Axis.horizontal,
+                    children: [
+                      TextFormField(
+                        controller: ageController,
+                        style: const TextStyle(color: Colors.white70),
+                        keyboardType: TextInputType.number,
+                        maxLength: 2,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                          counterText: '',
+                          labelText: fromUpdateButton ? 'עדכן גיל' : 'גיל',
+                          labelStyle: const TextStyle(
+                              color: Colors.white70, fontWeight: FontWeight.bold),
+                          fillColor: Colors.white,
+                          enabledBorder: fieldBorderDeco,
+                        ),
+                      ).expanded(flex: 30),
+                      const SizedBox(width: 7),
+                      // TextFormField(
+                      //   controller: messageController,
+                      //   style: const TextStyle(color: Colors.white70),
+                      //   decoration: InputDecoration(
+                      //     contentPadding:
+                      //         const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                      //     hintText: 'עיר מגורים',
+                      //     hintStyle: const TextStyle(color: Colors.white30),
+                      //     fillColor: Colors.white,
+                      //     enabledBorder: fieldBorderDeco,
+                      //   ),
+                      // )
 
-                    buildTextFormField(
-                      fromUpdateButton ? 'עדכן עיר מגורים' : 'עיר מגורים',
-                      locationController,
-                      onChanged: (value) async {
-                        suggestions = await searchAddress(value) ?? [];
+                      buildTextFormField(
+                        fromUpdateButton ? 'עדכן עיר מגורים' : 'עיר מגורים',
+                        locationController,
+                        onChanged: (value) async {
+                          suggestions = await searchAddress(value) ?? [];
+                          setState(() {});
+                        },
+                      ).expanded(flex: 70),
+                    ],
+                  ),
+                ),
+
+                Column(
+                  children: [
+                    if (suggestions.isNotEmpty) const SizedBox(height: 10),
+                    for (var sug in suggestions)
+                      Card(
+                        color: Colors.white38,
+                        child: ListTile(title: '${sug.name}'.toText(bold: true)),
+                      ).onTap(() async {
+                        suggestions = [];
+                        locationController.text = '${sug.name}'.toString();
+                        FocusScope.of(context).unfocus();
+                        selectedAddress = await getDetailsFromPlaceId(sug);
                         setState(() {});
-                      },
-                    ).expanded(flex: 70),
+                      }),
                   ],
                 ),
-              ),
 
-              Column(
-                children: [
-                  if (suggestions.isNotEmpty) const SizedBox(height: 10),
-                  for (var sug in suggestions)
-                    Card(
-                      color: Colors.white38,
-                      child: ListTile(title: '${sug.name}'.toText(bold: true)),
-                    ).onTap(() async {
-                      suggestions = [];
-                      locationController.text = '${sug.name}'.toString();
-                      FocusScope.of(context).unfocus();
-                      setState(() {});
-                      selectedAddress = await getDetailsFromPlaceId(sug);
-                    }),
-                ],
-              ),
+                const SizedBox(height: 10),
+                Builder(builder: (context) {
+                  var isDisabled =
+                      (ageController.text.isEmpty || selectedAddress == null);
+                  return TextButton(
+                    onPressed: isDisabled
+                        ? null
+                        : () {
+                            print('ageController.text ${ageController.text}');
+                            print('selectedAddress ${selectedAddress}');
 
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  if (ageController.text.isEmpty || selectedAddress == null) {
-                    isErr = true;
-                    setState(() {});
-                    return;
-                  }
+                            // if (isDisabled) {
+                            //   isErr = true;
+                            //   setState(() {});
+                            //   return;
+                            // }
 
-                  if (onConfirm != null) {
-                    var age = int.parse(ageController.text);
-                    onConfirm(UserData(age, selectedAddress));
-                    var box = Hive.box('uniBox');
-                    box.put('userAge', int.parse(ageController.text));
-                    box.put('userAddress', selectedAddress?.toJson());
-                    // var name = box.get('name');
-                  }
-                  Navigator.pop(context);
-                },
-                child: 'המשך'.toText(bold: true, color: Colors.purple[500]!),
-              ).centerRight,
-            ],
+                            if (onConfirm != null) {
+                              var age = int.parse(ageController.text);
+                              var box = Hive.box('uniBox');
+                              box.put('userAge', int.parse(ageController.text));
+                              box.put('userAddress', selectedAddress?.toJson());
+                              // var name = box.get('name');
+                              onConfirm(UserData(age, selectedAddress));
+                            }
+                            Navigator.pop(context);
+                          },
+                    child: 'המשך'.toText(
+                        bold: true,
+                        color: isDisabled
+                            ? Colors.purple[500]!.withOpacity(0.25)
+                            : Colors.purple[500]!),
+                  ).centerRight;
+                }),
+              ],
+            ),
           ),
         ),
       ),

@@ -4,10 +4,13 @@ import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_file.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'common/constants.dart';
 import 'common/models/event_category.dart';
 import 'common/models/event_item.dart';
 import 'package:intl/intl.dart' as intl;
+import 'dart:io' show Platform;
 
 OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed}) {
   return OutlinedButton.icon(
@@ -25,8 +28,8 @@ OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed
 }
 
 Widget buildEventCard(BuildContext context, EventItem eventItem) {
-  var subSize = 12.0;
-  var titleSize = 14.5;
+  var subSize = 11.0;
+  var titleSize = 14.0;
   var eventCategory = eventItem.eventCategory;
   var time = timeFormat(eventItem.eventAt!).toString();
 
@@ -38,7 +41,16 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
       children: [
         ListTile(
           title: eventItem.title.toString().toText(bold: true, fontSize: titleSize),
-          // leading:
+          leading: Container(
+                  color: bgColor.withOpacity(0.5),
+                  child: '${eventItem.minAge}-${eventItem.maxAge}'
+                      .toText(
+                        fontSize: subSize,
+                        color: Colors.grey,
+                      )
+                      .px(7)
+                      .py(5))
+              .roundedFull,
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -60,7 +72,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
           ).rounded(radius: 7),
           // isThreeLine: true,
         )
-            // .sizedBox(null, 60)
+        // .sizedBox(null, 60)
         ,
         Row(
           children: [
@@ -68,11 +80,12 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                'הצטרף'.toText(color: Colors.grey, fontSize: subSize, bold: true),
+                // ('הצטרף ')
+                ('לקבוצה ').toText(color: Colors.white70, fontSize: subSize, bold: true),
                 const SizedBox(width: 5),
                 // Icons.near_me_outlined.icon(color: Colors.grey, size: subSize),
                 const Opacity(
-                  opacity: 0.6,
+                  opacity: 0.8,
                   child: SizedBox(
                     height: 13,
                     width: 13,
@@ -89,7 +102,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
                 eventItem.address
                     .toString()
                     .toText(color: Colors.grey, fontSize: subSize)
-                    .sizedBox(160, null),
+                    .sizedBox(120, null),
                 const SizedBox(width: 3),
                 Icons.place_outlined.icon(color: Colors.grey, size: subSize),
               ],
@@ -100,8 +113,16 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
       ],
     ).pOnly(bottom: 10),
   ).onTap(() {
-    // Todo Add Go To Whatsapp
     print(eventItem.phone);
+    var phone = '+972${eventItem.phone?.substring(1)}';
+    var time = timeFormat(eventItem.eventAt!, withDay: true);
+    print('phone $phone');
+    openWhatsapp(context, number: phone, text: '''
+היי, ראיתי את הקבוצה *${eventItem.title}* שלך באפליקציית Around ואשמח להצטרף!
+
+לפי הפרטים הקבוצה עבור בני ${eventItem.maxAge}-${eventItem.minAge}
+ ונפגש ב${eventItem.address} ב $time
+    ''');
   }, radius: 5);
 }
 
@@ -121,4 +142,30 @@ String? timeFormat(DateTime timestamp, {bool withDay = true}) {
     return time;
   }
   return time;
+}
+
+void openWhatsapp(BuildContext context,
+    {required String text, required String number}) async {
+  var whatsapp = number; //+92xx enter like this
+  var whatsappURlAndroid = "whatsapp://send?phone=$whatsapp&text=$text";
+  var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
+  if (Platform.isIOS) {
+    // for iOS phone only
+    if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+      await launchUrl(Uri.parse(
+        whatsappURLIos,
+      ));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
+    }
+  } else {
+    // android , web
+    if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+      await launchUrl(Uri.parse(whatsappURlAndroid));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
+    }
+  }
 }

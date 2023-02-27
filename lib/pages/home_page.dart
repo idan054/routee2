@@ -33,7 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       tagsController.jumpTo(999.0);
-      getUserData();
     });
     fetchEvents();
     super.initState();
@@ -65,8 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void fetchEvents() async {
-    events = await FsAdvanced.getHomeEvents();
+    getUserData();
+    events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
+    titlesExist = [];
     setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    fetchEvents();
+    super.didChangeDependencies();
   }
 
   @override
@@ -94,12 +101,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       // bool isShowTitle = (i ~/ 3) == (i / 3); // AKA Every 4 posts.
 
                       bool isAddTitle = true;
-                      // var categoryTitle = events[i].eventCategory?.categoryType?.name;
-                      //   if (titlesExist.contains(categoryTitle)) {
-                      //     isAddTitle = false;
-                      //   } else {
-                      //     titlesExist.add('$categoryTitle');
-                      //   }
+                      var categoryTitle = events[i].eventCategory?.categoryType?.name;
+                      if (titlesExist.contains(categoryTitle)) {
+                        isAddTitle = false;
+                      } else {
+                        titlesExist.add('$categoryTitle');
+                      }
 
                       return Column(
                         children: [
@@ -167,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Row(
           children: [
             'עדכון'
-                .toText(fontSize: 14, color: Colors.white38, bold: true, underline: false)
+                .toText(fontSize: 14, color: Colors.white54, bold: true, underline: false)
                 .px(15)
                 .onTap(() {
               showUpdateDetailsDialog(

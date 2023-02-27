@@ -1,5 +1,6 @@
 // .set() / .update() = WRITE.
 import 'package:around/common/constants.dart';
+import 'package:around/common/models/event_category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'models/event_item.dart';
@@ -42,18 +43,35 @@ class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
   //~ The 3 start soon events of each category:
-  static Future<List<EventItem>> getHomeEvents() async {
+  static Future<List<EventItem>> getHomeEvents(int age) async {
     List eventDocs = [];
     List<EventItem> events = [];
     for (var category in categories) {
       var snap = await db
           .collection('events')
           .orderBy('eventAt', descending: true)
+          .where('eventAt', isGreaterThanOrEqualTo: DateTime.now()) // Hide DONE events
           .where('eventCategory.categoryType', isEqualTo: category.categoryType?.name)
-          .limit(1) // 3
+          .limit(3)
           .get();
       eventDocs.addAll(snap.docs);
     }
+    events = eventDocs.map((doc) => EventItem.fromJson(doc.data())).toList();
+    print('events ${events.length}');
+    return events;
+  }
+
+  static Future<List<EventItem>> getCategoryEvents(EventCategory eventCategory) async {
+    List eventDocs = [];
+    List<EventItem> events = [];
+    var snap = await db
+        .collection('events')
+        .orderBy('eventAt', descending: true)
+        .where('eventAt', isGreaterThanOrEqualTo: DateTime.now()) // Hide DONE events
+        .where('eventCategory.categoryType', isEqualTo: eventCategory.categoryType?.name)
+        .get();
+    eventDocs.addAll(snap.docs);
+
     events = eventDocs.map((doc) => EventItem.fromJson(doc.data())).toList();
     print('events ${events.length}');
     return events;

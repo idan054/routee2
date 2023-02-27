@@ -188,7 +188,7 @@ class _CreatePageState extends State<CreatePage> {
                 latitude: selectedAddress?.lat,
                 longitude: selectedAddress?.lng,
                 minAge: _currentRangeValues.start.round(),
-                maxAge: _currentRangeValues.start.round(),
+                maxAge: _currentRangeValues.end.round(),
               );
 
               print('newEvent.toJson() ${newEvent.toJson()}');

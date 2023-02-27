@@ -28,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<EventItem> events = [];
   List<String> titlesExist = [];
   UserData? user;
+  bool splashLoad = true;
 
   @override
   void initState() {
@@ -56,12 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (userAge == null || userAddress == null) {
       showUpdateDetailsDialog(
         context,
-        onConfirm: (UserData userData) async {
-          print('userData ${userData.age}');
-          print('userData ${userData.address?.name}');
-          user = userData;
-          fetchEvents();
-        },
+        onConfirm: (UserData userData) => _onUpdateUserInfo(userData),
       );
     } else {
       var jsonData = Map<String, dynamic>.from(userAddress);
@@ -70,8 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void fetchEvents() async {
+  void fetchEvents({bool withLoader = false}) async {
+    if (withLoader) {
+      splashLoad = true;
+      setState(() {});
+    }
     events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
+    splashLoad = false;
     setState(() {});
   }
 
@@ -80,6 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
     titlesExist = [];
 
     if (user == null) const Scaffold(backgroundColor: bgColor);
+    if (events.isEmpty && !splashLoad) {
+      const Scaffold(backgroundColor: bgColor);
+    } // App init
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -88,38 +92,53 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Colors.white,
         backgroundColor: Colors.white38,
         onRefresh: () async => fetchEvents(),
-        child: ListView(
+        child: Stack(
           children: [
-            const SizedBox(height: 15),
-            buildHomeTitle(context),
-            const SizedBox(height: 15),
-            buildTagsRow(),
-            events.isEmpty
-                ? const CircularProgressIndicator().center.pOnly(top: 100)
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    itemCount: events.length,
-                    itemBuilder: (context, i) {
-                      // bool isShowTitle = (i ~/ 3) == (i / 3); // AKA Every 4 posts.
+            ListView(
+              children: [
+                const SizedBox(height: 15),
+                buildHomeTitle(context),
+                const SizedBox(height: 15),
+                buildTagsRow(),
+                events.isEmpty && !splashLoad
+                    ? 'אין קבוצות לגלאי ${user?.age} ב${user?.address?.name}. צור קבוצה חדשה!'
+                        .toText()
+                        .center
+                        .pOnly(top: 200)
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        itemCount: events.length,
+                        itemBuilder: (context, i) {
+                          // bool isShowTitle = (i ~/ 3) == (i / 3); // AKA Every 4 posts.
 
-                      bool isAddTitle = true;
-                      var categoryTitle = events[i].eventCategory?.categoryType?.name;
-                      if (titlesExist.contains(categoryTitle)) {
-                        isAddTitle = false;
-                      } else {
-                        titlesExist.add('$categoryTitle');
-                      }
+                          bool isAddTitle = true;
+                          var categoryTitle = events[i].eventCategory?.categoryType?.name;
+                          if (titlesExist.contains(categoryTitle)) {
+                            isAddTitle = false;
+                          } else {
+                            titlesExist.add('$categoryTitle');
+                          }
 
-                      return Column(
-                        children: [
-                          if (isAddTitle) buildCategoryTitle(events[i]),
-                          buildEventCard(context, events[i]).px(5),
-                        ],
-                      );
-                    },
-                  ),
-            const SizedBox(height: 15),
+                          return Column(
+                            children: [
+                              if (isAddTitle) buildCategoryTitle(events[i]),
+                              buildEventCard(context, events[i]).px(5),
+                            ],
+                          );
+                        },
+                      ),
+                const SizedBox(height: 15),
+              ],
+            ),
+            if (splashLoad)
+              Card(
+                      color: bgColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: const CircularProgressIndicator().pad(15))
+                  .sizedBox(70, 70)
+                  .center,
           ],
         ),
       ),
@@ -142,13 +161,14 @@ class _MyHomePageState extends State<MyHomePage> {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildModeButton(
-            isShowLastedEvents,
-            onPressed: () {
-              isShowLastedEvents = !isShowLastedEvents;
-              setState(() {});
-            },
-          ).rtl,
+          // buildModeButton(
+          //   isShowLastedEvents,
+          //   onPressed: () {
+          //     isShowLastedEvents = !isShowLastedEvents;
+          //     setState(() {});
+          //   },
+          // ).rtl,
+
           // 'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
           const Spacer(),
           const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
@@ -168,12 +188,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        (isShowLastedEvents
-                // ? 'קבוצות עדכניות אליהם הזמינו אותך'
-                ? 'קבוצות עדכניות בשבילך'
-                : 'קבוצות קרובות בשבילך')
-            .toText(fontSize: 22, color: Colors.white38, bold: true)
-            .px(15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            (isShowLastedEvents
+                    // ? 'קבוצות עדכניות אליהם הזמינו אותך'
+                    // ? 'קבוצות עדכניות בשבילך'
+                    // : 'קבוצות קרובות בשבילך')
+                    ? 'כל הקבוצות העדכניות בשבילך'
+                    : 'כל הקבוצות הקרובות בשבילך')
+                .toText(fontSize: 18, color: Colors.white, bold: true)
+                .pOnly(right: 15),
+                // .pOnly(right: 5),
+            // (isShowLastedEvents ? Icons.schedule : Icons.place_outlined)
+            //     .icon(color: Colors.white, size: 20).pOnly(right: 12),
+          ],
+        ),
+        const SizedBox(height: 3),
         Row(
           children: [
             'עדכון'
@@ -183,12 +214,9 @@ class _MyHomePageState extends State<MyHomePage> {
               showUpdateDetailsDialog(
                 context,
                 fromUpdateButton: true,
-                onConfirm: (UserData userData) {
-                  print('userData ${userData.age}');
-                  print('userData ${userData.address?.name}');
-                  user = userData;
-                  setState(() {});
-                },
+                user: user,
+                onConfirm: (UserData userData) =>
+                    _onUpdateUserInfo(userData, withLoader: true),
               );
             }),
             const Spacer(),
@@ -200,6 +228,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+  }
+
+  void _onUpdateUserInfo(UserData userData, {bool withLoader = false}) {
+    print('userData ${userData.age}');
+    print('userData ${userData.address?.name}');
+    user = userData;
+    fetchEvents(withLoader: withLoader);
+    // setState(() {});
   }
 
   SingleChildScrollView buildTagsRow() {
@@ -270,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
           builder: (context) => CategoryPage(
-              eventCategory ?? categories[i!].copyWith(categoryColor: color))),
+              user!, eventCategory ?? categories[i!].copyWith(categoryColor: color))),
     );
   }
 

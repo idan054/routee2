@@ -18,13 +18,16 @@ class EventItem with _$EventItem {
     EventCategory? eventCategory,
     @DateTimeStampConv() DateTime? eventAt,
     @DateTimeStampConv() DateTime? createdAt,
-    String? latitude,
-    String? longitude,
-    String? address,
     String? phone,
     List? ageRange,
     // int? maxAge,
     // int? minAge,
+    int? distanceFromUser, // Example 50 Meter away...
+
+    // AKA AddressResult()
+    String? address,
+    String? latitude,
+    String? longitude,
 
   }) = _EventItem;
 

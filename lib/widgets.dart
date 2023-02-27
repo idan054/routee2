@@ -27,11 +27,16 @@ OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed
       onPressed: onPressed);
 }
 
-Widget buildEventCard(BuildContext context, EventItem eventItem) {
+Widget buildEventCard(BuildContext context, EventItem eventItem,
+    {bool distanceMode = false}) {
   var subSize = 11.0;
   var titleSize = 14.0;
   var eventCategory = eventItem.eventCategory;
   var time = timeFormat(eventItem.eventAt!).toString();
+
+  var distanceKm =
+      ('${((eventItem.distanceFromUser ?? 10) / 1000).toString().substring(0, 4)} km');
+  var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
 
   return Card(
     color: Colors.white12,
@@ -43,7 +48,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
           title: eventItem.title.toString().toText(bold: true, fontSize: titleSize),
           leading: Container(
                   color: bgColor.withOpacity(0.5),
-                  child: '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}'
+                  child: (distanceMode ? distanceKm : ageRange)
                       .toText(fontSize: subSize, color: Colors.grey)
                       .px(7)
                       .py(5))
@@ -96,12 +101,13 @@ Widget buildEventCard(BuildContext context, EventItem eventItem) {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                eventItem.address
+                (distanceMode ? 'לגלאי $ageRange' : eventItem.address)
                     .toString()
                     .toText(color: Colors.grey, fontSize: subSize)
                     .sizedBox(120, null),
                 const SizedBox(width: 3),
-                Icons.place_outlined.icon(color: Colors.grey, size: subSize),
+                (distanceMode ? Icons.group_outlined : Icons.place_outlined)
+                    .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
               ],
             ),
             const SizedBox(width: 75),

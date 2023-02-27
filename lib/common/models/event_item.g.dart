@@ -16,11 +16,12 @@ _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
           const DateTimeStampConv().fromJson(json['eventAt'] as Timestamp?),
       createdAt:
           const DateTimeStampConv().fromJson(json['createdAt'] as Timestamp?),
-      latitude: json['latitude'] as String?,
-      longitude: json['longitude'] as String?,
-      address: json['address'] as String?,
       phone: json['phone'] as String?,
       ageRange: json['ageRange'] as List<dynamic>?,
+      distanceFromUser: json['distanceFromUser'] as int?,
+      address: json['address'] as String?,
+      latitude: json['latitude'] as String?,
+      longitude: json['longitude'] as String?,
     );
 
 Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
@@ -29,9 +30,10 @@ Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
       'eventCategory': instance.eventCategory?.toJson(),
       'eventAt': const DateTimeStampConv().toJson(instance.eventAt),
       'createdAt': const DateTimeStampConv().toJson(instance.createdAt),
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
-      'address': instance.address,
       'phone': instance.phone,
       'ageRange': instance.ageRange,
+      'distanceFromUser': instance.distanceFromUser,
+      'address': instance.address,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };

@@ -28,6 +28,7 @@ var fieldDisableDeco = OutlineInputBorder(
 
 Future showUpdateDetailsDialog(
   BuildContext context, {
+  UserData? user,
   Function(UserData value)? onConfirm,
   bool fromUpdateButton = false,
 }) {
@@ -38,6 +39,7 @@ Future showUpdateDetailsDialog(
     builder: (_) {
       return updateInfoDialog(
         context,
+        user: user,
         fromUpdateButton: fromUpdateButton,
         onConfirm: onConfirm,
       );
@@ -48,6 +50,7 @@ Future showUpdateDetailsDialog(
 Widget updateInfoDialog(
   BuildContext context, {
   bool fromUpdateButton = false,
+  UserData? user,
   Function(UserData value)? onConfirm,
 }) {
   List<AddressResult> suggestions = [];
@@ -55,6 +58,12 @@ Widget updateInfoDialog(
   var ageController = TextEditingController();
   var locationController = TextEditingController();
   bool isErr = false;
+
+  if (user != null) {
+    ageController.text = '${user.age}';
+    locationController.text = '${user.address?.name}';
+    selectedAddress = user.address;
+  }
 
   return WillPopScope(
     onWillPop: () async {

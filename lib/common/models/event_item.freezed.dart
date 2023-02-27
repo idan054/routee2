@@ -27,11 +27,16 @@ mixin _$EventItem {
   DateTime? get eventAt => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
+  List<dynamic>? get ageRange =>
+      throw _privateConstructorUsedError; // int? maxAge,
+// int? minAge,
+  int? get distanceFromUser =>
+      throw _privateConstructorUsedError; // Example 50 Meter away...
+// AKA AddressResult()
+  String? get address => throw _privateConstructorUsedError;
   String? get latitude => throw _privateConstructorUsedError;
   String? get longitude => throw _privateConstructorUsedError;
-  String? get address => throw _privateConstructorUsedError;
-  String? get phone => throw _privateConstructorUsedError;
-  List<dynamic>? get ageRange => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,11 +54,12 @@ abstract class $EventItemCopyWith<$Res> {
       EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? eventAt,
       @DateTimeStampConv() DateTime? createdAt,
-      String? latitude,
-      String? longitude,
-      String? address,
       String? phone,
-      List<dynamic>? ageRange});
+      List<dynamic>? ageRange,
+      int? distanceFromUser,
+      String? address,
+      String? latitude,
+      String? longitude});
 
   $EventCategoryCopyWith<$Res>? get eventCategory;
 }
@@ -75,11 +81,12 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? eventCategory = freezed,
     Object? eventAt = freezed,
     Object? createdAt = freezed,
-    Object? latitude = freezed,
-    Object? longitude = freezed,
-    Object? address = freezed,
     Object? phone = freezed,
     Object? ageRange = freezed,
+    Object? distanceFromUser = freezed,
+    Object? address = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(_value.copyWith(
       title: freezed == title
@@ -98,18 +105,6 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      latitude: freezed == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as String?,
-      longitude: freezed == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as String?,
-      address: freezed == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
       phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
@@ -118,6 +113,22 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.ageRange
           : ageRange // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
+      distanceFromUser: freezed == distanceFromUser
+          ? _value.distanceFromUser
+          : distanceFromUser // ignore: cast_nullable_to_non_nullable
+              as int?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as String?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -146,11 +157,12 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
       EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? eventAt,
       @DateTimeStampConv() DateTime? createdAt,
-      String? latitude,
-      String? longitude,
-      String? address,
       String? phone,
-      List<dynamic>? ageRange});
+      List<dynamic>? ageRange,
+      int? distanceFromUser,
+      String? address,
+      String? latitude,
+      String? longitude});
 
   @override
   $EventCategoryCopyWith<$Res>? get eventCategory;
@@ -171,11 +183,12 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? eventCategory = freezed,
     Object? eventAt = freezed,
     Object? createdAt = freezed,
-    Object? latitude = freezed,
-    Object? longitude = freezed,
-    Object? address = freezed,
     Object? phone = freezed,
     Object? ageRange = freezed,
+    Object? distanceFromUser = freezed,
+    Object? address = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(_$_EventItem(
       title: freezed == title
@@ -194,18 +207,6 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      latitude: freezed == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as String?,
-      longitude: freezed == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as String?,
-      address: freezed == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
       phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
@@ -214,6 +215,22 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value._ageRange
           : ageRange // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
+      distanceFromUser: freezed == distanceFromUser
+          ? _value.distanceFromUser
+          : distanceFromUser // ignore: cast_nullable_to_non_nullable
+              as int?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as String?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -227,11 +244,12 @@ class _$_EventItem implements _EventItem {
       this.eventCategory,
       @DateTimeStampConv() this.eventAt,
       @DateTimeStampConv() this.createdAt,
-      this.latitude,
-      this.longitude,
-      this.address,
       this.phone,
-      final List<dynamic>? ageRange})
+      final List<dynamic>? ageRange,
+      this.distanceFromUser,
+      this.address,
+      this.latitude,
+      this.longitude})
       : _ageRange = ageRange;
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
@@ -249,12 +267,6 @@ class _$_EventItem implements _EventItem {
   @DateTimeStampConv()
   final DateTime? createdAt;
   @override
-  final String? latitude;
-  @override
-  final String? longitude;
-  @override
-  final String? address;
-  @override
   final String? phone;
   final List<dynamic>? _ageRange;
   @override
@@ -266,9 +278,22 @@ class _$_EventItem implements _EventItem {
     return EqualUnmodifiableListView(value);
   }
 
+// int? maxAge,
+// int? minAge,
+  @override
+  final int? distanceFromUser;
+// Example 50 Meter away...
+// AKA AddressResult()
+  @override
+  final String? address;
+  @override
+  final String? latitude;
+  @override
+  final String? longitude;
+
   @override
   String toString() {
-    return 'EventItem(title: $title, eventCategory: $eventCategory, eventAt: $eventAt, createdAt: $createdAt, latitude: $latitude, longitude: $longitude, address: $address, phone: $phone, ageRange: $ageRange)';
+    return 'EventItem(title: $title, eventCategory: $eventCategory, eventAt: $eventAt, createdAt: $createdAt, phone: $phone, ageRange: $ageRange, distanceFromUser: $distanceFromUser, address: $address, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -282,13 +307,15 @@ class _$_EventItem implements _EventItem {
             (identical(other.eventAt, eventAt) || other.eventAt == eventAt) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            const DeepCollectionEquality().equals(other._ageRange, _ageRange) &&
+            (identical(other.distanceFromUser, distanceFromUser) ||
+                other.distanceFromUser == distanceFromUser) &&
+            (identical(other.address, address) || other.address == address) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude) &&
-            (identical(other.address, address) || other.address == address) &&
-            (identical(other.phone, phone) || other.phone == phone) &&
-            const DeepCollectionEquality().equals(other._ageRange, _ageRange));
+                other.longitude == longitude));
   }
 
   @JsonKey(ignore: true)
@@ -299,11 +326,12 @@ class _$_EventItem implements _EventItem {
       eventCategory,
       eventAt,
       createdAt,
-      latitude,
-      longitude,
-      address,
       phone,
-      const DeepCollectionEquality().hash(_ageRange));
+      const DeepCollectionEquality().hash(_ageRange),
+      distanceFromUser,
+      address,
+      latitude,
+      longitude);
 
   @JsonKey(ignore: true)
   @override
@@ -325,11 +353,12 @@ abstract class _EventItem implements EventItem {
       final EventCategory? eventCategory,
       @DateTimeStampConv() final DateTime? eventAt,
       @DateTimeStampConv() final DateTime? createdAt,
-      final String? latitude,
-      final String? longitude,
-      final String? address,
       final String? phone,
-      final List<dynamic>? ageRange}) = _$_EventItem;
+      final List<dynamic>? ageRange,
+      final int? distanceFromUser,
+      final String? address,
+      final String? latitude,
+      final String? longitude}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -345,15 +374,19 @@ abstract class _EventItem implements EventItem {
   @DateTimeStampConv()
   DateTime? get createdAt;
   @override
-  String? get latitude;
-  @override
-  String? get longitude;
-  @override
-  String? get address;
-  @override
   String? get phone;
   @override
   List<dynamic>? get ageRange;
+  @override // int? maxAge,
+// int? minAge,
+  int? get distanceFromUser;
+  @override // Example 50 Meter away...
+// AKA AddressResult()
+  String? get address;
+  @override
+  String? get latitude;
+  @override
+  String? get longitude;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

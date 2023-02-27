@@ -97,8 +97,8 @@ class _CreatePageState extends State<CreatePage> {
                       suggestions = [];
                       locationController.text = sug.name.toString();
                       FocusScope.of(context).unfocus();
-                      setState(() {});
                       selectedAddress = await getDetailsFromPlaceId(sug);
+                      setState(() {});
                     }),
                 ],
               ),

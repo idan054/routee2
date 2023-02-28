@@ -100,7 +100,7 @@ var categories = [
 
 var sampleEvent = EventItem(
   title: 'באולינג בקניון של רחובות כולם מוזמנים',
-  eventAt: DateTime.now(),
+  // eventAt: DateTime.now(),
   createdAt: DateTime.now(),
   address: 'חבקוק 114, גדרה',
   eventCategory: categories.first,

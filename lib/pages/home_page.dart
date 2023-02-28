@@ -72,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {});
     }
     events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
+    events = sortByDistance(events, user!);
+    events = sortByType(events, user!);
     splashLoad = false;
     setState(() {});
   }
@@ -191,15 +193,16 @@ class _MyHomePageState extends State<MyHomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            (isShowLastedEvents
-                    // ? 'קבוצות עדכניות אליהם הזמינו אותך'
-                    // ? 'קבוצות עדכניות בשבילך'
-                    // : 'קבוצות קרובות בשבילך')
-                    ? 'כל הקבוצות העדכניות בשבילך'
-                    : 'כל הקבוצות הקרובות בשבילך')
+            // (isShowLastedEvents
+            //         // ? 'קבוצות עדכניות אליהם הזמינו אותך'
+            //         // ? 'קבוצות עדכניות בשבילך'
+            //         // : 'קבוצות קרובות בשבילך')
+            //         ? 'כל הקבוצות העדכניות בשבילך'
+            //         : 'כל הקבוצות הקרובות בשבילך')
+            'כל הקבוצות מסביבך'
                 .toText(fontSize: 18, color: Colors.white, bold: true)
                 .pOnly(right: 15),
-                // .pOnly(right: 5),
+            // .pOnly(right: 5),
             // (isShowLastedEvents ? Icons.schedule : Icons.place_outlined)
             //     .icon(color: Colors.white, size: 20).pOnly(right: 12),
           ],

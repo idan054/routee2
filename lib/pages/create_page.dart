@@ -35,7 +35,6 @@ class _CreatePageState extends State<CreatePage> {
   int? sValue;
   int? catIndex;
   EventCategory? selectedCategory;
-  DateTime? selectedDateTime;
   AddressResult? selectedAddress;
   List<AddressResult> suggestions = [];
 
@@ -66,22 +65,33 @@ class _CreatePageState extends State<CreatePage> {
                     .center,
               const SizedBox(height: 15),
 
-              buildTextFormField('מה בתכנון?', titleController),
+              Row(
+                children: [
+                  '1'
+                      .toText(color: Colors.white38, fontSize: 24, bold: true)
+                      .pOnly(left: 10),
+                  buildTextFormField('מה בתכנון?', titleController).expanded(),
+                ],
+              ),
               const SizedBox(height: 15),
               Row(
                 children: [
-                  buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
-                      .onTap(() async {
-                    selectedDateTime = await showOmniDateTimePicker(
-                      context: context,
-                      is24HourMode: true,
-                      startFirstDate: DateTime.now(),
-                    );
-                    if (selectedDateTime == null) return;
-                    dateTimeController.text = timeFormat(selectedDateTime!).toString();
-                    setState(() {});
-                  }).expanded(),
-                  const SizedBox(width: 10),
+                  // buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
+                  //     .onTap(() async {
+                  //   selectedDateTime = await showOmniDateTimePicker(
+                  //     context: context,
+                  //     is24HourMode: true,
+                  //     startFirstDate: DateTime.now(),
+                  //   );
+                  //   if (selectedDateTime == null) return;
+                  //   dateTimeController.text = timeFormat(selectedDateTime!).toString();
+                  //   setState(() {});
+                  // }).expanded(),
+
+              '2'
+                  .toText(color: Colors.white38, fontSize: 24, bold: true)
+
+                      .pOnly(left: 10),
                   buildTextFormField(
                     'איפה נפגש?',
                     locationController,
@@ -111,18 +121,25 @@ class _CreatePageState extends State<CreatePage> {
               ),
 
               const SizedBox(height: 15),
-              buildTextFormField(
-                'ווטאספ לבקשות הצטרפות',
-                phoneController,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  var box = Hive.box('uniBox');
-                  box.put('userPhone', phoneController.text);
-                },
+              Row(
+                children: [
+                  '3'
+                      .toText(color: Colors.white38, fontSize: 24, bold: true)
+                      .pOnly(left: 10),
+                  buildTextFormField(
+                    'ווטאספ לבקשות הצטרפות',
+                    phoneController,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      var box = Hive.box('uniBox');
+                      box.put('userPhone', phoneController.text);
+                    },
+                  ).expanded(),
+                ],
               ),
               const SizedBox(height: 5),
               " לדוגמא: 0545551234"
-                  .toText(color: Colors.white54, fontSize: 13)
+                  .toText(color: Colors.white54, fontSize: 13).pOnly(right: 25)
                   .centerRight,
               const SizedBox(height: 25),
               Row(
@@ -185,8 +202,7 @@ class _CreatePageState extends State<CreatePage> {
 
           TextButton(
             onPressed: () {
-              if (selectedDateTime == null ||
-                  selectedCategory == null ||
+              if (selectedCategory == null ||
                   selectedAddress == null ||
                   phoneController.text.length != 10 ||
                   locationController.text.isEmpty ||
@@ -197,7 +213,6 @@ class _CreatePageState extends State<CreatePage> {
               }
               var newEvent = EventItem(
                 title: titleController.text,
-                eventAt: selectedDateTime,
                 createdAt: DateTime.now(),
                 phone: phoneController.text,
                 eventCategory: selectedCategory,

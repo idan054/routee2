@@ -12,8 +12,6 @@ _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
           ? null
           : EventCategory.fromJson(
               json['eventCategory'] as Map<String, dynamic>),
-      eventAt:
-          const DateTimeStampConv().fromJson(json['eventAt'] as Timestamp?),
       createdAt:
           const DateTimeStampConv().fromJson(json['createdAt'] as Timestamp?),
       phone: json['phone'] as String?,
@@ -28,7 +26,6 @@ Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
     <String, dynamic>{
       'title': instance.title,
       'eventCategory': instance.eventCategory?.toJson(),
-      'eventAt': const DateTimeStampConv().toJson(instance.eventAt),
       'createdAt': const DateTimeStampConv().toJson(instance.createdAt),
       'phone': instance.phone,
       'ageRange': instance.ageRange,

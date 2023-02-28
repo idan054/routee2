@@ -61,6 +61,7 @@ class _CategoryPageState extends State<CategoryPage> {
       widget.user,
       widget.eventCategory,
     );
+    events = sortByDistance(events, widget.user);
     splashLoad = false;
     setState(() {});
   }
@@ -73,30 +74,6 @@ class _CategoryPageState extends State<CategoryPage> {
         backgroundColor: bgColor,
         appBar: AppBar(
           backgroundColor: bgColor,
-          // centerTitle: true,
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 30),
-              // 'Around'.toText(bold: true, fontSize: 14),
-              // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
-              const Spacer(),
-              buildModeButton(
-                isShowLastedEvents,
-                onPressed: () {
-                  isShowLastedEvents = !isShowLastedEvents;
-                  if (isShowLastedEvents) {
-                    events = sortByStartSoon(events, widget.user);
-                  } else {
-                    events = sortByDistance(events, widget.user);
-                  }
-
-                  setState(() {});
-                },
-              ).rtl,
-              // const SizedBox(width: 5),
-            ],
-          ),
         ),
         body: Directionality(
           textDirection: TextDirection.ltr,
@@ -141,7 +118,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     physics: const ScrollPhysics(),
                     itemCount: events.length,
                     itemBuilder: (context, i) {
-                      return buildEventCard(context, events[i], distanceMode: !isShowLastedEvents).px(5);
+                      return buildEventCard(context, events[i],
+                              distanceMode: !isShowLastedEvents)
+                          .px(5);
                     },
                   ),
                   const SizedBox(height: 15),
@@ -163,13 +142,24 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 }
 
-List<EventItem> sortByStartSoon(List<EventItem> events, UserData user) {
+// List<EventItem> sortByStartSoon(List<EventItem> events, UserData user) {
+//   var updatedEvents = <EventItem>[];
+//   for (var event in [...events]) {
+//     var updatedEvnt = setDistance(user, event);
+//     updatedEvents.add(updatedEvnt);
+//   }
+//   updatedEvents.sort((a, b) => a.eventAt!.compareTo(b.eventAt!));
+//   return updatedEvents;
+// }
+
+List<EventItem> sortByType(List<EventItem> events, UserData user) {
   var updatedEvents = <EventItem>[];
   for (var event in [...events]) {
     var updatedEvnt = setDistance(user, event);
     updatedEvents.add(updatedEvnt);
   }
-  updatedEvents.sort((a, b) => a.eventAt!.compareTo(b.eventAt!));
+  updatedEvents.sort(
+      (a, b) => a.eventCategory!.categoryName!.compareTo(b.eventCategory!.categoryName!));
   return updatedEvents;
 }
 

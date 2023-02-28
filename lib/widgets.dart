@@ -32,7 +32,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
   var subSize = 11.0;
   var titleSize = 14.0;
   var eventCategory = eventItem.eventCategory;
-  var time = timeFormat(eventItem.eventAt!).toString();
+  // var time = timeFormat(eventItem.eventAt!).toString();
 
   var distanceKm =
       ('${((eventItem.distanceFromUser ?? 10) / 1000).toString().substring(0, 4)} km');
@@ -49,15 +49,16 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
           leading: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!distanceMode) const SizedBox(height: 4),
+              const SizedBox(height: 10),
               Container(
                       color: bgColor.withOpacity(distanceMode ? 0.5 : 0.5),
-                      child: (distanceMode ? distanceKm : ageRange)
+                      // child: (distanceMode ? distanceKm : ageRange)
+                      child: (distanceKm)
                           .toText(fontSize: subSize, color: Colors.grey)
                           .px(7)
                           .py(5))
                   .rounded(radius: distanceMode ? 20 : 20),
-              const SizedBox(height: 4),
+
               // if(distanceMode)
               // Container(
               //     color: bgColor.withOpacity(0.3),
@@ -68,18 +69,22 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
               //     .rounded(radius: 20)
             ],
           ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              const Spacer(),
 
-              // 'היום, בשעה 21:00'.toText(color: Colors.grey, fontSize: subSize),
-              time.toText(color: Colors.grey, fontSize: subSize),
-              const SizedBox(width: 3),
-              // Icons.date_range.icon(color: Colors.grey, size: subSize),
-              Icons.schedule.icon(color: Colors.grey, size: subSize),
-            ],
-          ).py(3),
+          // subtitle: Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     const Spacer(),
+          //
+          //     // 'היום, בשעה 21:00'.toText(color: Colors.grey, fontSize: subSize),
+          //     time.toText(color: Colors.grey, fontSize: subSize),
+          //     const SizedBox(width: 3),
+          //     // Icons.date_range.icon(color: Colors.grey, size: subSize),
+          //     Icons.schedule.icon(color: Colors.grey, size: subSize),
+          //   ],
+          // ).py(3),
+
+          // subtitle:
+
           trailing: Container(
             height: 45,
             width: 45,
@@ -91,62 +96,61 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
         )
         // .sizedBox(null, 60)
         ,
+        buildAddressText(eventItem, subSize, distanceMode).pOnly(right: 75),
         Row(
           children: [
             const SizedBox(width: 15),
             if (!distanceMode) buildWhatsappJoin(subSize),
             const Spacer(),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                eventItem.address
-                    .toString()
-                    .toText(color: Colors.grey, fontSize: subSize)
-                    .sizedBox(110, null),
-                const SizedBox(width: 3),
-                Icons.place_outlined
-                    .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
-              ],
-            ),
-            const SizedBox(width: 75),
+            buildAgeText(ageRange, subSize, distanceMode).py(3),
           ],
-        ),
-        const SizedBox(height: 5),
-        if (distanceMode)
-          Row(
-            children: [
-              const SizedBox(width: 15),
-              buildWhatsappJoin(subSize),
-              const Spacer(),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  'גילאים $ageRange'
-                      .toString()
-                      .toText(color: Colors.grey, fontSize: subSize)
-                      .sizedBox(110, null),
-                  const SizedBox(width: 3),
-                  Icons.group_outlined.icon(
-                      color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
-                ],
-              ),
-              const SizedBox(width: 75),
-            ],
-          ),
+        ).pOnly(right: 75, top: 2),
       ],
-    ).pOnly(bottom: 10),
+    ).pOnly(bottom: 10, top: 5),
   ).onTap(() {
     print(eventItem.phone);
     var phone = '+972${eventItem.phone?.substring(1)}';
-    var time = timeFormat(eventItem.eventAt!, withDay: true);
+    // var time = timeFormat(eventItem.eventAt!, withDay: true);
     print('phone $phone');
     openWhatsapp(context, number: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באפליקציית Around ואשמח להצטרף!
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
- ונפגש ב${eventItem.address} ב $time
+ ונפגש ב${eventItem.address}
     ''');
   }, radius: 5);
+}
+
+Row buildAgeText(String ageRange, double subSize, bool distanceMode) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      'גילאים $ageRange'
+          .toString()
+          .toText(color: Colors.grey, fontSize: subSize)
+          .sizedBox(110, null),
+      const SizedBox(width: 3),
+      Icons.group_outlined
+          .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+    ],
+  );
+}
+
+Widget buildAddressText(EventItem eventItem, double subSize, bool distanceMode) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    // mainAxisSize: MainAxisSize.min,
+    children: [
+      eventItem.address
+          .toString()
+          .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
+      // .sizedBox(130, null),
+      const SizedBox(width: 3),
+      Icons.place_outlined
+          .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+    ],
+  );
 }
 
 Widget buildWhatsappJoin(double subSize) {

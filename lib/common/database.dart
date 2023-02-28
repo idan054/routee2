@@ -44,9 +44,8 @@ class FsAdvanced {
   static final db = FirebaseFirestore.instance;
   static final reqBase = db
       .collection('events')
-      .orderBy('eventAt', descending: false)
-      .where('eventAt', isGreaterThanOrEqualTo: DateTime.now() // Hide DONE events;
-          );
+      // .where('eventAt', isGreaterThanOrEqualTo: DateTime.now() // Hide DONE events;
+      .orderBy('createdAt', descending: true);
 
   //~ The 3 start soon events of each category:
   static Future<List<EventItem>> getHomeEvents(int age) async {

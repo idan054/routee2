@@ -16,7 +16,7 @@ class EventItem with _$EventItem {
     // String? imagePngName,
     String? title,
     EventCategory? eventCategory,
-    @DateTimeStampConv() DateTime? eventAt,
+    // @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
     @DateTimeStampConv() DateTime? createdAt,
     String? phone,
     List? ageRange,

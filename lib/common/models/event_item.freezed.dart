@@ -22,9 +22,8 @@ EventItem _$EventItemFromJson(Map<String, dynamic> json) {
 mixin _$EventItem {
 // String? imagePngName,
   String? get title => throw _privateConstructorUsedError;
-  EventCategory? get eventCategory => throw _privateConstructorUsedError;
-  @DateTimeStampConv()
-  DateTime? get eventAt => throw _privateConstructorUsedError;
+  EventCategory? get eventCategory =>
+      throw _privateConstructorUsedError; // @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
   @DateTimeStampConv()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
@@ -52,7 +51,6 @@ abstract class $EventItemCopyWith<$Res> {
   $Res call(
       {String? title,
       EventCategory? eventCategory,
-      @DateTimeStampConv() DateTime? eventAt,
       @DateTimeStampConv() DateTime? createdAt,
       String? phone,
       List<dynamic>? ageRange,
@@ -79,7 +77,6 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   $Res call({
     Object? title = freezed,
     Object? eventCategory = freezed,
-    Object? eventAt = freezed,
     Object? createdAt = freezed,
     Object? phone = freezed,
     Object? ageRange = freezed,
@@ -97,10 +94,6 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.eventCategory
           : eventCategory // ignore: cast_nullable_to_non_nullable
               as EventCategory?,
-      eventAt: freezed == eventAt
-          ? _value.eventAt
-          : eventAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -155,7 +148,6 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
   $Res call(
       {String? title,
       EventCategory? eventCategory,
-      @DateTimeStampConv() DateTime? eventAt,
       @DateTimeStampConv() DateTime? createdAt,
       String? phone,
       List<dynamic>? ageRange,
@@ -181,7 +173,6 @@ class __$$_EventItemCopyWithImpl<$Res>
   $Res call({
     Object? title = freezed,
     Object? eventCategory = freezed,
-    Object? eventAt = freezed,
     Object? createdAt = freezed,
     Object? phone = freezed,
     Object? ageRange = freezed,
@@ -199,10 +190,6 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.eventCategory
           : eventCategory // ignore: cast_nullable_to_non_nullable
               as EventCategory?,
-      eventAt: freezed == eventAt
-          ? _value.eventAt
-          : eventAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -242,7 +229,6 @@ class _$_EventItem implements _EventItem {
   const _$_EventItem(
       {this.title,
       this.eventCategory,
-      @DateTimeStampConv() this.eventAt,
       @DateTimeStampConv() this.createdAt,
       this.phone,
       final List<dynamic>? ageRange,
@@ -260,9 +246,7 @@ class _$_EventItem implements _EventItem {
   final String? title;
   @override
   final EventCategory? eventCategory;
-  @override
-  @DateTimeStampConv()
-  final DateTime? eventAt;
+// @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
   @override
   @DateTimeStampConv()
   final DateTime? createdAt;
@@ -293,7 +277,7 @@ class _$_EventItem implements _EventItem {
 
   @override
   String toString() {
-    return 'EventItem(title: $title, eventCategory: $eventCategory, eventAt: $eventAt, createdAt: $createdAt, phone: $phone, ageRange: $ageRange, distanceFromUser: $distanceFromUser, address: $address, latitude: $latitude, longitude: $longitude)';
+    return 'EventItem(title: $title, eventCategory: $eventCategory, createdAt: $createdAt, phone: $phone, ageRange: $ageRange, distanceFromUser: $distanceFromUser, address: $address, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -304,7 +288,6 @@ class _$_EventItem implements _EventItem {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.eventCategory, eventCategory) ||
                 other.eventCategory == eventCategory) &&
-            (identical(other.eventAt, eventAt) || other.eventAt == eventAt) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.phone, phone) || other.phone == phone) &&
@@ -324,7 +307,6 @@ class _$_EventItem implements _EventItem {
       runtimeType,
       title,
       eventCategory,
-      eventAt,
       createdAt,
       phone,
       const DeepCollectionEquality().hash(_ageRange),
@@ -351,7 +333,6 @@ abstract class _EventItem implements EventItem {
   const factory _EventItem(
       {final String? title,
       final EventCategory? eventCategory,
-      @DateTimeStampConv() final DateTime? eventAt,
       @DateTimeStampConv() final DateTime? createdAt,
       final String? phone,
       final List<dynamic>? ageRange,
@@ -367,10 +348,7 @@ abstract class _EventItem implements EventItem {
   String? get title;
   @override
   EventCategory? get eventCategory;
-  @override
-  @DateTimeStampConv()
-  DateTime? get eventAt;
-  @override
+  @override // @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
   @DateTimeStampConv()
   DateTime? get createdAt;
   @override

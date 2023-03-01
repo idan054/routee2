@@ -7,16 +7,25 @@ import 'models/address_result.dart';
 Future<List<AddressResult>?> searchAddress(String searchTerm) async {
   print('START: searchAddress() $searchTerm');
 
-  var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-      '?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g'
-      '&language=he&il';
+  var url = 'https://pogoshneor.herokuapp.com/autocomplete';
+  // var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json''?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g''&language=he&il';
 
   final response = await http.get(
     Uri.parse('$url&input=$searchTerm'),
     headers: {
+      'method': 'GET',
+      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      // 'Access-Control-Allow-Origin': 'http://localhost:52610',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers':
+      'Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale',
     },
   );
+
+  print('response ${response.statusCode}');
+  print('response ${response.body}');
 
   if (response.statusCode == 200) {
     final jsonBody = jsonDecode(response.body);

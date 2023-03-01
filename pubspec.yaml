@@ -23,6 +23,7 @@ dependencies:
   share: ^2.0.4
   url_launcher: ^6.1.10
   haversine_distance: ^1.2.1
+  dio: ^5.0.1
 
 dev_dependencies:
   flutter_test:

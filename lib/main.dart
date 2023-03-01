@@ -5,10 +5,12 @@ import 'package:hive/hive.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'firebase_options.dart';
 
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -19,8 +21,12 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final dbDir = await getApplicationDocumentsDirectory();
-  Hive.init(dbDir.path);
+
+  // path_provider doesn't support web
+  if (!kIsWeb) {
+    final dbDir = await getApplicationDocumentsDirectory();
+    Hive.init(dbDir.path);
+  }
   await Hive.openBox('uniBox');
   await initializeDateFormatting('he_IL', null);
   // if (kDebugMode) await Hive.box('uniBox').clear();

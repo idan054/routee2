@@ -22,14 +22,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // path_provider doesn't support web
+  // path_provider no need on web
   if (!kIsWeb) {
     final dbDir = await getApplicationDocumentsDirectory();
     Hive.init(dbDir.path);
   }
   await Hive.openBox('uniBox');
   await initializeDateFormatting('he_IL', null);
-  // if (kDebugMode) await Hive.box('uniBox').clear();
+  // if (kIsWeb || kDebugMode) await Hive.box('uniBox').clear();
   runApp(const MyApp());
 }
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       locale: const Locale('he'),
-      title: 'Flutter Demo',
+      title: 'Around',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.purple),
       home: const MyHomePage(),

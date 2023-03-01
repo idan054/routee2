@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:around/pages/category_page.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:share/share.dart';
@@ -34,8 +35,9 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
   var eventCategory = eventItem.eventCategory;
   // var time = timeFormat(eventItem.eventAt!).toString();
 
-  var distanceKm =
-      ('${((eventItem.distanceFromUser ?? 10) / 1000).toString().substring(0, 4)} km');
+  var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
+  distanceKm += '.01'; // Needed when user distance = 0
+  distanceKm = '${distanceKm.substring(0, 4)} km';
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
 
   return Card(
@@ -204,23 +206,30 @@ String? timeFormat(DateTime timestamp, {bool withDay = true}) {
 
 void openWhatsapp(BuildContext context,
     {required String text, required String number}) async {
+  print('START: openWhatsapp()');
   var whatsapp = number; //+92xx enter like this
   var whatsappURlAndroid = "whatsapp://send?phone=$whatsapp&text=$text";
   var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
-  if (Platform.isIOS) {
+  // print('whatsappURlAndroid $whatsappURlAndroid');
+  // print('whatsappURLIos $whatsappURLIos');
+
+  if (kIsWeb || Platform.isAndroid) {
+    print('START: != IOS');
+    // android , web
+    await launchUrl(Uri.parse(whatsappURlAndroid));
+    // if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+    // } else {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
+    // }
+
+  } else {
+    print('START: == IOS');
     // for iOS phone only
     if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
       await launchUrl(Uri.parse(
         whatsappURLIos,
       ));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
-    }
-  } else {
-    // android , web
-    if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-      await launchUrl(Uri.parse(whatsappURlAndroid));
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));

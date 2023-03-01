@@ -115,6 +115,8 @@ class _CreatePageState extends State<CreatePage> {
                       locationController.text = sug.name.toString();
                       FocusScope.of(context).unfocus();
                       selectedAddress = await getDetailsFromPlaceId(sug);
+                      print('selectedAddress ${selectedAddress?.lng}');
+                      print('selectedAddress ${selectedAddress?.lat}');
                       setState(() {});
                     }),
                 ],

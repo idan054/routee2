@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:around/common/database.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../common/constants.dart';
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      tagsController.jumpTo(999.0);
+      tagsController.jumpTo(kIsWeb ? 4999.0 : 999.0);
     });
     super.initState();
   }
@@ -130,12 +131,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           );
                         },
                       ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
+                if (!splashLoad) 'גרסא 1.3'.toText(color: Colors.grey, fontSize: 12).center,
+                const SizedBox(height: 5),
               ],
             ),
             if (splashLoad)
               Card(
-                      color: bgColor,
+                      color: bgColorLight,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
                       child: const CircularProgressIndicator().pad(15))

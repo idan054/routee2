@@ -162,12 +162,11 @@ Widget updateInfoForm(
                   }
                 },
                 decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                   counterText: '',
                   labelText: 'גיל',
-                  labelStyle: const TextStyle(
-                      color: Colors.white70, fontWeight: FontWeight.bold),
+                  labelStyle:
+                      const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
                   fillColor: Colors.white,
                   enabledBorder: fieldBorderDeco,
                 ),
@@ -251,6 +250,11 @@ Widget updateInfoForm(
           ).centerRight;
         }).px(15),
         const SizedBox(height: 10),
+        if (!fromUpdateButton) ...[
+          const Spacer(),
+          'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
+          const SizedBox(height: 10),
+        ]
       ],
     ),
   );

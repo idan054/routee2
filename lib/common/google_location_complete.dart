@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
 // import "package:google_maps_webservice/places.dart";
 import 'models/address_result.dart';
 // import "package:google_maps_webservice/geocoding.dart";
@@ -31,30 +32,18 @@ import 'models/address_result.dart';
 //   return suggestions;
 // }
 
-var proxyBase = 'https://cors-anywhere.herokuapp.com/'; // Needed for WEB Access
+// var proxyBase = 'https://cors-anywhere.herokuapp.com/'; // Needed for WEB Access
+var proxyBase = ''; // Needed for WEB Access
 
 Future<List<AddressResult>?> searchAddress(String searchTerm) async {
   print('START: searchAddress() $searchTerm');
 
-  // var url = 'https://pogoshneor.herokuapp.com/autocomplete';
-  var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-      '?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g'
-      '&language=he&il';
-
-  final response = await http.get(
-    Uri.parse('$proxyBase$url&input=$searchTerm'),
-    headers: {
-      'method': 'GET',
-      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      // 'Access-Control-Allow-Origin': 'http://localhost:52610',
-      'Access-Control-Allow-Credentials': 'true',
-      'X-Requested-With': 'XMLHttpRequest',
-      'Access-Control-Allow-Headers':
-          'Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale',
-    },
-  );
+  // var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g&language=he%26il&input=${input};
+  // Just check index.js to see firebase functions (server) deploy
+  var url =
+      'https://us-central1-around-proj.cloudfunctions.net/autocomplete?input$searchTerm';
+  final response =
+      await http.get(Uri.parse(url), headers: {'Access-Control-Allow-Origin': '*'});
 
   print('response ${response.statusCode}');
   print('response ${response.body}');
@@ -85,16 +74,13 @@ Future<List<AddressResult>?> searchAddress(String searchTerm) async {
 // Future<PlaceByGooglePlaceIdModel> getDetailsFromPlaceId(String placeId) async {
 Future getDetailsFromPlaceId(AddressResult address) async {
   print('START: getDetailsFromPlaceId()');
-  var url = 'https://maps.googleapis.com/maps/api/place/details/json'
-      '?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g'
-      '&language=he&il';
-  final response = await http.get(
-    Uri.parse('$proxyBase$url&placeid=${address.placeId}'),
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-  );
+
+  // var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g&language=he&il&placeid=${placeId};
+  // Just check index.js to see firebase functions (server) deploy
+  var url =
+      'https://us-central1-around-proj.cloudfunctions.net/placeDetails?placeId${address.placeId}';
+  final response =
+      await http.get(Uri.parse(url), headers: {'Access-Control-Allow-Origin': '*'});
 
   if (response.statusCode == 200) {
     final jsonBody = jsonDecode(response.body);

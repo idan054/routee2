@@ -52,8 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var box = Hive.box('uniBox');
     var userAge = box.get('userAge');
     var userAddress = box.get('userAddress');
-    print('userAge $userAge');
-    print('userAddress $userAddress');
+    print('appVersion: $appVersion');
+    print('userAge: $userAge');
+    print('userAddress: $userAddress');
 
     if (userAge == null || userAddress == null) {
       showUpdateDetailsDialog(
@@ -132,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                 const SizedBox(height: 10),
-                if (!splashLoad) 'גרסא 1.3'.toText(color: Colors.grey, fontSize: 12).center,
+                if (!splashLoad) 'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
                 const SizedBox(height: 5),
               ],
             ),

@@ -83,6 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     titlesExist = [];
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     if (user == null) const Scaffold(backgroundColor: bgColor);
     if (events.isEmpty && !splashLoad) {
@@ -133,7 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                 const SizedBox(height: 10),
-                if (!splashLoad) 'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
+                if (events.isEmpty && !splashLoad) SizedBox(height: height * 0.45),
+                if (!splashLoad)
+                  'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
                 const SizedBox(height: 5),
               ],
             ),

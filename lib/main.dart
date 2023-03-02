@@ -31,7 +31,8 @@ void main() async {
   }
   await Hive.openBox('uniBox');
   await initializeDateFormatting('he_IL', null);
-  if (kIsWeb || kDebugMode) await Hive.box('uniBox').clear();
+  print('kIsWeb: $kIsWeb kDebugMode: $kDebugMode');
+  // if (kDebugMode) await Hive.box('uniBox').clear();
   runApp(const MyApp());
 }
 

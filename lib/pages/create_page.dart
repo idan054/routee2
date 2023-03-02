@@ -88,9 +88,8 @@ class _CreatePageState extends State<CreatePage> {
                   //   setState(() {});
                   // }).expanded(),
 
-              '2'
-                  .toText(color: Colors.white38, fontSize: 24, bold: true)
-
+                  '2'
+                      .toText(color: Colors.white38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
                     'איפה נפגש?',
@@ -141,7 +140,8 @@ class _CreatePageState extends State<CreatePage> {
               ),
               const SizedBox(height: 5),
               " לדוגמא: 0545551234"
-                  .toText(color: Colors.white54, fontSize: 13).pOnly(right: 25)
+                  .toText(color: Colors.white54, fontSize: 13)
+                  .pOnly(right: 25)
                   .centerRight,
               const SizedBox(height: 25),
               Row(
@@ -267,12 +267,15 @@ class _CreatePageState extends State<CreatePage> {
   }
 }
 
-InputDecoration fieldInputDeco(hintText) {
+InputDecoration fieldInputDeco(String? labelText, String? hintText) {
   return InputDecoration(
+    floatingLabelBehavior: FloatingLabelBehavior.always,
     contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-    labelText: hintText,
+    labelText: labelText,
+    hintText: hintText,
     labelStyle: GoogleFonts.openSans(
-        textStyle: const TextStyle(color: Colors.white54, fontWeight: FontWeight.bold)),
+        textStyle: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+    hintStyle: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white54)),
     fillColor: Colors.white12,
     // filled: !enabled,
     disabledBorder: fieldDisableDeco,
@@ -281,8 +284,9 @@ InputDecoration fieldInputDeco(hintText) {
 }
 
 Widget buildTextFormField(
-  String hintText,
+  String labelText,
   TextEditingController? controller, {
+  String? hintText,
   bool enabled = true,
   ValueChanged<String>? onChanged,
   TextInputType? keyboardType,
@@ -294,8 +298,9 @@ Widget buildTextFormField(
     enabled: enabled,
     controller: controller,
     onChanged: onChanged,
+    textDirection: TextDirection.rtl,
     style: GoogleFonts.openSans(
         textStyle: const TextStyle(color: Colors.white70, fontSize: 14)),
-    decoration: fieldInputDeco(hintText),
+    decoration: fieldInputDeco(labelText, hintText),
   );
 }

@@ -65,206 +65,218 @@ Widget updateInfoDialog(
     selectedAddress = user.address;
   }
 
-  return WillPopScope(
-    onWillPop: () async {
-      return false;
-    },
-    child: fromUpdateButton
-        ? AlertDialog(
-            elevation: 0,
-            backgroundColor: bgColor,
-            contentPadding: EdgeInsets.zero,
-            insetPadding: const EdgeInsets.symmetric(horizontal: 5),
-            content: Directionality(
-              textDirection: TextDirection.rtl,
-              child: updateInfoForm(
-                fromUpdateButton,
-                isErr,
-                ageController,
-                locationController,
-                suggestions,
-                selectedAddress,
-                onConfirm,
+  return LayoutBuilder(builder: (context, size) {
+    bool wideMode = size.maxWidth < 600;
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: fromUpdateButton
+          ? AlertDialog(
+              elevation: 0,
+              backgroundColor: bgColor,
+              contentPadding: EdgeInsets.zero,
+              insetPadding: const EdgeInsets.symmetric(horizontal: 5),
+              content: Directionality(
+                textDirection: TextDirection.rtl,
+                child: updateInfoForm(
+                  fromUpdateButton,
+                  wideMode,
+                  ageController,
+                  locationController,
+                  suggestions,
+                  selectedAddress,
+                  onConfirm,
+                ),
+              ),
+            )
+          : Scaffold(
+              backgroundColor: bgColor,
+              body: Directionality(
+                textDirection: TextDirection.rtl,
+                child: updateInfoForm(
+                  fromUpdateButton,
+                  wideMode,
+                  ageController,
+                  locationController,
+                  suggestions,
+                  selectedAddress,
+                  onConfirm,
+                ),
               ),
             ),
-          )
-        : Scaffold(
-            backgroundColor: bgColor,
-            body: Directionality(
-              textDirection: TextDirection.rtl,
-              child: updateInfoForm(
-                fromUpdateButton,
-                isErr,
-                ageController,
-                locationController,
-                suggestions,
-                selectedAddress,
-                onConfirm,
-              ),
-            ),
-          ),
-  );
+    );
+  });
 }
 
 Widget updateInfoForm(
     bool fromUpdateButton,
-    bool isErr,
+    bool wideMode,
     TextEditingController ageController,
-    TextEditingController locationController,
+    TextEditingController addressController,
     List<AddressResult> suggestions,
     AddressResult? selectedAddress,
     Function(UserData value) onConfirm) {
   var addressNode = FocusNode();
 
+  var ageHint = ageController.text;
+  var addressHint = addressController.text;
+  if (fromUpdateButton) {
+    ageController.text = '';
+    addressController.text = '';
+  }
+
   // return SingleChildScrollView(
-  return StatefulBuilder(
-    builder: (context, setState) => LayoutBuilder(builder: (context, size) {
-      double width = size.maxWidth;
-      var phoneView = size.maxWidth < 600;
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          phoneView
+  return StatefulBuilder(builder: (context, setState) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Assets.tagsAndIcon.image(),
+
+        Opacity(
+          opacity: .8,
+          child: wideMode
               ? Assets.tagsAndIcon.image()
               : Assets.tagsAndIconWide.image().sizedBox(null, 300),
+        ),
 
-          // .sizedBox(70, 70).py(20),
-          // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
-          'ב Around תיצרו ותצטרפו'
-                  '\nלקבוצות מסביבך'
-              .toText(
-                bold: true,
-                maxLines: 5,
-                fontSize: phoneView ? 18 : 28,
-                textAlign: TextAlign.center,
-              )
-              .center,
-          const SizedBox(height: 10),
-          // if (!fromUpdateButton)
-          //   Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
-          const SizedBox(height: 10),
-          if (!fromUpdateButton)
-            'פרטים להצטרפות'
-                .toText(color: isErr ? Colors.red : Colors.white70)
-                .centerRight
-                .px(15),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 55,
-            child: Row(
-              // shrinkWrap: true,
-              // scrollDirection: Axis.horizontal,
-              children: [
-                TextFormField(
-                  controller: ageController,
-                  style: const TextStyle(color: Colors.white70),
-                  keyboardType: TextInputType.number,
-                  maxLength: 2,
-                  onChanged: (value) {
-                    if (value.length == 2) {
-                      if (selectedAddress == null) {
-                        FocusScope.of(context).requestFocus(addressNode);
-                      }
-                      setState(() {});
-                    }
-                  },
-                  decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                    counterText: '',
-                    labelText: 'גיל',
-                    labelStyle: const TextStyle(
-                        color: Colors.white70, fontWeight: FontWeight.bold),
-                    fillColor: Colors.white,
-                    enabledBorder: fieldBorderDeco,
-                  ),
-                ).expanded(flex: 30),
-                const SizedBox(width: 7),
-                // TextFormField(
-                //   controller: messageController,
-                //   style: const TextStyle(color: Colors.white70),
-                //   decoration: InputDecoration(
-                //     contentPadding:
-                //         const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                //     hintText: 'עיר מגורים',
-                //     hintStyle: const TextStyle(color: Colors.white30),
-                //     fillColor: Colors.white,
-                //     enabledBorder: fieldBorderDeco,
-                //   ),
-                // )
-
-                buildTextFormField(
-                  'עיר מגורים',
-                  locationController,
-                  focusNode: addressNode,
-                  onChanged: (value) async {
-                    suggestions = await searchAddress(value) ?? [];
-                    setState(() {});
-                  },
-                ).expanded(flex: 70),
-              ],
-            ).px(15),
-          ),
-
-          Column(
+        // .sizedBox(70, 70).py(20),
+        // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
+        'ב Around תיצרו ותצטרפו'
+                '\nלקבוצות מסביבך'
+            .toText(
+              bold: true,
+              maxLines: 5,
+              fontSize: wideMode ? 16 : 26,
+              textAlign: TextAlign.center,
+            )
+            .center,
+        const SizedBox(height: 10),
+        // if (!fromUpdateButton)
+        //   Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
+        const SizedBox(height: 10),
+        if (!fromUpdateButton)
+          Row(
             children: [
-              if (suggestions.isNotEmpty) const SizedBox(height: 10),
-              for (var sug in suggestions)
-                Card(
-                  color: Colors.white24,
-                  child: ListTile(title: '${sug.name}'.toText(bold: true)),
-                ).onTap(() async {
-                  suggestions = [];
-                  locationController.text = '${sug.name}'.toString();
-                  FocusScope.of(context).unfocus();
-                  selectedAddress = await getDetailsFromPlaceId(sug);
+              'פרטים להצטרפות'.toText(color: Colors.white70).centerRight.px(15),
+              SizedBox(width: width * 0.085),
+              if (addressController.text.isNotEmpty && selectedAddress == null)
+                const CircularProgressIndicator().sizedBox(15, 15),
+            ],
+          ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 55,
+          child: Row(
+            // shrinkWrap: true,
+            // scrollDirection: Axis.horizontal,
+            children: [
+              TextFormField(
+                controller: ageController,
+                textDirection: TextDirection.rtl,
+                style: const TextStyle(color: Colors.white70),
+                keyboardType: TextInputType.number,
+                maxLength: 2,
+                onChanged: (value) {
+                  if (value.length == 2) {
+                    if (selectedAddress == null) {
+                      FocusScope.of(context).requestFocus(addressNode);
+                    }
+                    setState(() {});
+                  }
+                },
+                decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                  counterText: '',
+                  labelText: 'גיל',
+                  hintText: ageHint,
+                  labelStyle:
+                      const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+                  hintStyle: const TextStyle(color: Colors.white54),
+                  fillColor: Colors.white,
+                  enabledBorder: fieldBorderDeco,
+                ),
+              ).expanded(flex: 30),
+              const SizedBox(width: 7),
+              buildTextFormField(
+                'עיר מגורים',
+                hintText: addressHint,
+                addressController,
+                focusNode: addressNode,
+                onChanged: (value) async {
+                  suggestions = await searchAddress(value) ?? [];
                   setState(() {});
-                }),
+                },
+              ).expanded(flex: 70),
             ],
           ).px(15),
+        ),
 
+        Column(
+          children: [
+            if (suggestions.isNotEmpty) const SizedBox(height: 10),
+            for (var sug in suggestions)
+              Card(
+                color: Colors.white24,
+                child: ListTile(title: '${sug.name}'.toText(bold: true)),
+              ).onTap(() async {
+                suggestions = [];
+                addressController.text = '${sug.name}'.toString();
+                FocusScope.of(context).unfocus();
+                selectedAddress = await getDetailsFromPlaceId(sug);
+                setState(() {});
+              }),
+          ],
+        ).px(15),
+
+        const SizedBox(height: 10),
+        Builder(builder: (context) {
+          var age = ageController.text.isNotEmpty ? ageController.text : ageHint;
+          var isDisabled = ((ageController.text.isEmpty && ageHint.isEmpty) ||
+              selectedAddress == null);
+          return TextButton(
+            style: TextButton.styleFrom(
+                backgroundColor: isDisabled
+                    ? Colors.purple[500]!.withOpacity(0.35)
+                    : Colors.purple[500]!),
+            onPressed: isDisabled
+                ? null
+                : () {
+                    // print('ageController.text ${ageController.text}');
+                    print('age ${age}');
+                    print('selectedAddress $selectedAddress');
+
+                    // if (isDisabled) {
+                    //   isErr = true;
+                    //   setState(() {});
+                    //   return;
+                    // }
+
+                    var intAge = int.parse(age);
+                    var box = Hive.box('uniBox');
+                    box.put('userAge', intAge);
+                    box.put('userAddress', selectedAddress?.toJson());
+                    // var name = box.get('name');
+                    onConfirm(UserData(intAge, selectedAddress));
+                    Navigator.pop(context);
+                  },
+            child: 'המשך'.toText(
+                fontSize: 16,
+                bold: true,
+                color: isDisabled ? Colors.white30 : Colors.white),
+          ).centerRight;
+        }).px(15),
+        const SizedBox(height: 10),
+        if (!fromUpdateButton) ...[
+          const Spacer(),
+          'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
           const SizedBox(height: 10),
-          Builder(builder: (context) {
-            var isDisabled = (ageController.text.isEmpty || selectedAddress == null);
-            return TextButton(
-              onPressed: isDisabled
-                  ? null
-                  : () {
-                      print('ageController.text ${ageController.text}');
-                      print('selectedAddress ${selectedAddress}');
-
-                      // if (isDisabled) {
-                      //   isErr = true;
-                      //   setState(() {});
-                      //   return;
-                      // }
-
-                      if (onConfirm != null) {
-                        var age = int.parse(ageController.text);
-                        var box = Hive.box('uniBox');
-                        box.put('userAge', int.parse(ageController.text));
-                        box.put('userAddress', selectedAddress?.toJson());
-                        // var name = box.get('name');
-                        onConfirm(UserData(age, selectedAddress));
-                      }
-                      Navigator.pop(context);
-                    },
-              child: 'המשך'.toText(
-                  fontSize: 16,
-                  bold: true,
-                  color: isDisabled
-                      ? Colors.purple[500]!.withOpacity(0.35)
-                      : Colors.purple[500]!),
-            ).centerRight;
-          }).px(15),
-          const SizedBox(height: 10),
-          if (!fromUpdateButton) ...[
-            const Spacer(),
-            'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
-            const SizedBox(height: 10),
-          ]
-        ],
-      );
-    }),
-  );
+        ]
+      ],
+    );
+  });
 }

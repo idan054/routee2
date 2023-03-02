@@ -4,9 +4,9 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 1.8;
+var appVersion = 1.01;
 const bgColor = Color(0xff1d1b31);
-const bgColorLight = Color(0xff2b2848);
+const bgColorLight = Color(0xff262440);
 
 class UserData {
   int? age;

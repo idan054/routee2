@@ -107,7 +107,7 @@ class _CreatePageState extends State<CreatePage> {
                   if (suggestions.isNotEmpty) const SizedBox(height: 10),
                   for (var sug in suggestions)
                     Card(
-                      color: Colors.white38,
+                      color: bgColorLight,
                       child: ListTile(title: '${sug.name}'.toText(bold: true)),
                     ).onTap(() async {
                       suggestions = [];

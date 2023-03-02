@@ -208,6 +208,7 @@ Widget updateInfoForm(
                 addressController,
                 focusNode: addressNode,
                 onChanged: (value) async {
+                  setState(() {}); // To start loader
                   suggestions = await searchAddress(value) ?? [];
                   setState(() {});
                 },
@@ -221,7 +222,7 @@ Widget updateInfoForm(
             if (suggestions.isNotEmpty) const SizedBox(height: 10),
             for (var sug in suggestions)
               Card(
-                color: Colors.white24,
+                color: bgColorLight,
                 child: ListTile(title: '${sug.name}'.toText(bold: true)),
               ).onTap(() async {
                 suggestions = [];

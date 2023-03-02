@@ -1,3 +1,5 @@
+import 'package:around/common/constants.dart';
+import 'package:around/common/widget_ext.dart';
 import 'package:around/pages/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,7 @@ void main() async {
   }
   await Hive.openBox('uniBox');
   await initializeDateFormatting('he_IL', null);
-  // if (kIsWeb || kDebugMode) await Hive.box('uniBox').clear();
+  if (kIsWeb || kDebugMode) await Hive.box('uniBox').clear();
   runApp(const MyApp());
 }
 
@@ -39,12 +41,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('he'),
-      title: 'Around',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.purple),
-      home: const MyHomePage(),
+    return LayoutBuilder(
+      builder: (context, size) {
+        double width = size.maxWidth;
+
+        if (size.maxWidth < 700) {
+          // Mobile
+          return materialApp;
+        } else {
+          // Web
+          return Container(
+            color: bgColorLight,
+            child: materialApp.px(width * 0.25),
+          );
+        }
+      },
     );
   }
 }
+
+Widget get materialApp => MaterialApp(
+    locale: const Locale('he'),
+    title: 'Around',
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(primarySwatch: Colors.purple),
+    home: const MyHomePage());

@@ -69,6 +69,8 @@ class Assets {
   static const $AssetsCoversGen covers = $AssetsCoversGen();
   static const AssetGenImage tagsAndIcon =
       AssetGenImage('assets/tagsAndIcon.png');
+  static const AssetGenImage tagsAndIconWide =
+      AssetGenImage('assets/tagsAndIconWide.png');
   static const AssetGenImage tagsX = AssetGenImage('assets/tagsX.png');
   static const AssetGenImage whatsappXxl =
       AssetGenImage('assets/whatsapp-xxl.png');
@@ -81,6 +83,7 @@ class Assets {
         addWithBg,
         appIcon,
         tagsAndIcon,
+        tagsAndIconWide,
         tagsX,
         whatsappXxl
       ];

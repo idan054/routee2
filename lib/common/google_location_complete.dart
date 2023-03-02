@@ -41,9 +41,13 @@ Future<List<AddressResult>?> searchAddress(String searchTerm) async {
   // var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g&language=he%26il&input=${input};
   // Just check index.js to see firebase functions (server) deploy
   var url =
-      'https://us-central1-around-proj.cloudfunctions.net/autocomplete?input$searchTerm';
+      'https://us-central1-around-proj.cloudfunctions.net/autocomplete?input=$searchTerm';
   final response =
-      await http.get(Uri.parse(url), headers: {'Access-Control-Allow-Origin': '*'});
+      await http.get(Uri.parse(url), headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers' : 'Content-Type, X-Auth-Token, Origin, Authorization'
+      });
 
   print('response ${response.statusCode}');
   print('response ${response.body}');
@@ -78,9 +82,13 @@ Future getDetailsFromPlaceId(AddressResult address) async {
   // var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyCzo0DzVe0YEMjpPUVMOGX3rqTtKEXlS9g&language=he&il&placeid=${placeId};
   // Just check index.js to see firebase functions (server) deploy
   var url =
-      'https://us-central1-around-proj.cloudfunctions.net/placeDetails?placeId${address.placeId}';
+      'https://us-central1-around-proj.cloudfunctions.net/placeDetails?placeId=${address.placeId}';
   final response =
-      await http.get(Uri.parse(url), headers: {'Access-Control-Allow-Origin': '*'});
+      await http.get(Uri.parse(url), headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers' : 'Content-Type, X-Auth-Token, Origin, Authorization'
+      });
 
   if (response.statusCode == 200) {
     final jsonBody = jsonDecode(response.body);

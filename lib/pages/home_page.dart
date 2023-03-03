@@ -14,6 +14,7 @@ import '../gen/assets.gen.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'category_page.dart';
+import 'dart:math' as math; // import this
 import 'create_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -34,13 +35,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      tagsController.jumpTo(kIsWeb ? 4999.0 : 999.0);
+      // tagsController.jumpTo(9999.0);
     });
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    // tagsController.jumpTo(9999.0);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // if (mounted)
       setUserData();
@@ -153,10 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: bgColor,
-        child: Container(
-                color: Colors.white.withOpacity(0.04), child: Assets.addOnlyWhite.image())
-            .roundedFull,
+        backgroundColor: bgColorLight,
+        child: Assets.addOnlyWhite.image().roundedFull,
         onPressed: () {
           _handleCreateEvent();
         },
@@ -249,41 +249,39 @@ class _MyHomePageState extends State<MyHomePage> {
     // setState(() {});
   }
 
-  SingleChildScrollView buildTagsRow() {
+  Widget buildTagsRow() {
     int? sValue;
     // int? catIndex;
     EventCategory? selectedCategory;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      controller: tagsController,
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: List<Widget>.generate(
-            categories.length,
-            (int i) {
-              var cat = categories[i];
-              return ChoiceChip(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                label: '${cat.categoryName}'
-                    .toText(fontSize: 14, bold: true, color: Colors.white),
-                side: BorderSide(color: cat.categoryColor!, width: 2),
-                selected: sValue == i,
-                backgroundColor: bgColor,
-                selectedColor: cat.categoryColor!,
-                onSelected: (bool selected) {
-                  // sValue = selected ? i : null;
-                  selectedCategory = cat;
-                  // setState(() {});
-                  _handleGoToCategory(null, null, eventCategory: selectedCategory);
-                },
-              ).px(3.5);
-            },
-          ).toList(),
-        ).px(15),
-      ),
+    return SizedBox(
+      height: 50,
+      child:
+      ListView(
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        children: List<Widget>.generate(
+          categories.length,
+          (int i) {
+            var cat = categories[i];
+            return ChoiceChip(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              label: '${cat.categoryName}'
+                  .toText(fontSize: 14, bold: true, color: Colors.white),
+              side: BorderSide(color: cat.categoryColor!, width: 2),
+              selected: sValue == i,
+              backgroundColor: bgColor,
+              selectedColor: cat.categoryColor!,
+              onSelected: (bool selected) {
+                // sValue = selected ? i : null;
+                selectedCategory = cat;
+                // setState(() {});
+                _handleGoToCategory(null, null, eventCategory: selectedCategory);
+              },
+            ).px(3.5);
+          },
+        ).toList(),
+      ).px(15),
     );
   }
 

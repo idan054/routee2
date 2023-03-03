@@ -269,7 +269,7 @@ class _CreatePageState extends State<CreatePage> {
 
 InputDecoration fieldInputDeco(String? labelText, String? hintText) {
   return InputDecoration(
-    floatingLabelBehavior: FloatingLabelBehavior.always,
+    floatingLabelBehavior: hintText == null || hintText.isEmpty ? null :  FloatingLabelBehavior.always,
     contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
     labelText: labelText,
     hintText: hintText,

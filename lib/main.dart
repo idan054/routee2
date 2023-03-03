@@ -65,5 +65,7 @@ Widget get materialApp => MaterialApp(
     locale: const Locale('he'),
     title: 'Around',
     debugShowCheckedModeBanner: false,
-    theme: ThemeData(primarySwatch: Colors.purple),
+    theme: ThemeData(
+      primarySwatch: Colors.purple,
+    ),
     home: const MyHomePage());

@@ -4,7 +4,7 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 1.1;
+var appVersion = 1.2;
 // const bgColor = Color(0xff1d1b31);
 // const bgColorLight = Color(0xff262440);
 
@@ -57,6 +57,7 @@ var categories = [
       // categoryName: 'קבוצות 18-24 לאימונים וספורט',
       // categoryName: 'לאימונים וספורט',
       categoryName: 'לספורט',
+          // ' 👟',
       categoryColor: categoryColors[4],
       coverImagePath: 'assets/covers/sport.png'),
   EventCategory(
@@ -64,6 +65,7 @@ var categories = [
       // categoryName: 'קבוצות 18-24 ליציאה בסופש',
       // categoryName: 'ליציאות בסופש',
       categoryName: 'ליציאות בסופש',
+          // ' 🍻',
       categoryColor: categoryColors[0],
       coverImagePath: 'assets/covers/weekend.png'),
   // EventCategory(
@@ -78,6 +80,7 @@ var categories = [
       // categoryName: 'קבוצות 18-24 למשחקי קופסא',
       // categoryName: 'למשחקי קופסא',
       categoryName: 'למשחקי קופסא',
+          // ' 🎲',
       categoryColor: categoryColors[2],
       coverImagePath: 'assets/covers/board_games.png'),
   EventCategory(
@@ -85,15 +88,10 @@ var categories = [
       // categoryName: 'קבוצות 18-24 למפגשים ספונטנים',
       // categoryName: 'למפגשים ספונטנים',
       categoryName: 'למפגשים ספונטנים',
+          // ' 👋',
       categoryColor: categoryColors[3],
       coverImagePath: 'assets/covers/other_event.png'),
-  EventCategory(
-      categoryType: CategoryType.lecture,
-      // categoryName: 'קבוצות 18-24 לסדנאות והרצאות',
-      // categoryName: 'לסדנאות והרצאות',
-      categoryName: 'לסדנאות והרצאות',
-      categoryColor: categoryColors[5],
-      coverImagePath: 'assets/covers/lecture.png'),
+
   // EventCategory(
   //     categoryType: CategoryType.party,
   //     // categoryName: 'קבוצות 18-24 למסיבות ואירועים',
@@ -101,20 +99,30 @@ var categories = [
   //     categoryName: 'למסיבות ואירועים',
   //     categoryColor: categoryColors[6],
   //     coverImagePath: 'assets/covers/party.png'),
+
   EventCategory(
       categoryType: CategoryType.show,
       // categoryName: 'קבוצות 18-24 ללכת להופעות',
       // categoryName: 'ללכת להופעות',
-      categoryName: 'להופעות ואירועים',
+      categoryName: 'להופעות ומסיבות',
+          // ' 🎉',
       categoryColor: categoryColors[6],
       coverImagePath: 'assets/covers/show.png'),
   EventCategory(
       categoryType: CategoryType.trip,
       // categoryName: 'קבוצות 18-24 לטיולים וחופשות',
-      categoryName: 'לטיולים וחופשות',
-      // categoryName: 'לטיולים',
+      // categoryName: 'לטיולים וחופשות',
+      categoryName: 'לטיולים',
+          // ' 🍃',
       categoryColor: categoryColors[7],
       coverImagePath: 'assets/covers/trip.png'),
+  EventCategory(
+      categoryType: CategoryType.lecture,
+      // categoryName: 'קבוצות 18-24 לסדנאות והרצאות',
+      // categoryName: 'לסדנאות והרצאות',
+      categoryName: 'לאירועים מיוחדים',
+      categoryColor: categoryColors[5],
+      coverImagePath: 'assets/covers/lecture.png'),
 ];
 
 var sampleEvent = EventItem(

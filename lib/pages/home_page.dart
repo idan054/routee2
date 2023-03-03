@@ -175,14 +175,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return AppBar(
       backgroundColor: bgColorDark,
       title: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
-          'Around'.toText(bold: true, fontSize: 18),
+          aroundLogo().pOnly(right: 7, left: 0),
           const Spacer(),
           'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
         ],
-      ).pOnly(right: 7, left: 0),
+      ),
     );
   }
 
@@ -341,4 +339,17 @@ class _MyHomePageState extends State<MyHomePage> {
       MaterialPageRoute(builder: (context) => const CreatePage()),
     );
   }
+}
+
+Widget aroundLogo(){
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      'Ar'.toText(bold: true, fontSize: 20, color: wtspGreen).offset(4, 0),
+      Assets.wtspLocationGroupIcon.image(height: 30).offset(0, 1),
+      // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
+      'und'.toText(bold: true, fontSize: 20, color: wtspGreen).offset(-2, 0),
+    ],
+  ).ltr;
+      // .sizedBox(100, null);
 }

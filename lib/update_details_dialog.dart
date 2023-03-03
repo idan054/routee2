@@ -3,6 +3,7 @@ import 'package:around/common/models/address_result.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
 import 'package:around/pages/create_page.dart';
+import 'package:around/pages/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -150,11 +151,13 @@ Widget updateInfoForm(
           // 'להצטרף וליצור ' 'קבוצות חברתיות'
           // 'קבוצות חברתיות מסביבך'
 
-          SizedBox(height: fromUpdateButton ? 20 : 200),
-          Assets.appIcon.image(height: 80),
+          SizedBox(height: fromUpdateButton ? 20 : 100),
+          // Assets.appIcon.image(height: 80),
+          Assets.wtspLocationGroupIcon.image(height: 100),
+          // aroundLogo(),
 
           // Assets.wtspBgWithIconX.image(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
 
           'Around - '
                   'קבוצות מסביבך'
@@ -165,7 +168,6 @@ Widget updateInfoForm(
                 textAlign: TextAlign.center,
               )
               .center,
-
           const SizedBox(height: 5),
 
           // 'לא משנה אם בא לך'
@@ -178,11 +180,10 @@ Widget updateInfoForm(
               )
               .center
               .px(20),
-          const SizedBox(height: 5),
+          const SizedBox(height: 20),
 
           // if (!fromUpdateButton)
           //   Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
-          const SizedBox(height: 25),
           if (!fromUpdateButton)
             Row(
               children: [
@@ -298,7 +299,7 @@ Widget updateInfoForm(
                       onConfirm(UserData(intAge, selectedAddress));
                       Navigator.pop(context);
                     },
-              child: 'המשך'.toText(
+              child: (fromUpdateButton ? 'המשך' : 'התחל').toText(
                   fontSize: 16,
                   bold: true,
                   color: isDisabled ? Colors.black26 : Colors.black),

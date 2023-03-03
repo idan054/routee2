@@ -9,6 +9,7 @@ import 'dart:math';
 import 'package:around/common/database.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
+import 'package:around/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../common/constants.dart';
@@ -77,14 +78,7 @@ class _CategoryPageState extends State<CategoryPage> {
           leading: Icons.arrow_back
               .icon(size: 25, color: Colors.black)
               .onTap(() => Navigator.pop(context)),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Spacer(),
-              'Around'.toText(bold: true, fontSize: 18),
-              const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
-            ],
-          ).pOnly(right: 7, left: 0),
+          title: aroundLogo().pOnly(right: 7, left: 0).centerLeft,
         ),
         body: Directionality(
           textDirection: TextDirection.ltr,

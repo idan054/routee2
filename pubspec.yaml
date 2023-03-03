@@ -24,16 +24,24 @@ dependencies:
   url_launcher: ^6.1.10
   haversine_distance: ^1.2.1
   dio: ^5.0.1
+#  flutter_svg: ^1.1.6
+  flutter_svg: ^1.0.3
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^2.0.0
   build_runner: ^2.2.0
   json_serializable: ^6.3.1
   flutter_gen_runner: ^5.1.0+1
   freezed: ^2.1.0+1
+
+flutter_gen:
+  output: lib/common/
+  integrations:
+    flutter_svg: true
 
 #  flutter_launcher_icons: 0.11.0
 #  flutter_launcher_name: ^0.0.1
@@ -50,6 +58,7 @@ flutter_icons:
 flutter:
   assets:
     - assets/
+    - assets/svg/
     - assets/covers/
   uses-material-design: true
 

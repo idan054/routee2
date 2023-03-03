@@ -7,15 +7,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'common/google_location_complete.dart';
-import 'gen/assets.gen.dart';
+import '../common/assets.gen.dart';
 
 var fieldBorderDeco = OutlineInputBorder(
-    borderSide: const BorderSide(color: Colors.white38, width: 2),
+    borderSide: const BorderSide(color: Colors.black38, width: 2),
     borderRadius: BorderRadius.circular(8));
 
 var fieldDisableDeco = OutlineInputBorder(
     // borderSide: const BorderSide(color: Colors.transparent, width: 0),
-    borderSide: const BorderSide(color: Colors.white38, width: 2),
+    borderSide: const BorderSide(color: Colors.black38, width: 2),
     borderRadius: BorderRadius.circular(8));
 
 // var fieldFocusBorderDeco = OutlineInputBorder(
@@ -136,19 +136,29 @@ Widget updateInfoForm(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Assets.tagsAndIcon.image(),
-
-          Opacity(
-            opacity: .8,
-            child: wideMode
-                ? Assets.tagsAndIcon.image()
-                : Assets.tagsAndIconWide.image().sizedBox(null, 300),
-          ),
+          // Opacity(
+          //   opacity: .8,
+          //   child: wideMode
+          //       ? Assets.tagsAndIcon.image()
+          //       : Assets.tagsAndIconWide.image().sizedBox(null, 300),
+          // ),
 
           // .sizedBox(70, 70).py(20),
           // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
-          'ב Around תיצרו ותצטרפו'
-                  '\nלקבוצות מסביבך'
+
+          // 'ב Around תיצרו ותצטרפו' '\nלקבוצות מסביבך'
+          // 'להצטרף וליצור ' 'קבוצות חברתיות'
+          // 'קבוצות חברתיות מסביבך'
+
+
+          SizedBox(height: fromUpdateButton ? 20 :  200),
+          Assets.appIcon.image(height: 80),
+
+          // Assets.wtspBgWithIconX.image(),
+          const SizedBox(height: 20),
+
+          'Around - '
+                  'קבוצות מסביבך'
               .toText(
                 bold: true,
                 maxLines: 5,
@@ -156,14 +166,29 @@ Widget updateInfoForm(
                 textAlign: TextAlign.center,
               )
               .center,
-          const SizedBox(height: 10),
+
+          const SizedBox(height: 5),
+
+          // 'לא משנה אם בא לך'
+              ' ללכת למסיבה, לים, לטייל, או אפילו להתאמן.'
+                  ' הכל כיף יותר ביחד (:'
+              .toText(
+                maxLines: 5,
+                fontSize: wideMode ? 16 : 26,
+                textAlign: TextAlign.center,
+              )
+              // .center,
+              .centerRight
+              .px(20),
+          const SizedBox(height: 5),
+
           // if (!fromUpdateButton)
           //   Opacity(opacity: 0.8, child: Assets.tagsX.image().scale(scale: 1.1)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 25),
           if (!fromUpdateButton)
             Row(
               children: [
-                'פרטים להצטרפות'.toText(color: Colors.white70).centerRight.px(15),
+                'פרטים להצטרפות'.toText(color: Colors.black54).centerRight.px(15),
                 SizedBox(width: width * 0.085),
                 if (showLoader) const CircularProgressIndicator().sizedBox(15, 15),
               ],
@@ -178,7 +203,7 @@ Widget updateInfoForm(
                 TextFormField(
                   controller: ageController,
                   textDirection: TextDirection.rtl,
-                  style: const TextStyle(color: Colors.white70),
+                  style: TextStyle(color: Colors.black.withOpacity(0.70)),
                   keyboardType: TextInputType.number,
                   maxLength: 2,
                   onChanged: (value) {
@@ -190,16 +215,14 @@ Widget updateInfoForm(
                     }
                   },
                   decoration: InputDecoration(
-                    floatingLabelBehavior: ageHint.isEmpty ? null : FloatingLabelBehavior.always,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                     counterText: '',
                     labelText: 'גיל',
                     hintText: ageHint,
-                    labelStyle: const TextStyle(
-                        color: Colors.white70, fontWeight: FontWeight.bold),
-                    hintStyle: const TextStyle(color: Colors.white54),
-                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.black.withOpacity(0.70), fontWeight: FontWeight.bold),
+                    hintStyle: const TextStyle(color: Colors.black54),
                     enabledBorder: fieldBorderDeco,
                   ),
                 ).expanded(flex: 30),
@@ -229,7 +252,7 @@ Widget updateInfoForm(
               if (suggestions.isNotEmpty) const SizedBox(height: 10),
               for (var sug in suggestions)
                 Card(
-                  color: bgColorLight,
+                  color: bgColorDark,
                   child: ListTile(title: '${sug.name}'.toText(bold: true)),
                 ).onTap(() async {
                   suggestions = [];
@@ -252,9 +275,8 @@ Widget updateInfoForm(
                 selectedAddress == null);
             return TextButton(
               style: TextButton.styleFrom(
-                  backgroundColor: isDisabled
-                      ? Colors.purple[500]!.withOpacity(0.35)
-                      : Colors.purple[500]!),
+                  backgroundColor:
+                      isDisabled ? bgColorDark.withOpacity(0.35) : bgColorDark),
               onPressed: isDisabled
                   ? null
                   : () {
@@ -279,11 +301,11 @@ Widget updateInfoForm(
               child: 'המשך'.toText(
                   fontSize: 16,
                   bold: true,
-                  color: isDisabled ? Colors.white30 : Colors.white),
+                  color: isDisabled ? Colors.black26 : Colors.black),
             ).centerRight;
           }).px(15),
           // AKA PlaceHolder
-          if(suggestions.isEmpty) const SizedBox(height: 100),
+          if (suggestions.isEmpty) const SizedBox(height: 100),
           const SizedBox(height: 10),
 
           // if (!fromUpdateButton) ...[

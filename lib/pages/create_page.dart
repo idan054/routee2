@@ -12,7 +12,7 @@ import '../common/database.dart';
 import '../common/google_location_complete.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_item.dart';
-import '../gen/assets.gen.dart';
+import '../common/assets.gen.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'category_page.dart';
@@ -31,7 +31,7 @@ class _CreatePageState extends State<CreatePage> {
   var dateTimeController = TextEditingController();
   var phoneController = TextEditingController();
   var locationController = TextEditingController();
-  bool isErrFound = false;
+  String? errText;
   int? sValue;
   int? catIndex;
   EventCategory? selectedCategory;
@@ -59,8 +59,9 @@ class _CreatePageState extends State<CreatePage> {
               // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
               // 'ב Around תיצרו ותצטרפו ' 'לקבוצות מסביבך'.toText(bold: true, maxLines: 5, fontSize: 16).centerRight,
               const SizedBox(height: 15),
-              if (isErrFound)
-                'אנא מלא את כל הפרטים'
+              if (errText != null)
+                // 'אנא מלא את כל הפרטים'
+                errText.toString()
                     .toText(bold: true, fontSize: 16, color: Colors.red)
                     .center,
               const SizedBox(height: 15),
@@ -68,7 +69,7 @@ class _CreatePageState extends State<CreatePage> {
               Row(
                 children: [
                   '1'
-                      .toText(color: Colors.white38, fontSize: 24, bold: true)
+                      .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField('מה בתכנון?', titleController).expanded(),
                 ],
@@ -89,7 +90,7 @@ class _CreatePageState extends State<CreatePage> {
                   // }).expanded(),
 
                   '2'
-                      .toText(color: Colors.white38, fontSize: 24, bold: true)
+                      .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
                     'איפה נפגש?',
@@ -107,7 +108,7 @@ class _CreatePageState extends State<CreatePage> {
                   if (suggestions.isNotEmpty) const SizedBox(height: 10),
                   for (var sug in suggestions)
                     Card(
-                      color: bgColorLight,
+                      color: bgColorDark,
                       child: ListTile(title: '${sug.name}'.toText(bold: true)),
                     ).onTap(() async {
                       suggestions = [];
@@ -125,7 +126,7 @@ class _CreatePageState extends State<CreatePage> {
               Row(
                 children: [
                   '3'
-                      .toText(color: Colors.white38, fontSize: 24, bold: true)
+                      .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
                     'ווטאספ לבקשות הצטרפות',
@@ -140,17 +141,17 @@ class _CreatePageState extends State<CreatePage> {
               ),
               const SizedBox(height: 5),
               " לדוגמא: 0545551234"
-                  .toText(color: Colors.white54, fontSize: 13)
+                  .toText(color: Colors.black54, fontSize: 13)
                   .pOnly(right: 25)
                   .centerRight,
               const SizedBox(height: 25),
               Row(
                 children: [
                   (" מיועד לגיל ${_currentRangeValues.start.round()}")
-                      .toText(color: Colors.white54, fontSize: 13, bold: true),
+                      .toText(color: Colors.black54, fontSize: 13, bold: true),
                   const Spacer(),
                   (" עד ${_currentRangeValues.end.round()}")
-                      .toText(color: Colors.white54, fontSize: 13, bold: true),
+                      .toText(color: Colors.black54, fontSize: 13, bold: true),
                 ],
               ).px(22),
               RangeSlider(
@@ -188,31 +189,50 @@ class _CreatePageState extends State<CreatePage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      backgroundColor: bgColor,
+      backgroundColor: bgColorDark,
       // centerTitle: true,
+      leading: Icons.arrow_back
+          .icon(size: 25, color: Colors.black)
+          .onTap(() => Navigator.pop(context)),
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           // 'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
           // 'Around'.toText(bold: true, fontSize: 18),
           const Spacer(),
-          const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
+          // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
           const SizedBox(width: 5),
           'קבוצה חדשה'.toText(bold: true, fontSize: 18),
           const Spacer(),
-          const SizedBox(width: 50),
+          // const SizedBox(width: 50),
+          const SizedBox(width: 80),
 
           TextButton(
             onPressed: () {
-              if (selectedCategory == null ||
-                  selectedAddress == null ||
-                  phoneController.text.length != 10 ||
-                  locationController.text.isEmpty ||
-                  titleController.text.isEmpty) {
-                isErrFound = true;
+              if(titleController.text.isEmpty){
+                errText = '1. הזן מה בתכנון?';
                 setState(() {});
                 return;
               }
+
+              if(locationController.text.isEmpty || selectedAddress == null){
+                errText = '2. בחר איפה נפגש?';
+                setState(() {});
+                return;
+              }
+
+              if(phoneController.text.length != 10){
+                errText = '3. הזן קישור ווטסאפ או טלפון תקין';
+                setState(() {});
+                return;
+              }
+
+              if(selectedCategory == null){
+                errText = 'יש לבחור את מטרת הקבוצה';
+                setState(() {});
+                return;
+              }
+
               var newEvent = EventItem(
                 title: titleController.text,
                 createdAt: DateTime.now(),
@@ -243,24 +263,46 @@ class _CreatePageState extends State<CreatePage> {
 
   Wrap buildTags() {
     return Wrap(
-      spacing: 10,
+      textDirection: TextDirection.rtl,
+      runSpacing: 10, // up / down
+      spacing: 5, // Left / right
       children: List<Widget>.generate(
         categories.length,
         (int i) {
           var cat = categories[i];
           return ChoiceChip(
-            label: '${cat.categoryName}'
-                .toText(fontSize: 14, bold: true, color: Colors.white),
-            side: BorderSide(color: cat.categoryColor!, width: 2),
+            elevation: 2,
+            pressElevation: 2,
+            padding: EdgeInsets.zero,
+            labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+            // labelPadding: const EdgeInsets.only(left: 7.5),
+            // avatar:
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(backgroundColor: cat.categoryColor, radius: 3),
+                const SizedBox(width: 6),
+                '${cat.categoryName}'
+                    .toText(fontSize: 13, medium: false, color: Colors.black),
+              ],
+            ),
+            // side: BorderSide(color: cat.categoryColor!, width: 2),
             selected: sValue == i,
-            backgroundColor: bgColor,
-            selectedColor: cat.categoryColor!,
+            // backgroundColor: bgColor,
+            backgroundColor: Colors.white,
+            // selectedColor: cat.categoryColor!,
+            // selectedColor: Colors.black.withOpacity(0.06),
+            selectedColor: Colors.purple.withOpacity(0.12),
             onSelected: (bool selected) {
               sValue = selected ? i : null;
               selectedCategory = cat;
               setState(() {});
             },
-          );
+          )
+              .sizedBox(null, 30)
+              // .px(3.5)
+              .rtl;
         },
       ).toList(),
     );
@@ -269,14 +311,15 @@ class _CreatePageState extends State<CreatePage> {
 
 InputDecoration fieldInputDeco(String? labelText, String? hintText) {
   return InputDecoration(
-    floatingLabelBehavior: hintText == null || hintText.isEmpty ? null :  FloatingLabelBehavior.always,
+    floatingLabelBehavior: FloatingLabelBehavior.always,
     contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
     labelText: labelText,
     hintText: hintText,
     labelStyle: GoogleFonts.openSans(
-        textStyle: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
-    hintStyle: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.white54)),
-    fillColor: Colors.white12,
+        textStyle: TextStyle(
+            color: Colors.black.withOpacity(0.70), fontWeight: FontWeight.bold)),
+    hintStyle: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.black54)),
+    fillColor: Colors.black12,
     // filled: !enabled,
     disabledBorder: fieldDisableDeco,
     enabledBorder: fieldBorderDeco,
@@ -300,7 +343,7 @@ Widget buildTextFormField(
     onChanged: onChanged,
     textDirection: TextDirection.rtl,
     style: GoogleFonts.openSans(
-        textStyle: const TextStyle(color: Colors.white70, fontSize: 14)),
+        textStyle: TextStyle(color: Colors.black.withOpacity(0.70), fontSize: 14)),
     decoration: fieldInputDeco(labelText, hintText),
   );
 }

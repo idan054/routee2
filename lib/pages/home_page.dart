@@ -5,12 +5,13 @@ import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import '../common/assets.gen.dart';
 import '../common/constants.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_category.dart';
 import '../common/models/event_item.dart';
-import '../gen/assets.gen.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'category_page.dart';
@@ -97,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: bgColor,
       appBar: buildHomeAppBar(),
       body: RefreshIndicator(
-        color: Colors.white,
-        backgroundColor: Colors.white38,
+        color: Colors.black,
+        backgroundColor: bgColorDark,
         onRefresh: () async => fetchEvents(),
         child: Stack(
           children: [
@@ -145,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             if (splashLoad)
               Card(
-                      color: bgColorLight,
+                      color: bgColorDark,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
                       child: const CircularProgressIndicator().pad(15))
@@ -154,40 +155,34 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: bgColorLight,
-        child: Assets.addOnlyWhite.image().roundedFull,
+      floatingActionButton: FloatingActionButton.extended(
+        extendedPadding: EdgeInsets.symmetric(horizontal: 3),
+        backgroundColor: bgColorDark,
+        label: Row(
+          children: [
+            Assets.addOnlyWhite.image(height: 42).roundedFull,
+            'קבוצה חדשה'.toText(bold: true).pOnly(left: 10).offset(5, 0),
+          ],
+        ),
         onPressed: () {
           _handleCreateEvent();
         },
-      ),
+      ).rtl,
     );
   }
 
   AppBar buildHomeAppBar() {
     return AppBar(
-      backgroundColor: bgColor,
-      // centerTitle: true,
+      backgroundColor: bgColorDark,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // buildModeButton(
-          //   isShowLastedEvents,
-          //   onPressed: () {
-          //     isShowLastedEvents = !isShowLastedEvents;
-          //     setState(() {});
-          //   },
-          // ).rtl,
-
-          // 'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
-          const Spacer(),
           const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
           'Around'.toText(bold: true, fontSize: 18),
-          // 'קבוצות עדכניות'.toText(bold: true, fontSize: 18),
-          // const SizedBox(width: 5),
-          //
+          const Spacer(),
+          'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
         ],
-      ),
+      ).pOnly(right: 7, left: 0),
     );
   }
 
@@ -198,28 +193,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            // (isShowLastedEvents
-            //         // ? 'קבוצות עדכניות אליהם הזמינו אותך'
-            //         // ? 'קבוצות עדכניות בשבילך'
-            //         // : 'קבוצות קרובות בשבילך')
-            //         ? 'כל הקבוצות העדכניות בשבילך'
-            //         : 'כל הקבוצות הקרובות בשבילך')
-            'כל הקבוצות מסביבך'
-                .toText(fontSize: 18, color: Colors.white, bold: true)
-                .pOnly(right: 15),
-            // .pOnly(right: 5),
-            // (isShowLastedEvents ? Icons.schedule : Icons.place_outlined)
-            //     .icon(color: Colors.white, size: 20).pOnly(right: 12),
-          ],
-        ),
-        const SizedBox(height: 3),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   children: [
+        //     // (isShowLastedEvents
+        //     //         // ? 'קבוצות עדכניות אליהם הזמינו אותך'
+        //     //         // ? 'קבוצות עדכניות בשבילך'
+        //     //         // : 'קבוצות קרובות בשבילך')
+        //     //         ? 'כל הקבוצות העדכניות בשבילך'
+        //     //         : 'כל הקבוצות הקרובות בשבילך')
+        //     'כל הקבוצות מסביבך'
+        //         .toText(fontSize: 18, color: Colors.black, bold: true)
+        //         .pOnly(right: 15),
+        //     // .pOnly(right: 5),
+        //     // (isShowLastedEvents ? Icons.schedule : Icons.place_outlined)
+        //     //     .icon(color: Colors.black, size: 20).pOnly(right: 12),
+        //   ],
+        // ),
         Row(
           children: [
             'עדכון'
-                .toText(fontSize: 14, color: Colors.white54, bold: true, underline: false)
+                .toText(fontSize: 12, color: Colors.black54, bold: false, underline: true)
                 .px(15)
                 .onTap(() {
               showUpdateDetailsDialog(
@@ -233,10 +227,10 @@ class _MyHomePageState extends State<MyHomePage> {
             const Spacer(),
             if (user != null)
               'לגלאי ${user?.age}, באיזור ${user?.address?.name}'
-                  .toText(fontSize: 14, color: Colors.white38, bold: false)
+                  .toText(fontSize: 14, color: Colors.black54, medium: true)
                   .px(15),
           ],
-        ),
+        ).px(7),
       ],
     );
   }
@@ -255,32 +249,54 @@ class _MyHomePageState extends State<MyHomePage> {
     EventCategory? selectedCategory;
 
     return SizedBox(
-      height: 50,
-      child:
-      ListView(
-        scrollDirection: Axis.horizontal,
-        reverse: true,
-        children: List<Widget>.generate(
-          categories.length,
-          (int i) {
-            var cat = categories[i];
-            return ChoiceChip(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-              label: '${cat.categoryName}'
-                  .toText(fontSize: 14, bold: true, color: Colors.white),
-              side: BorderSide(color: cat.categoryColor!, width: 2),
-              selected: sValue == i,
-              backgroundColor: bgColor,
-              selectedColor: cat.categoryColor!,
-              onSelected: (bool selected) {
-                // sValue = selected ? i : null;
-                selectedCategory = cat;
-                // setState(() {});
-                _handleGoToCategory(null, null, eventCategory: selectedCategory);
-              },
-            ).px(3.5);
-          },
-        ).toList(),
+      // height: 50,
+      child: Wrap(
+        textDirection: TextDirection.rtl,
+        runSpacing: 10, // up / down
+        spacing: 5, // Left / right
+        // scrollDirection: Axis.horizontal,
+        // reverse: true,
+        children: [
+          // const SizedBox(width: 5),
+          ...List<Widget>.generate(
+            categories.length,
+            (int i) {
+              var cat = categories[i];
+              return ChoiceChip(
+                elevation: 1,
+                padding: EdgeInsets.zero,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                // labelPadding: const EdgeInsets.only(left: 7.5),
+                // avatar:
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(backgroundColor: cat.categoryColor, radius: 3),
+                    const SizedBox(width: 6),
+                    '${cat.categoryName}'
+                        .toText(fontSize: 13, medium: false, color: Colors.black),
+                  ],
+                ),
+                // side: BorderSide(color: cat.categoryColor!, width: 2),
+                selected: sValue == i,
+                // backgroundColor: bgColor,
+                backgroundColor: Colors.white,
+                selectedColor: cat.categoryColor!,
+                onSelected: (bool selected) {
+                  // sValue = selected ? i : null;
+                  selectedCategory = cat;
+                  // setState(() {});
+                  _handleGoToCategory(null, null, eventCategory: selectedCategory);
+                },
+              )
+                  .sizedBox(null, 30)
+                  // .px(3.5)
+                  .rtl;
+            },
+          ).toList(),
+          // const SizedBox(width: 5),
+        ],
       ).px(15),
     );
   }
@@ -293,13 +309,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Row(
       children: [
         const SizedBox(height: 50),
-        Icons.keyboard_double_arrow_left.icon(),
+        Icons.keyboard_double_arrow_left.icon(color: Colors.black),
         const SizedBox(width: 5),
         // 'עוד'.toText(fontSize: 12.0, color: color, bold: true),
         const Spacer(),
         '${eventItem.eventCategory?.categoryName}'
             // .toText(color: color, fontSize: 15, bold: true)
-            .toText(color: Colors.white, fontSize: 15, bold: true)
+            .toText(fontSize: 15, bold: true)
             .centerRight,
         const SizedBox(width: 7),
         CircleAvatar(backgroundColor: eventItem.eventCategory?.categoryColor, radius: 3)

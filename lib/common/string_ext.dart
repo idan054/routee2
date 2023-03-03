@@ -41,42 +41,48 @@ extension StringX on String {
 
   // My:
   Text toText(
-          {Color color = Colors.white,
-          double? fontSize,
-          TextAlign? textAlign,
-          bool medium = false,
-          int maxLines = 2,
-          bool bold = false,
-          bool underline = false,
-          bool softWrap = false}) =>
-      Text(this,
-          softWrap: softWrap,
-          maxLines: maxLines,
-          textAlign: textAlign ?? (isHebrew ? TextAlign.right : TextAlign.left),
-          textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
-          overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.openSans(
-              textStyle: (bold
-                  ? TextStyle(
-                      color: color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: fontSize ?? 14,
-                      decoration: underline ? TextDecoration.underline : null
-                      // height: 1
-                      ) // line spacing
-                  : medium
-                      ? TextStyle(
-                          color: color,
-                          fontSize: fontSize ?? 14,
-                          decoration: underline ? TextDecoration.underline : null
-                          // height: 1
-                          )
-                      : TextStyle(
-                          color: color,
-                          fontSize: fontSize ?? 14,
-                          decoration: underline ? TextDecoration.underline : null
-                          // height: 1
-                          )))); // line spacing
+      {Color color = Colors.black,
+      double? fontSize,
+      TextAlign? textAlign,
+      bool medium = false,
+      int maxLines = 2,
+      bool bold = false,
+      bool autoRemove = true,
+      bool underline = false,
+      bool softWrap = false}) {
+    var txt = this;
+    if (autoRemove) txt = replaceAll(', ישראל', '');
+
+    return Text(txt,
+        softWrap: softWrap,
+        maxLines: maxLines,
+        textAlign: textAlign ?? (txt.isHebrew ? TextAlign.right : TextAlign.left),
+        textDirection: txt.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+        overflow: TextOverflow.ellipsis,
+        style: GoogleFonts.openSans(
+            textStyle: (bold
+                ? TextStyle(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: fontSize ?? 14,
+                    decoration: underline ? TextDecoration.underline : null
+                    // height: 1
+                    ) // line spacing
+                : medium
+                    ? TextStyle(
+                        color: color,
+                        fontWeight: FontWeight.w600,
+                        fontSize: fontSize ?? 14,
+                        decoration: underline ? TextDecoration.underline : null
+                        // height: 1
+                        )
+                    : TextStyle(
+                        color: color,
+                        fontSize: fontSize ?? 14,
+                        decoration: underline ? TextDecoration.underline : null
+                        // height: 1
+                        )))); // line spacing}
+  }
 
   // ExpandableText toTextExpanded( // String text,
   //         {

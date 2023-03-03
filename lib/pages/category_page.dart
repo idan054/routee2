@@ -15,7 +15,7 @@ import '../common/constants.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_category.dart';
 import '../common/models/event_item.dart';
-import '../gen/assets.gen.dart';
+import '../common/assets.gen.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'category_page.dart';
@@ -73,7 +73,18 @@ class _CategoryPageState extends State<CategoryPage> {
       child: Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
-          backgroundColor: bgColor,
+          backgroundColor: bgColorDark,
+          leading: Icons.arrow_back
+              .icon(size: 25, color: Colors.black)
+              .onTap(() => Navigator.pop(context)),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Spacer(),
+              'Around'.toText(bold: true, fontSize: 18),
+              const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
+            ],
+          ).pOnly(right: 7, left: 0),
         ),
         body: Directionality(
           textDirection: TextDirection.ltr,
@@ -96,7 +107,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           const Spacer(),
                           'כל הקבוצות '
                                   '${widget.eventCategory.categoryName}'
-                              .toText(fontSize: 18, color: Colors.white, bold: true)
+                              .toText(fontSize: 18, color: Colors.black, bold: true)
                               .px(5),
                           const SizedBox(width: 5),
                           CircleAvatar(
@@ -107,7 +118,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       ),
                       const SizedBox(height: 3),
                       'לגלאי ${widget.user.age}, באיזור ${widget.user.address?.name}'
-                          .toText(fontSize: 14, color: Colors.white38, bold: false)
+                          .toText(fontSize: 14, color: Colors.black54, medium: true)
                           .px(15),
                     ],
                   ),

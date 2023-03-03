@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'common/assets.gen.dart';
 import 'common/constants.dart';
 import 'common/models/event_category.dart';
 import 'common/models/event_item.dart';
 import 'package:intl/intl.dart' as intl;
 import 'dart:io' show Platform;
+
+import '../common/assets.gen.dart';
 
 OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed}) {
   return OutlinedButton.icon(
@@ -36,69 +39,57 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
   // var time = timeFormat(eventItem.eventAt!).toString();
 
   var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
-  distanceKm += '.01'; // Needed when user distance = 0
-  distanceKm = '${distanceKm.substring(0, 4)} km';
+  distanceKm += '100'; // Needed when user distance = 0
+  distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
 
   return Card(
-    color: Colors.white12,
-    elevation: 0,
+    color: Colors.white,
+    elevation: 3,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
     child: Column(
       children: [
         ListTile(
-          title: eventItem.title.toString().toText(bold: true, fontSize: titleSize),
+          title: eventItem.title.toString().toText(
+                medium: true,
+                fontSize: titleSize,
+                color: Colors.black,
+              ),
           leading: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
               Container(
-                      color: bgColor.withOpacity(distanceMode ? 0.5 : 0.5),
+                      color: bgColor.withOpacity(0.8),
                       // child: (distanceMode ? distanceKm : ageRange)
                       child: (distanceKm)
-                          .toText(fontSize: subSize, color: Colors.grey)
+                          .toText(
+                            fontSize: subSize - 2,
+                            medium: true,
+                            color: Colors.black54,
+                          )
                           .px(7)
                           .py(5))
-                  .rounded(radius: distanceMode ? 20 : 20),
-
-              // if(distanceMode)
-              // Container(
-              //     color: bgColor.withOpacity(0.3),
-              //     child: (ageRange)
-              //         .toText(fontSize: subSize, color: Colors.grey)
-              //         .px(7)
-              //         .py(5))
-              //     .rounded(radius: 20)
+                  .rounded(radius: 20),
             ],
           ),
 
-          // subtitle: Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     const Spacer(),
-          //
-          //     // 'היום, בשעה 21:00'.toText(color: Colors.grey, fontSize: subSize),
-          //     time.toText(color: Colors.grey, fontSize: subSize),
-          //     const SizedBox(width: 3),
-          //     // Icons.date_range.icon(color: Colors.grey, size: subSize),
-          //     Icons.schedule.icon(color: Colors.grey, size: subSize),
-          //   ],
-          // ).py(3),
+          // trailing: Container(
+          //   height: 45,
+          //   width: 45,
+          //   color: Colors.white,
+          //   child: Image(
+          //       image: AssetImage('${eventCategory?.coverImagePath}'), fit: BoxFit.cover),
+          // ).rounded(radius: 7),
 
-          // subtitle:
-
-          trailing: Container(
-            height: 45,
-            width: 45,
-            color: Colors.white,
-            child: Image(
-                image: AssetImage('${eventCategory?.coverImagePath}'), fit: BoxFit.cover),
-          ).rounded(radius: 7),
           // isThreeLine: true,
         )
         // .sizedBox(null, 60)
         ,
-        buildAddressText(eventItem, subSize, distanceMode).pOnly(right: 75),
+        buildAddressText(eventItem, subSize, distanceMode)
+            // .pOnly(right: 75)
+            .pOnly(right: 15)
+        ,
         Row(
           children: [
             const SizedBox(width: 15),
@@ -106,7 +97,8 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
             const Spacer(),
             buildAgeText(ageRange, subSize, distanceMode).py(3),
           ],
-        ).pOnly(right: 75, top: 2),
+        // ).pOnly(right: 75, top: 2),
+        ).pOnly(right: 15, top: 2),
       ],
     ).pOnly(bottom: 10, top: 5),
   ).onTap(() {
@@ -140,13 +132,13 @@ Row buildAgeText(String ageRange, double subSize, bool distanceMode) {
 }
 
 Widget buildAddressText(EventItem eventItem, double subSize, bool distanceMode) {
+  var address = eventItem.address.toString();
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     // mainAxisSize: MainAxisSize.min,
     children: [
-      eventItem.address
-          .toString()
-          .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
+      address.toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
       // .sizedBox(130, null),
       const SizedBox(width: 3),
       Icons.place_outlined
@@ -162,17 +154,18 @@ Widget buildWhatsappJoin(double subSize) {
       // ('הצטרף ')
       // if (distanceMode)
       //   '($ageRange)'.toText(color: Colors.grey, fontSize: subSize),
-      ('לקבוצה ').toText(color: Colors.grey, fontSize: subSize, bold: true),
+      ('לקבוצה').toText(color: wtspGreen, fontSize: subSize, bold: true),
       const SizedBox(width: 5),
       // Icons.near_me_outlined.icon(color: Colors.grey, size: subSize),
-      const Opacity(
-        opacity: 0.6,
-        child: SizedBox(
-          height: 13,
-          width: 13,
-          child: Image(image: AssetImage('assets/whatsapp-xxl.png'), fit: BoxFit.cover),
-        ),
-      )
+      Assets.svg.whatsappOutline.svg(color: wtspGreen, height: 18)
+      // const Opacity(
+      //   opacity: 0.6,
+      //   child: SizedBox(
+      //     height: 13,
+      //     width: 13,
+      //     child: Image(image: AssetImage('assets/whatsapp-xxl.png'), fit: BoxFit.cover),
+      //   ),
+      // )
     ],
   );
 }

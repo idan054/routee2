@@ -25,7 +25,7 @@ const corsHandler = require('cors')({origin: true});
        const input = query["input"]
 
     corsHandler(req, res, () => {
-       var url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyD-5oNLyCX9tiICMNCozzSH8ZoUbb_-7pg&language=he%26il&input=${input}`;
+       var url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyD-5oNLyCX9tiICMNCozzSH8ZoUbb_-7pg&language=he&il&input=${input}`;
               axios.get(url, {}, {headers: {'Access-Control-Allow-Origin': '*'}})
            .then(function (response) {
                res.send(response.data);

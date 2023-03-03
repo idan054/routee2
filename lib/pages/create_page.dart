@@ -61,7 +61,8 @@ class _CreatePageState extends State<CreatePage> {
               const SizedBox(height: 15),
               if (errText != null)
                 // 'אנא מלא את כל הפרטים'
-                errText.toString()
+                errText
+                    .toString()
                     .toText(bold: true, fontSize: 16, color: Colors.red)
                     .center,
               const SizedBox(height: 15),
@@ -71,7 +72,8 @@ class _CreatePageState extends State<CreatePage> {
                   '1'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
-                  buildTextFormField('מה בתכנון?', titleController).expanded(),
+                  buildTextFormField('מה בתכנון?', titleController, pinLabel: false)
+                      .expanded(),
                 ],
               ),
               const SizedBox(height: 15),
@@ -95,6 +97,7 @@ class _CreatePageState extends State<CreatePage> {
                   buildTextFormField(
                     'איפה נפגש?',
                     locationController,
+                    pinLabel: false,
                     onChanged: (value) async {
                       suggestions = await searchAddress(value) ?? [];
                       setState(() {});
@@ -109,7 +112,10 @@ class _CreatePageState extends State<CreatePage> {
                   for (var sug in suggestions)
                     Card(
                       color: bgColorDark,
-                      child: ListTile(title: '${sug.name}'.toText(bold: true)),
+                      child: ListTile(
+                          title: '${sug.name}'.toText(
+                        bold: true,
+                      )),
                     ).onTap(() async {
                       suggestions = [];
                       locationController.text = sug.name.toString();
@@ -131,6 +137,7 @@ class _CreatePageState extends State<CreatePage> {
                   buildTextFormField(
                     'ווטאספ לבקשות הצטרפות',
                     phoneController,
+                    pinLabel: false,
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       var box = Hive.box('uniBox');
@@ -209,25 +216,25 @@ class _CreatePageState extends State<CreatePage> {
 
           TextButton(
             onPressed: () {
-              if(titleController.text.isEmpty){
+              if (titleController.text.isEmpty) {
                 errText = '1. הזן מה בתכנון?';
                 setState(() {});
                 return;
               }
 
-              if(locationController.text.isEmpty || selectedAddress == null){
+              if (locationController.text.isEmpty || selectedAddress == null) {
                 errText = '2. בחר איפה נפגש?';
                 setState(() {});
                 return;
               }
 
-              if(phoneController.text.length != 10){
+              if (phoneController.text.length != 10) {
                 errText = '3. הזן קישור ווטסאפ או טלפון תקין';
                 setState(() {});
                 return;
               }
 
-              if(selectedCategory == null){
+              if (selectedCategory == null) {
                 errText = 'יש לבחור את מטרת הקבוצה';
                 setState(() {});
                 return;
@@ -309,9 +316,9 @@ class _CreatePageState extends State<CreatePage> {
   }
 }
 
-InputDecoration fieldInputDeco(String? labelText, String? hintText) {
+InputDecoration fieldInputDeco(String? labelText, String? hintText, bool pinLabel) {
   return InputDecoration(
-    floatingLabelBehavior: FloatingLabelBehavior.always,
+    floatingLabelBehavior: pinLabel ? FloatingLabelBehavior.always : null,
     contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
     labelText: labelText,
     hintText: hintText,
@@ -331,6 +338,7 @@ Widget buildTextFormField(
   TextEditingController? controller, {
   String? hintText,
   bool enabled = true,
+  bool pinLabel = true,
   ValueChanged<String>? onChanged,
   TextInputType? keyboardType,
   FocusNode? focusNode,
@@ -344,6 +352,6 @@ Widget buildTextFormField(
     textDirection: TextDirection.rtl,
     style: GoogleFonts.openSans(
         textStyle: TextStyle(color: Colors.black.withOpacity(0.70), fontSize: 14)),
-    decoration: fieldInputDeco(labelText, hintText),
+    decoration: fieldInputDeco(labelText, hintText, pinLabel),
   );
 }

@@ -150,8 +150,7 @@ Widget updateInfoForm(
           // 'להצטרף וליצור ' 'קבוצות חברתיות'
           // 'קבוצות חברתיות מסביבך'
 
-
-          SizedBox(height: fromUpdateButton ? 20 :  200),
+          SizedBox(height: fromUpdateButton ? 20 : 200),
           Assets.appIcon.image(height: 80),
 
           // Assets.wtspBgWithIconX.image(),
@@ -170,15 +169,14 @@ Widget updateInfoForm(
           const SizedBox(height: 5),
 
           // 'לא משנה אם בא לך'
-              ' ללכת למסיבה, לים, לטייל, או אפילו להתאמן.'
+          ' ללכת למסיבה, לים, לטייל, או אפילו להתאמן.'
                   ' הכל כיף יותר ביחד (:'
               .toText(
                 maxLines: 5,
                 fontSize: wideMode ? 16 : 26,
                 textAlign: TextAlign.center,
               )
-              // .center,
-              .centerRight
+              .center
               .px(20),
           const SizedBox(height: 5),
 
@@ -221,7 +219,9 @@ Widget updateInfoForm(
                     counterText: '',
                     labelText: 'גיל',
                     hintText: ageHint,
-                    labelStyle: TextStyle(color: Colors.black.withOpacity(0.70), fontWeight: FontWeight.bold),
+                    labelStyle: TextStyle(
+                        color: Colors.black.withOpacity(0.70),
+                        fontWeight: FontWeight.bold),
                     hintStyle: const TextStyle(color: Colors.black54),
                     enabledBorder: fieldBorderDeco,
                   ),

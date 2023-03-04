@@ -135,7 +135,8 @@ class _CreatePageState extends State<CreatePage> {
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
-                    'ווטאספ לבקשות הצטרפות',
+                    // 'ווטסאפ לבקשות הצטרפות',
+                    "קישור קבוצה / מס' ווטסאפ",
                     phoneController,
                     pinLabel: false,
                     keyboardType: TextInputType.number,
@@ -147,10 +148,17 @@ class _CreatePageState extends State<CreatePage> {
                 ],
               ),
               const SizedBox(height: 5),
-              " לדוגמא: 0545551234"
-                  .toText(color: Colors.black54, fontSize: 13)
-                  .pOnly(right: 25)
-                  .centerRight,
+              if (errText != null && errText!.contains('טלפון'))
+                        "טלפון לדוגמא:  "
+                        "0545551234"
+                        "\n"
+                "קבוצה לדוגמא:  "
+                        // "\n"
+                        "chat.whatsapp.com/BAnak"
+                        // "\n"
+                    .toText(color: Colors.red, fontSize: 13, maxLines: 10)
+                    .pOnly(right: 25)
+                    .centerRight,
               const SizedBox(height: 25),
               Row(
                 children: [
@@ -165,7 +173,7 @@ class _CreatePageState extends State<CreatePage> {
                 values: _currentRangeValues,
                 min: 10,
                 max: 60,
-                divisions: 25,
+                // divisions: 25,
                 // labels: RangeLabels(
                 //   _currentRangeValues.start.round().toString(),
                 //   _currentRangeValues.end.round().toString(),
@@ -228,8 +236,9 @@ class _CreatePageState extends State<CreatePage> {
                 return;
               }
 
-              if (phoneController.text.length != 10) {
-                errText = '3. הזן קישור ווטסאפ או טלפון תקין';
+              if (phoneController.text.length != 10 &&
+                  !(phoneController.text.contains('chat.whatsapp'))) {
+                errText = '3. הזן קישור קבוצת ווטסאפ או טלפון תקין';
                 setState(() {});
                 return;
               }
@@ -344,6 +353,13 @@ Widget buildTextFormField(
   FocusNode? focusNode,
 }) {
   return TextFormField(
+    // selectionControls:  FlutterSelectionControls(toolBarItems: [
+    //   ToolBarItem(item: Text('Select All'), itemControl: ToolBarItemControl.selectAll),
+    //   ToolBarItem(item: const Icon(Icons.copy), itemControl: ToolBarItemControl.copy),
+    //   ToolBarItem(item: const Icon(Icons.cut), itemControl: ToolBarItemControl.cut),
+    //   ToolBarItem(item: const Icon(Icons.paste), itemControl: ToolBarItemControl.paste),
+    //
+    // ]),
     focusNode: focusNode,
     keyboardType: keyboardType,
     enabled: enabled,

@@ -35,7 +35,7 @@ Future showUpdateDetailsDialog(
 }) {
   return showDialog(
     context: context,
-    barrierColor: fromUpdateButton ? Colors.white12 : bgColor,
+    barrierColor: fromUpdateButton ? Colors.black12 : bgColor,
     barrierDismissible: false,
     builder: (_) {
       return updateInfoDialog(
@@ -74,10 +74,10 @@ Widget updateInfoDialog(
       },
       child: fromUpdateButton
           ? AlertDialog(
-              elevation: 0,
+              elevation: 4,
               backgroundColor: bgColor,
               contentPadding: EdgeInsets.zero,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 5),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 10),
               content: Directionality(
                 textDirection: TextDirection.rtl,
                 child: updateInfoForm(
@@ -151,13 +151,13 @@ Widget updateInfoForm(
           // 'להצטרף וליצור ' 'קבוצות חברתיות'
           // 'קבוצות חברתיות מסביבך'
 
-          SizedBox(height: fromUpdateButton ? 20 : 100),
+          SizedBox(height: fromUpdateButton ? 20 : 50),
           // Assets.appIcon.image(height: 80),
-          Assets.wtspLocationGroupIcon.image(height: 100),
+          Assets.wtspLocationGroupIconSolid.image(height: 80),
           // aroundLogo(),
 
           // Assets.wtspBgWithIconX.image(),
-          const SizedBox(height: 5),
+          const SizedBox(height: 10),
 
           'Around - '
                   'קבוצות מסביבך'

@@ -12,7 +12,8 @@ var textColor = Colors.white;
 
 // const bgColor = Color(0xffE1DBD1);
 const bgColor = Color(0xfff7f4ed);
-const wtspGreen = Color(0xff0ad84b);
+// const wtspGreen = Color(0xff0ad84b);
+const wtspGreen = Color(0xff25d366);
 const wtspGreenLight = Color(0xffdaf9c4);
 const bgColorDark = Color(0xffE1DBD1);
 

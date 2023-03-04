@@ -26,6 +26,7 @@ dependencies:
   dio: ^5.0.1
 #  flutter_svg: ^1.1.6
   flutter_svg: ^1.0.3
+#  text_selection_controls: ^0.0.2
 
 
 
@@ -38,12 +39,8 @@ dev_dependencies:
   flutter_gen_runner: ^5.1.0+1
   freezed: ^2.1.0+1
 
-flutter_gen:
-  output: lib/common/
-  integrations:
-    flutter_svg: true
 
-#  flutter_launcher_icons: 0.11.0
+  flutter_launcher_icons: 0.11.0
 #  flutter_launcher_name: ^0.0.1
   #  flutter_launcher_name: # flutter pub get
 
@@ -53,7 +50,12 @@ flutter_gen:
 flutter_icons:
   ios: true
   android: "ic_launcher"
-  image_path: "assets/app_icon.png"
+  image_path: "assets/wtsp-green-app_icon.png"
+
+flutter_gen:
+  output: lib/common/
+  integrations:
+    flutter_svg: true
 
 flutter:
   assets:

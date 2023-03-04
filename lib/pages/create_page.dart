@@ -41,7 +41,10 @@ class _CreatePageState extends State<CreatePage> {
   @override
   void initState() {
     var box = Hive.box('uniBox');
-    phoneController.text = box.get('userPhone') ?? '';
+    var phoneOrWhatsappGroup = box.get('userPhone').toString();
+    if (phoneOrWhatsappGroup.length == 10) {
+      phoneController.text = phoneOrWhatsappGroup;
+    }
     super.initState();
   }
 
@@ -135,8 +138,8 @@ class _CreatePageState extends State<CreatePage> {
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
-                    // 'ווטסאפ לבקשות הצטרפות',
-                    "קישור קבוצה / מס' ווטסאפ",
+                    'ווטסאפ לבקשות הצטרפות',
+                    // "קישור קבוצה / מס' ווטסאפ",
                     phoneController,
                     pinLabel: false,
                     keyboardType: TextInputType.number,
@@ -148,17 +151,20 @@ class _CreatePageState extends State<CreatePage> {
                 ],
               ),
               const SizedBox(height: 5),
-              if (errText != null && errText!.contains('טלפון'))
-                        "טלפון לדוגמא:  "
-                        "0545551234"
-                        "\n"
-                "קבוצה לדוגמא:  "
-                        // "\n"
-                        "chat.whatsapp.com/BAnak"
-                        // "\n"
-                    .toText(color: Colors.red, fontSize: 13, maxLines: 10)
-                    .pOnly(right: 25)
-                    .centerRight,
+              // if (errText != null && errText!.contains('טלפון'))
+              //           "טלפון לדוגמא:  "
+              //           "0545551234"
+              // "\n"
+              // "קבוצה לדוגמא:  "
+              //         "\n"
+              // "chat.whatsapp.com/BAnak"
+              // "\n"
+
+              "לדוגמא:  "
+                      "0545551234"
+                  .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
+                  .pOnly(right: 25)
+                  .centerRight,
               const SizedBox(height: 25),
               Row(
                 children: [

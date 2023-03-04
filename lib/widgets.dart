@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:around/common/database.dart';
 import 'package:around/pages/category_page.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
@@ -43,76 +44,114 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
   distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
 
-  return Card(
-    color: Colors.white,
-    elevation: 3,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-    child: Column(
-      children: [
-        ListTile(
-          title: eventItem.title.toString().toText(
-                medium: true,
-                fontSize: titleSize,
-                color: Colors.black,
-              ),
-          leading: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                      color: bgColor.withOpacity(0.8),
-                      // child: (distanceMode ? distanceKm : ageRange)
-                      child: (distanceKm)
-                          .toText(
-                            fontSize: subSize - 2,
-                            medium: true,
-                            color: Colors.black54,
-                          )
-                          .px(7)
-                          .py(5))
-                  .rounded(radius: 20),
-            ],
-          ),
-
-          // trailing: Container(
-          //   height: 45,
-          //   width: 45,
-          //   color: Colors.white,
-          //   child: Image(
-          //       image: AssetImage('${eventCategory?.coverImagePath}'), fit: BoxFit.cover),
-          // ).rounded(radius: 7),
-
-          // isThreeLine: true,
-        )
-        // .sizedBox(null, 60)
-        ,
-        buildAddressText(eventItem, subSize, distanceMode)
-            // .pOnly(right: 75)
-            .pOnly(right: 15)
-        ,
-        Row(
-          children: [
-            const SizedBox(width: 15),
-            if (!distanceMode) buildWhatsappJoin(subSize),
-            const Spacer(),
-            buildAgeText(ageRange, subSize, distanceMode).py(3),
-          ],
-        // ).pOnly(right: 75, top: 2),
-        ).pOnly(right: 15, top: 2),
-      ],
-    ).pOnly(bottom: 10, top: 5),
-  ).onTap(() {
-    print(eventItem.phone);
-    var phone = '+972${eventItem.phone?.substring(1)}';
-    // var time = timeFormat(eventItem.eventAt!, withDay: true);
-    print('phone $phone');
-    openWhatsapp(context, number: phone, text: '''
+  return InkWell(
+    onTap: () {
+      print(eventItem.phone);
+      var phone = eventItem.phone.toString();
+      if (eventItem.phone?.length == 10) {
+        phone = '+972${eventItem.phone?.substring(1)}';
+      }
+      // var time = timeFormat(eventItem.eventAt!, withDay: true);
+      print('phone $phone');
+      openWhatsapp(context, whatsapp: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באפליקציית Around ואשמח להצטרף!
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
-    ''');
-  }, radius: 5);
+      ''');
+    },
+    onLongPress: () {
+      _showMyDialog(context);
+    },
+    child: Card(
+      color: Colors.white,
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+      child: Column(
+        children: [
+          ListTile(
+            title: eventItem.title.toString().toText(
+                  medium: true,
+                  fontSize: titleSize,
+                  color: Colors.black,
+                ),
+            leading: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                Container(
+                        color: bgColor.withOpacity(0.8),
+                        // child: (distanceMode ? distanceKm : ageRange)
+                        child: (distanceKm)
+                            .toText(
+                              fontSize: subSize - 2,
+                              medium: true,
+                              color: Colors.black54,
+                            )
+                            .px(7)
+                            .py(5))
+                    .rounded(radius: 20),
+              ],
+            ),
+          ),
+          buildAddressText(eventItem, subSize, distanceMode)
+              // .pOnly(right: 75)
+              .pOnly(right: 15),
+          Row(
+            children: [
+              const SizedBox(width: 15),
+              if (!distanceMode) buildWhatsappJoin(subSize),
+              const Spacer(),
+              buildAgeText(ageRange, subSize, distanceMode).py(3),
+            ],
+            // ).pOnly(right: 75, top: 2),
+          ).pOnly(right: 15, top: 2),
+        ],
+      ).pOnly(bottom: 10, top: 5),
+    ),
+    // .onTap(() {}, radius: 5),
+  );
+}
+
+Future<void> _showMyDialog(
+  BuildContext context,
+) async {
+  var passController = TextEditingController();
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        // title: 'האם למחוק את האירוע'.toText(bold: true),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              'למחיקה, יש להזין סיסמת מנהל:'.toText(bold: true),
+              TextField(controller: passController)
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: 'מחק אירוע'.toText(bold: true, color: Colors.purple),
+            onPressed: () {
+              // Todo Handel delete
+              if (passController.text == '2003') {
+                // Database.deleteDoc(collection: 'events', docName: );
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+          TextButton(
+            child: 'ביטול'.toText(),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 Row buildAgeText(String ageRange, double subSize, bool distanceMode) {
@@ -198,24 +237,25 @@ String? timeFormat(DateTime timestamp, {bool withDay = true}) {
 }
 
 void openWhatsapp(BuildContext context,
-    {required String text, required String number}) async {
+    {required String text, required String whatsapp}) async {
   print('START: openWhatsapp()');
-  var whatsapp = number; //+92xx enter like this
+
+  // WhatsApp group link
+  if (whatsapp.contains('chat.whatsapp')) {
+    print('whatsapp ${whatsapp}');
+    print('Uri.parse(whatsapp) ${Uri.parse(whatsapp)}');
+    await launchUrl(Uri.parse(whatsapp), mode: LaunchMode.externalApplication);
+    return;
+  }
+
+  // var whatsapp = whtsapp; //+92xx enter like this
   var whatsappURlAndroid = "whatsapp://send?phone=$whatsapp&text=$text";
   var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
-  // print('whatsappURlAndroid $whatsappURlAndroid');
-  // print('whatsappURLIos $whatsappURLIos');
 
   if (kIsWeb || Platform.isAndroid) {
     print('START: != IOS');
     // android , web
     await launchUrl(Uri.parse(whatsappURlAndroid));
-    // if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-    // } else {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
-    // }
-
   } else {
     print('START: == IOS');
     // for iOS phone only

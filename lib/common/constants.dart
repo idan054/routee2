@@ -4,7 +4,7 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 1.2;
+var appVersion = 1.3;
 var adminMode = false;
 
 const bgColor = Color(0xfff7f4ed);
@@ -29,6 +29,7 @@ var categoryColors = const [
   Color(0xff00DA8F), // 3
   Color(0xffFFA800), // 4
   Color(0xff00B4D3), // 5
+  // Color(0xff006ad3), // Blue
   Color(0xffA80292), // 6
   Color(0xff7ADA00), // 7
 ];
@@ -76,7 +77,7 @@ var categories = [
       categoryType: CategoryType.boardGames,
       // categoryName: 'קבוצות 18-24 למשחקי קופסא',
       // categoryName: 'למשחקי קופסא',
-      categoryName: 'למשחקי קופסא',
+      categoryName: 'למשחקי שולחן',
           // ' 🎲',
       categoryColor: categoryColors[2],
       coverImagePath: 'assets/covers/board_games.png'),

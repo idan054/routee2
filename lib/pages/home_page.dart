@@ -155,7 +155,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 10),
                 if (events.isEmpty && !splashLoad) const SizedBox(height: 300),
                 if (!splashLoad)
-                  'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      'צור קשר'
+                          .toText(color: Colors.grey, fontSize: 12, underline: true)
+                          .px(10)
+                          .py(5)
+                          .onTap(() {
+                        openWhatsapp(context, text: 'היי, הגעתי אלייך מהאתר Around', whatsapp: '+972584770076');
+                      }).center,
+                      const SizedBox(width: 10),
+                      'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
+                    ],
+                  ),
                 const SizedBox(height: 5),
               ],
             ),

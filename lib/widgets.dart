@@ -58,6 +58,8 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
+ 
+ https://around-proj.web.app
       ''');
     },
     onLongPress: adminMode ? () {} : null,

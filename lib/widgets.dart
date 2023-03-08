@@ -40,7 +40,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
   // var time = timeFormat(eventItem.eventAt!).toString();
 
   var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
-  distanceKm += '100'; // Needed when user distance = 0
+  if(distanceKm.length < 4) distanceKm += '.01'; // Needed when user distance = 0
   distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
 
@@ -54,15 +54,13 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
       // var time = timeFormat(eventItem.eventAt!, withDay: true);
       print('phone $phone');
       openWhatsapp(context, whatsapp: phone, text: '''
-היי, ראיתי את הקבוצה *${eventItem.title}* שלך באפליקציית Around ואשמח להצטרף!
+היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around ואשמח להצטרף!
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
       ''');
     },
-    onLongPress: () {
-      _showMyDialog(context);
-    },
+    onLongPress: adminMode ? () {} : null,
     child: Card(
       color: Colors.white,
       elevation: 3,
@@ -110,47 +108,6 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
       ).pOnly(bottom: 10, top: 5),
     ),
     // .onTap(() {}, radius: 5),
-  );
-}
-
-Future<void> _showMyDialog(
-  BuildContext context,
-) async {
-  var passController = TextEditingController();
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        // title: 'האם למחוק את האירוע'.toText(bold: true),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              'למחיקה, יש להזין סיסמת מנהל:'.toText(bold: true),
-              TextField(controller: passController)
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: 'מחק אירוע'.toText(bold: true, color: Colors.purple),
-            onPressed: () {
-              // Todo Handel delete
-              if (passController.text == '2003') {
-                // Database.deleteDoc(collection: 'events', docName: );
-                Navigator.of(context).pop();
-              }
-            },
-          ),
-          TextButton(
-            child: 'ביטול'.toText(),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
   );
 }
 

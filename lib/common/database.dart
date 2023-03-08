@@ -53,6 +53,7 @@ class FsAdvanced {
     List eventDocs = [];
     List<EventItem> events = [];
     for (var category in categories) {
+      print('category ${category.categoryName}');
       var snap = await reqBase
           .where('ageRange', arrayContains: age)
           .where('eventCategory.categoryType', isEqualTo: category.categoryType?.name)

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:around/common/database.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,7 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (userAge == null || userAddress == null) {
       showUpdateDetailsDialog(
         context,
-        onConfirm: (UserData userData) => _onUpdateUserInfo(userData),
+        onConfirm: (UserData? userData) {
+          _onUpdateUserInfo(userData);
+        },
       );
     } else {
       var jsonData = Map<String, dynamic>.from(userAddress);
@@ -71,13 +74,24 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _onUpdateUserInfo(UserData? userData, {bool withLoader = false}) {
+    if (userData != null) {
+      print('userData ${userData.age}');
+      print('userData ${userData.address?.name}');
+      user = userData;
+    }
+    fetchEvents(withLoader: withLoader);
+    // setState(() {});
+  }
+
   void fetchEvents({bool withLoader = false}) async {
     if (withLoader) {
       splashLoad = true;
       setState(() {});
     }
     events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
-    events = sortByDistance(events, user!);
+
+    // events = sortByDistance(events, user!);
     events = sortByType(events, user!);
     splashLoad = false;
     setState(() {});
@@ -115,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         .center
                         .pOnly(top: 200)
                     : ListView.builder(
+                        // reverse: true,
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         itemCount: events.length,
@@ -173,14 +188,64 @@ class _MyHomePageState extends State<MyHomePage> {
 
   AppBar buildHomeAppBar() {
     return AppBar(
+      // backgroundColor: bgColor,
       backgroundColor: bgColorDark,
+      // backgroundColor: Colors.white70,
+      elevation: 3,
       title: Row(
         children: [
           aroundLogo().pOnly(right: 7, left: 0),
+          if (adminMode) 'Admin'.toText(fontSize: 12, medium: true).offset(0, 2),
           const Spacer(),
           'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
         ],
-      ),
+      ).py(5).onTap(() {
+        _showAdminDialog(context);
+      }, longPressMode: true, radius: 5),
+    );
+  }
+
+  Future<void> _showAdminDialog(
+    BuildContext context,
+  ) async {
+    var passController = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: 'האם למחוק את האירוע'.toText(bold: true),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                'יש להזין סיסמת מנהל בת 4 ספרות:'.toText(bold: true),
+                TextField(
+                  controller: passController,
+                  keyboardType: TextInputType.number,
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: 'מצב מנהל'.toText(bold: true, color: Colors.purple),
+              onPressed: () {
+                if (passController.text == '2003') {
+                  adminMode = true;
+                  setState(() {});
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+            TextButton(
+              child: 'ביטול'.toText(),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -218,8 +283,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 context,
                 fromUpdateButton: true,
                 user: user,
-                onConfirm: (UserData userData) =>
-                    _onUpdateUserInfo(userData, withLoader: true),
+                onConfirm: (UserData? userData) {
+                  _onUpdateUserInfo(userData, withLoader: true);
+                },
               );
             }),
             const Spacer(),
@@ -231,14 +297,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ).px(7),
       ],
     );
-  }
-
-  void _onUpdateUserInfo(UserData userData, {bool withLoader = false}) {
-    print('userData ${userData.age}');
-    print('userData ${userData.address?.name}');
-    user = userData;
-    fetchEvents(withLoader: withLoader);
-    // setState(() {});
   }
 
   Widget buildTagsRow() {
@@ -304,6 +362,10 @@ class _MyHomePageState extends State<MyHomePage> {
     //     ? categoryColors[i]
     //     : categoryColors[Random().nextInt(categoryColors.length)];
 
+    var category = categories.firstWhereOrNull((cat) =>
+            cat.categoryType?.name == eventItem.eventCategory?.categoryType?.name) ??
+        eventItem.eventCategory;
+
     return Row(
       children: [
         const SizedBox(height: 50),
@@ -311,16 +373,15 @@ class _MyHomePageState extends State<MyHomePage> {
         const SizedBox(width: 5),
         // 'עוד'.toText(fontSize: 12.0, color: color, bold: true),
         const Spacer(),
-        '${eventItem.eventCategory?.categoryName}'
+        '${category?.categoryName}'
             // .toText(color: color, fontSize: 15, bold: true)
             .toText(fontSize: 15, bold: true)
             .centerRight,
         const SizedBox(width: 7),
-        CircleAvatar(backgroundColor: eventItem.eventCategory?.categoryColor, radius: 3)
-            .pOnly(top: 5)
+        CircleAvatar(backgroundColor: category?.categoryColor, radius: 3).pOnly(top: 5)
       ],
     ).px(15).onTap(() {
-      _handleGoToCategory(null, null, eventCategory: eventItem.eventCategory);
+      _handleGoToCategory(null, null, eventCategory: category);
     });
   }
 
@@ -341,7 +402,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Widget aroundLogo(){
+Widget aroundLogo() {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -352,5 +413,5 @@ Widget aroundLogo(){
       'und'.toText(bold: true, fontSize: 20, color: wtspGreen), // .offset(-2, 0),
     ],
   ).ltr;
-      // .sizedBox(100, null);
+  // .sizedBox(100, null);
 }

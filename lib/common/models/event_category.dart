@@ -15,6 +15,7 @@ enum CategoryType {
   party,
   trip,
   show,
+  volunteer,
 }
 
 // flutter pub run build_runner build --delete-conflicting-outputs

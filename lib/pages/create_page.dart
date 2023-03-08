@@ -79,7 +79,12 @@ class _CreatePageState extends State<CreatePage> {
                       .expanded(),
                 ],
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 5),
+              // "מומלץ להוסיף אימוג'י 🤘 "
+              //     .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
+              //     .pOnly(right: 25)
+              //     .centerRight,
+              const SizedBox(height: 10),
               Row(
                 children: [
                   // buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
@@ -138,7 +143,7 @@ class _CreatePageState extends State<CreatePage> {
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
-                    'ווטסאפ לבקשות הצטרפות',
+                    'קישור קבוצה / ווטסאפ לבקשות הצטרפות',
                     // "קישור קבוצה / מס' ווטסאפ",
                     phoneController,
                     pinLabel: false,
@@ -223,6 +228,7 @@ class _CreatePageState extends State<CreatePage> {
           const Spacer(),
           // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
           const SizedBox(width: 5),
+          // Assets.wtspLocationGroupIconSolid.image(height: 22).px(1),
           'קבוצה חדשה'.toText(bold: true, fontSize: 18),
           const Spacer(),
           // const SizedBox(width: 50),
@@ -319,6 +325,8 @@ class _CreatePageState extends State<CreatePage> {
             onSelected: (bool selected) {
               sValue = selected ? i : null;
               selectedCategory = cat;
+              print('selectedCategory.categoryType '
+                  '${selectedCategory?.categoryType.toString()}');
               setState(() {});
             },
           )
@@ -339,7 +347,9 @@ InputDecoration fieldInputDeco(String? labelText, String? hintText, bool pinLabe
     hintText: hintText,
     labelStyle: GoogleFonts.openSans(
         textStyle: TextStyle(
-            color: Colors.black.withOpacity(0.70), fontWeight: FontWeight.bold)),
+            color: Colors.black.withOpacity(0.70),
+            fontWeight: FontWeight.bold,
+            fontSize: 13)),
     hintStyle: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.black54)),
     fillColor: Colors.black12,
     // filled: !enabled,

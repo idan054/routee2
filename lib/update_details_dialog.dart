@@ -30,12 +30,13 @@ var fieldDisableDeco = OutlineInputBorder(
 Future showUpdateDetailsDialog(
   BuildContext context, {
   UserData? user,
-  required Function(UserData value) onConfirm,
+  required Function(UserData? value) onConfirm,
   bool fromUpdateButton = false,
 }) {
   return showDialog(
     context: context,
-    barrierColor: fromUpdateButton ? Colors.black12 : bgColor,
+    // barrierColor: fromUpdateButton ? Colors.black12 : bgColor,
+    barrierColor: Colors.black12,
     barrierDismissible: false,
     builder: (_) {
       return updateInfoDialog(
@@ -52,7 +53,7 @@ Widget updateInfoDialog(
   BuildContext context, {
   bool fromUpdateButton = false,
   UserData? user,
-  required Function(UserData value) onConfirm,
+  required Function(UserData? value) onConfirm,
 }) {
   List<AddressResult> suggestions = [];
   AddressResult? selectedAddress;
@@ -69,44 +70,45 @@ Widget updateInfoDialog(
   return LayoutBuilder(builder: (context, size) {
     bool wideMode = size.maxWidth < 600;
     return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: fromUpdateButton
-          ? AlertDialog(
-              elevation: 4,
-              backgroundColor: bgColor,
-              contentPadding: EdgeInsets.zero,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-              content: Directionality(
-                textDirection: TextDirection.rtl,
-                child: updateInfoForm(
-                  fromUpdateButton,
-                  wideMode,
-                  ageController,
-                  locationController,
-                  suggestions,
-                  selectedAddress,
-                  onConfirm,
-                ),
-              ),
-            )
-          : Scaffold(
-              backgroundColor: bgColor,
-              body: Directionality(
-                textDirection: TextDirection.rtl,
-                child: updateInfoForm(
-                  fromUpdateButton,
-                  wideMode,
-                  ageController,
-                  locationController,
-                  suggestions,
-                  selectedAddress,
-                  onConfirm,
-                ),
-              ),
+        onWillPop: () async {
+          return false;
+        },
+        child:
+            // fromUpdateButton ?
+            AlertDialog(
+          elevation: 4,
+          backgroundColor: bgColor,
+          contentPadding: EdgeInsets.zero,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: updateInfoForm(
+              fromUpdateButton,
+              wideMode,
+              ageController,
+              locationController,
+              suggestions,
+              selectedAddress,
+              onConfirm,
             ),
-    );
+          ),
+        )
+        // : Scaffold(
+        //     backgroundColor: bgColor,
+        //     body: Directionality(
+        //       textDirection: TextDirection.rtl,
+        //       child: updateInfoForm(
+        //         fromUpdateButton,
+        //         wideMode,
+        //         ageController,
+        //         locationController,
+        //         suggestions,
+        //         selectedAddress,
+        //         onConfirm,
+        //       ),
+        //     ),
+        //   ),
+        );
   });
 }
 
@@ -117,7 +119,7 @@ Widget updateInfoForm(
     TextEditingController addressController,
     List<AddressResult> suggestions,
     AddressResult? selectedAddress,
-    Function(UserData value) onConfirm) {
+    Function(UserData? value) onConfirm) {
   var addressNode = FocusNode();
   bool showLoader = false;
 
@@ -271,41 +273,56 @@ Widget updateInfoForm(
           ).px(15),
 
           const SizedBox(height: 10),
-          Builder(builder: (context) {
-            var age = ageController.text.isNotEmpty ? ageController.text : ageHint;
-            var isDisabled = ((ageController.text.isEmpty && ageHint.isEmpty) ||
-                selectedAddress == null);
-            return TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor:
-                      isDisabled ? bgColorDark.withOpacity(0.35) : bgColorDark),
-              onPressed: isDisabled
-                  ? null
-                  : () {
-                      // print('ageController.text ${ageController.text}');
-                      print('age ${age}');
-                      print('selectedAddress $selectedAddress');
 
-                      // if (isDisabled) {
-                      //   isErr = true;
-                      //   setState(() {});
-                      //   return;
-                      // }
+          Row(
+            children: [
+              Builder(builder: (context) {
+                var age = ageController.text.isNotEmpty ? ageController.text : ageHint;
+                var isDisabled = ((ageController.text.isEmpty && ageHint.isEmpty) ||
+                    selectedAddress == null);
+                return TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor:
+                          isDisabled ? bgColorDark.withOpacity(0.35) : bgColorDark),
+                  onPressed: isDisabled
+                      ? null
+                      : () {
+                          // print('ageController.text ${ageController.text}');
+                          print('age ${age}');
+                          print('selectedAddress $selectedAddress');
 
-                      var intAge = int.parse(age);
-                      var box = Hive.box('uniBox');
-                      box.put('userAge', intAge);
-                      box.put('userAddress', selectedAddress?.toJson());
-                      // var name = box.get('name');
-                      onConfirm(UserData(intAge, selectedAddress));
-                      Navigator.pop(context);
-                    },
-              child: (fromUpdateButton ? 'המשך' : 'התחל').toText(
-                  fontSize: 16,
-                  bold: true,
-                  color: isDisabled ? Colors.black26 : Colors.black),
-            ).centerRight;
-          }).px(15),
+                          // if (isDisabled) {
+                          //   isErr = true;
+                          //   setState(() {});
+                          //   return;
+                          // }
+
+                          var intAge = int.parse(age);
+                          var box = Hive.box('uniBox');
+                          box.put('userAge', intAge);
+                          box.put('userAddress', selectedAddress?.toJson());
+                          // var name = box.get('name');
+                          onConfirm(UserData(intAge, selectedAddress));
+                          Navigator.pop(context);
+                        },
+                  child: (fromUpdateButton ? 'המשך' : 'התחל').toText(
+                      fontSize: 16,
+                      bold: true,
+                      color: isDisabled ? Colors.black26 : Colors.black),
+                ).centerRight;
+              }).px(15),
+              const Spacer(),
+              if (false)
+                'דלג'.toText(color: Colors.black54, underline: true).px(15).py(10).onTap(
+                  () {
+                    onConfirm(null);
+                    Navigator.pop(context);
+                  },
+                  radius: 5,
+                ),
+              const SizedBox(width: 5),
+            ],
+          ),
           // AKA PlaceHolder
           if (suggestions.isEmpty) const SizedBox(height: 100),
           const SizedBox(height: 10),

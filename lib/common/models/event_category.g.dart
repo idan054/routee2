@@ -35,6 +35,7 @@ const _$CategoryTypeEnumMap = {
   CategoryType.party: 'party',
   CategoryType.trip: 'trip',
   CategoryType.show: 'show',
+  CategoryType.volunteer: 'volunteer',
 };
 
 Value? _$JsonConverterFromJson<Json, Value>(

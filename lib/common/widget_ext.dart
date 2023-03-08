@@ -20,7 +20,7 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  Widget onTap(GestureTapCallback? onTap, {double radius = 99, bool onLongPress = false, Color? tapColor}) => Theme(
+  Widget onTap(GestureTapCallback? onTap, {double radius = 99, bool longPressMode = false, Color? tapColor}) => Theme(
     data: ThemeData(canvasColor: Colors.transparent),
     child: Material(
       color: Colors.transparent,
@@ -31,8 +31,8 @@ extension WidgetX on Widget {
           //   highlightColor: Colors.yellow,
           //   hoverColor: Colors.yellow,
           borderRadius: BorderRadius.circular(radius),
-          onTap: onLongPress ? null : onTap,
-          onLongPress: onLongPress ? onTap : null,
+          onTap: longPressMode ? null : onTap,
+          onLongPress: longPressMode ? onTap : null,
           child: this),
     ),
   );

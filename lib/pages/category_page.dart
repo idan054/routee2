@@ -46,6 +46,7 @@ class _CategoryPageState extends State<CategoryPage> {
   List<EventItem> events = [];
   bool isShowLastedEvents = true;
   bool splashLoad = true;
+  bool longDistanceShowed = false;
 
   @override
   void initState() {
@@ -100,6 +101,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         children: [
                           const Spacer(),
                           'כל הקבוצות '
+                                  // 'קבוצות מסביבך '
                                   '${widget.eventCategory.categoryName}'
                               .toText(fontSize: 18, color: Colors.black, bold: true)
                               .px(5),
@@ -111,21 +113,57 @@ class _CategoryPageState extends State<CategoryPage> {
                         ],
                       ),
                       const SizedBox(height: 3),
-                      'לגלאי ${widget.user.age}, באיזור ${widget.user.address?.name}'
-                          .toText(fontSize: 14, color: Colors.black54, medium: true)
-                          .px(15),
+                      Row(
+                        children: [
+                          'לפי מרחק'
+                              .toText(fontSize: 12, color: Colors.black54, bold: false)
+                              .px(15),
+                          const Spacer(),
+                          'לגלאי ${widget.user.age}, באיזור ${widget.user.address?.name}'
+                              .toText(fontSize: 14, color: Colors.black54, medium: true)
+                              .px(15),
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 15),
+
+                  if (splashLoad == false && events.isEmpty)
+                    'לא נמצאו קבוצות ${widget.eventCategory.categoryName} \n'
+                            'לגלאי ${widget.user.age} ב${widget.user.address?.name}. צור קבוצה חדשה!'
+                        .toText(textAlign: TextAlign.center)
+                        .center
+                        .pOnly(top: 200),
 
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     itemCount: events.length,
                     itemBuilder: (context, i) {
-                      return buildEventCard(context, events[i],
-                              distanceMode: !isShowLastedEvents)
-                          .px(5);
+                      var distance = events[i].distanceFromUser;
+                      var distanceKm = ((distance ?? 10) / 1000).toString();
+                      if (distanceKm.length < 4) distanceKm += '.01';
+                      distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
+
+                      return Column(
+                        children: [
+                          if (distance != null &&
+                              distance > 30000 &&
+                              longDistanceShowed == false)
+                            Builder(builder: (context) {
+                              longDistanceShowed = true;
+                              return 'קבוצות רחוקות מ 30 ק"מ'
+                                  .toText(
+                                      fontSize: 14, color: Colors.black54, medium: true)
+                                  .centerRight
+                                  .px(15)
+                                  .pOnly(top: 10, bottom: 10);
+                            }),
+                          buildEventCard(context, events[i],
+                                  distanceMode: !isShowLastedEvents)
+                              .px(5),
+                        ],
+                      );
                     },
                   ),
                   const SizedBox(height: 15),
@@ -163,8 +201,18 @@ List<EventItem> sortByType(List<EventItem> events, UserData user) {
     var updatedEvnt = setDistance(user, event);
     updatedEvents.add(updatedEvnt);
   }
+  return updatedEvents;
+}
+
+List<EventItem> sortByTypeOld(List<EventItem> events, UserData user) {
+  var updatedEvents = <EventItem>[];
+  for (var event in [...events]) {
+    var updatedEvnt = setDistance(user, event);
+    updatedEvents.add(updatedEvnt);
+  }
   updatedEvents.sort(
       (a, b) => a.eventCategory!.categoryName!.compareTo(b.eventCategory!.categoryName!));
+  updatedEvents = updatedEvents.reversed.toList();
   return updatedEvents;
 }
 
@@ -175,5 +223,6 @@ List<EventItem> sortByDistance(List<EventItem> events, UserData user) {
     updatedEvents.add(updatedEvnt);
   }
   updatedEvents.sort((a, b) => a.distanceFromUser!.compareTo(b.distanceFromUser!));
+
   return updatedEvents;
 }

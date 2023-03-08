@@ -5,14 +5,9 @@ import 'models/event_category.dart';
 import 'models/event_item.dart';
 
 var appVersion = 1.2;
-// const bgColor = Color(0xff1d1b31);
-// const bgColorLight = Color(0xff262440);
+var adminMode = false;
 
-var textColor = Colors.white;
-
-// const bgColor = Color(0xffE1DBD1);
 const bgColor = Color(0xfff7f4ed);
-// const wtspGreen = Color(0xff0ad84b);
 const wtspGreen = Color(0xff25d366);
 const wtspGreenLight = Color(0xffdaf9c4);
 const bgColorDark = Color(0xffE1DBD1);
@@ -28,14 +23,14 @@ class UserData {
 }
 
 var categoryColors = const [
-  Color(0xffCC59E9),
-  Color(0xffFF4F03),
-  Color(0xffFD114A),
-  Color(0xff00DA8F),
-  Color(0xffFFA800),
-  Color(0xff00B4D3),
-  Color(0xffA80292),
-  Color(0xff7ADA00),
+  Color(0xffCC59E9), // 0
+  Color(0xffFF4F03), // 1
+  Color(0xffFD114A), // 2
+  Color(0xff00DA8F), // 3
+  Color(0xffFFA800), // 4
+  Color(0xff00B4D3), // 5
+  Color(0xffA80292), // 6
+  Color(0xff7ADA00), // 7
 ];
 
 // class EventCategory {
@@ -61,6 +56,7 @@ var categories = [
           // ' 👟',
       categoryColor: categoryColors[4],
       coverImagePath: 'assets/covers/sport.png'),
+
   EventCategory(
       categoryType: CategoryType.weekend,
       // categoryName: 'קבוצות 18-24 ליציאה בסופש',
@@ -107,7 +103,7 @@ var categories = [
       // categoryName: 'ללכת להופעות',
       categoryName: 'להופעות ומסיבות',
           // ' 🎉',
-      categoryColor: categoryColors[6],
+      categoryColor: categoryColors[1],
       coverImagePath: 'assets/covers/show.png'),
   EventCategory(
       categoryType: CategoryType.trip,
@@ -122,6 +118,12 @@ var categories = [
       // categoryName: 'קבוצות 18-24 לסדנאות והרצאות',
       // categoryName: 'לסדנאות והרצאות',
       categoryName: 'לאירועים מיוחדים',
+      categoryColor: categoryColors[6],
+      coverImagePath: 'assets/covers/lecture.png'),
+
+  EventCategory(
+      categoryType: CategoryType.volunteer,
+      categoryName: 'להתנדב',
       categoryColor: categoryColors[5],
       coverImagePath: 'assets/covers/lecture.png'),
 ];

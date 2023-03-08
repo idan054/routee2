@@ -54,13 +54,12 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
       // var time = timeFormat(eventItem.eventAt!, withDay: true);
       print('phone $phone');
       openWhatsapp(context, whatsapp: phone, text: '''
-היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around ואשמח להצטרף!
+היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around 
+ https://around-proj.web.app
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
- 
- https://around-proj.web.app
-      ''');
+אשמח להצטרף!''');
     },
     onLongPress: adminMode ? () {} : null,
     child: Card(

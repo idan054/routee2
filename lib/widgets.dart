@@ -60,8 +60,9 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
             children: [
               'מחק קבוצה'.toText(bold: true, color: Colors.red).py(15).px(10).onTap(() {
                 Database.deleteDoc(collection: 'events', docName: eventItem.id);
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: 'הקבוצה נמחקה בהצלחה!'.toText(bold: true, color: Colors.white)));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        'הקבוצה נמחקה בהצלחה!'.toText(bold: true, color: Colors.white)));
               }, radius: 10),
               const Spacer(),
               'האם למחוק את הקבוצה?'.toText().px(10)
@@ -123,9 +124,10 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
                     ],
                   ),
                 ),
-                buildAddressText(eventItem, subSize, distanceMode)
-                    // .pOnly(right: 75)
-                    .pOnly(right: 15),
+                if (adminMode)
+                  buildInfo(eventItem, subSize, distanceMode).pOnly(right: 15, bottom: 5),
+                buildAddressText(eventItem, subSize, distanceMode).pOnly(right: 15),
+                // buildCreatedAt(eventItem, subSize, distanceMode).pOnly(right: 15),
                 Row(
                   children: [
                     const SizedBox(width: 15),
@@ -143,6 +145,29 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
       ],
     );
   });
+}
+
+Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
+  var date = timeFormat(eventItem.createdAt!, withDay: true);
+  var createdBy = eventItem.phone.toString().length == 10
+      ? eventItem.phone?.substring(6, 10)
+      : eventItem.phone?.split('.com/')[1].substring(0, 4);
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    // mainAxisSize: MainAxisSize.min,
+    children: [
+              'נוצר '
+          '${date.toString().contains('היום') ? '' : 'ב'}'
+          '$date'
+          ' - '
+      'ע"י $createdBy'
+          .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
+      // .sizedBox(130, null),
+      const SizedBox(width: 3),
+      Icons.info_outlined
+          .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+    ],
+  );
 }
 
 Row buildAgeText(String ageRange, double subSize, bool distanceMode) {

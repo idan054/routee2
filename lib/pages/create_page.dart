@@ -26,6 +26,7 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
   RangeValues _currentRangeValues = const RangeValues(10, 60);
+
   // region ageList
   var ageRange = [
     10,
@@ -80,6 +81,7 @@ class _CreatePageState extends State<CreatePage> {
     59,
     60,
   ];
+
   // endregion ageList
   var titleController = TextEditingController();
   var dateTimeController = TextEditingController();
@@ -225,15 +227,19 @@ class _CreatePageState extends State<CreatePage> {
                   .pOnly(right: 25)
                   .centerRight,
               const SizedBox(height: 25),
-              Row(
-                children: [
+              Row(children: [
+                // if (_currentRangeValues.start.round() == 10 &&
+                //     _currentRangeValues.end.round() == 60) ...[
+                //   (" מיועד לכל הגילאים ")
+                //       .toText(color: Colors.black54, fontSize: 13, bold: true),
+                // ] else ...[
                   (" מיועד לגיל ${_currentRangeValues.start.round()}")
                       .toText(color: Colors.black54, fontSize: 13, bold: true),
                   const Spacer(),
                   (" עד ${_currentRangeValues.end.round()}")
                       .toText(color: Colors.black54, fontSize: 13, bold: true),
-                ],
-              ).px(22),
+                // ],
+              ]).px(22),
               RangeSlider(
                 values: _currentRangeValues,
                 min: 10,

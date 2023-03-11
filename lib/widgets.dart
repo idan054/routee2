@@ -34,82 +34,115 @@ OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed
 
 Widget buildEventCard(BuildContext context, EventItem eventItem,
     {bool distanceMode = false}) {
+  bool showDeleteOption = false;
   var subSize = 11.0;
   var titleSize = 14.0;
   var eventCategory = eventItem.eventCategory;
   // var time = timeFormat(eventItem.eventAt!).toString();
 
   var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
-  if(distanceKm.length < 4) distanceKm += '.01'; // Needed when user distance = 0
+  if (distanceKm.length < 4) distanceKm += '.01'; // Needed when user distance = 0
   distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
+  if (eventItem.ageRange?.last == 60) {
+    ageRange = '${eventItem.ageRange?.first}+';
+  }
+  if (eventItem.ageRange?.first == 10 && eventItem.ageRange?.last == 60) {
+    ageRange = '- כולם מוזמנים!';
+  }
 
-  return InkWell(
-    onTap: () {
-      print(eventItem.phone);
-      var phone = eventItem.phone.toString();
-      if (eventItem.phone?.length == 10) {
-        phone = '+972${eventItem.phone?.substring(1)}';
-      }
-      // var time = timeFormat(eventItem.eventAt!, withDay: true);
-      print('phone $phone');
-      openWhatsapp(context, whatsapp: phone, text: '''
+  return StatefulBuilder(builder: (context, cardSetState) {
+    return Column(
+      children: [
+        if (showDeleteOption) ...[
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              'מחק קבוצה'.toText(bold: true, color: Colors.red).py(15).px(10).onTap(() {
+                Database.deleteDoc(collection: 'events', docName: eventItem.id);
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: 'הקבוצה נמחקה בהצלחה!'.toText(bold: true, color: Colors.white)));
+              }, radius: 10),
+              const Spacer(),
+              'האם למחוק את הקבוצה?'.toText().px(10)
+            ],
+          ),
+        ],
+        InkWell(
+          onTap: () {
+            print(eventItem.phone);
+            var phone = eventItem.phone.toString();
+            if (eventItem.phone?.length == 10) {
+              phone = '+972${eventItem.phone?.substring(1)}';
+            }
+            // var time = timeFormat(eventItem.eventAt!, withDay: true);
+            print('phone $phone');
+            openWhatsapp(context, whatsapp: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around 
  https://around-proj.web.app
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
 אשמח להצטרף!''');
-    },
-    onLongPress: adminMode ? () {} : null,
-    child: Card(
-      color: Colors.white,
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-      child: Column(
-        children: [
-          ListTile(
-            title: eventItem.title.toString().toText(
-                  medium: true,
-                  fontSize: titleSize,
-                  color: Colors.black,
-                ),
-            leading: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          },
+          onLongPress: adminMode
+              ? () {
+                  print('START: onLongPress()');
+                  showDeleteOption = !showDeleteOption;
+                  cardSetState(() {});
+                }
+              : null,
+          child: Card(
+            color: Colors.white,
+            elevation: 3,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+            child: Column(
               children: [
-                const SizedBox(height: 10),
-                Container(
-                        color: bgColor.withOpacity(0.8),
-                        // child: (distanceMode ? distanceKm : ageRange)
-                        child: (distanceKm)
-                            .toText(
-                              fontSize: subSize - 2,
-                              medium: true,
-                              color: Colors.black54,
-                            )
-                            .px(7)
-                            .py(5))
-                    .rounded(radius: 20),
+                ListTile(
+                  title: eventItem.title.toString().toText(
+                        medium: true,
+                        fontSize: titleSize,
+                        color: Colors.black,
+                      ),
+                  leading: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      Container(
+                              color: bgColor.withOpacity(0.8),
+                              // child: (distanceMode ? distanceKm : ageRange)
+                              child: (distanceKm)
+                                  .toText(
+                                    fontSize: subSize - 2,
+                                    medium: true,
+                                    color: Colors.black54,
+                                  )
+                                  .px(7)
+                                  .py(5))
+                          .rounded(radius: 20),
+                    ],
+                  ),
+                ),
+                buildAddressText(eventItem, subSize, distanceMode)
+                    // .pOnly(right: 75)
+                    .pOnly(right: 15),
+                Row(
+                  children: [
+                    const SizedBox(width: 15),
+                    if (!distanceMode) buildWhatsappJoin(subSize),
+                    const Spacer(),
+                    buildAgeText(ageRange, subSize, distanceMode).py(3),
+                  ],
+                  // ).pOnly(right: 75, top: 2),
+                ).pOnly(right: 15, top: 2),
               ],
-            ),
+            ).pOnly(bottom: 10, top: 5),
           ),
-          buildAddressText(eventItem, subSize, distanceMode)
-              // .pOnly(right: 75)
-              .pOnly(right: 15),
-          Row(
-            children: [
-              const SizedBox(width: 15),
-              if (!distanceMode) buildWhatsappJoin(subSize),
-              const Spacer(),
-              buildAgeText(ageRange, subSize, distanceMode).py(3),
-            ],
-            // ).pOnly(right: 75, top: 2),
-          ).pOnly(right: 15, top: 2),
-        ],
-      ).pOnly(bottom: 10, top: 5),
-    ),
-    // .onTap(() {}, radius: 5),
-  );
+          // .onTap(() {}, radius: 5),
+        ),
+      ],
+    );
+  });
 }
 
 Row buildAgeText(String ageRange, double subSize, bool distanceMode) {

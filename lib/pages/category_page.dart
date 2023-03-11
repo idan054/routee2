@@ -60,7 +60,7 @@ class _CategoryPageState extends State<CategoryPage> {
       setState(() {});
     }
     events = await FsAdvanced.getCategoryEvents(
-      widget.user,
+      adminMode ? null : widget.user.age,
       widget.eventCategory,
     );
     events = sortByDistance(events, widget.user);
@@ -103,6 +103,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           'כל הקבוצות '
                                   // 'קבוצות מסביבך '
                                   '${widget.eventCategory.categoryName}'
+                          '${adminMode ? ' (${events.length})' : ''}'
                               .toText(fontSize: 18, color: Colors.black, bold: true)
                               .px(5),
                           const SizedBox(width: 5),
@@ -119,7 +120,8 @@ class _CategoryPageState extends State<CategoryPage> {
                               .toText(fontSize: 12, color: Colors.black54, bold: false)
                               .px(15),
                           const Spacer(),
-                          'לגלאי ${widget.user.age}, באיזור ${widget.user.address?.name}'
+                          '${adminMode ? 'לכל הגילאים' : 'לגלאי ${widget.user.age}'}'
+                                  ', באיזור ${widget.user.address?.name}'
                               .toText(fontSize: 14, color: Colors.black54, medium: true)
                               .px(15),
                         ],

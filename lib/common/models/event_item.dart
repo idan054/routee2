@@ -14,6 +14,7 @@ class EventItem with _$EventItem {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory EventItem({
     // String? imagePngName,
+    String? id,
     String? title,
     EventCategory? eventCategory,
     // @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...

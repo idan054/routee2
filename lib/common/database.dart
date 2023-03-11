@@ -48,36 +48,47 @@ class FsAdvanced {
       .orderBy('createdAt', descending: true);
 
   //~ The 3 start soon events of each category:
-  static Future<List<EventItem>> getHomeEvents(int age) async {
+  static Future<List<EventItem>> getHomeEvents(int? age) async {
     print('START: getHomeEvents()');
-    List eventDocs = [];
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> eventDocs = [];
     List<EventItem> events = [];
+    var homeReqBase = reqBase;
+    if (age != null) homeReqBase = reqBase.where('ageRange', arrayContains: age);
+
     for (var category in categories) {
       print('category ${category.categoryName}');
-      var snap = await reqBase
-          .where('ageRange', arrayContains: age)
+      var snap = await homeReqBase
           .where('eventCategory.categoryType', isEqualTo: category.categoryType?.name)
           .limit(3)
           .get();
       eventDocs.addAll(snap.docs);
     }
-    events = eventDocs.map((doc) => EventItem.fromJson(doc.data())).toList();
-    print('events ${events.length}');
+    events = eventDocs.map((doc) {
+      var event = EventItem.fromJson(doc.data());
+      event = event.copyWith(id: doc.id);
+      return event;
+    }).toList();
     return events;
   }
 
   static Future<List<EventItem>> getCategoryEvents(
-      UserData user, EventCategory eventCategory) async {
+      int? age, EventCategory eventCategory) async {
     print('START: getCategoryEvents()');
-    List eventDocs = [];
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> eventDocs = [];
     List<EventItem> events = [];
-    var snap = await reqBase
-        .where('ageRange', arrayContains: user.age)
+    var homeReqBase = reqBase;
+    if (age != null) homeReqBase = reqBase.where('ageRange', arrayContains: age);
+
+    var snap = await homeReqBase
         .where('eventCategory.categoryType', isEqualTo: eventCategory.categoryType?.name)
         .get();
     eventDocs.addAll(snap.docs);
 
-    events = eventDocs.map((doc) => EventItem.fromJson(doc.data())).toList();
+    events = eventDocs.map((doc) {
+      var event = EventItem.fromJson(doc.data());
+      event = event.copyWith(id: doc.id);
+      return event;
+    }).toList();
 
     print('events ${events.length}');
     return events;

@@ -7,6 +7,7 @@ part of 'event_item.dart';
 // **************************************************************************
 
 _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
+      id: json['id'] as String?,
       title: json['title'] as String?,
       eventCategory: json['eventCategory'] == null
           ? null
@@ -24,6 +25,7 @@ _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
 
 Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'eventCategory': instance.eventCategory?.toJson(),
       'createdAt': const DateTimeStampConv().toJson(instance.createdAt),

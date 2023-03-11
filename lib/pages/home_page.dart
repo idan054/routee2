@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> titlesExist = [];
   UserData? user;
   bool splashLoad = true;
+  bool isShowAdminRequest = false;
 
   @override
   void initState() {
@@ -56,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var box = Hive.box('uniBox');
     var userAge = box.get('userAge');
     var userAddress = box.get('userAddress');
+    adminMode = box.get('adminMode') ?? false;
     print('appVersion: $appVersion');
     print('userAge: $userAge');
     print('userAddress: $userAddress');
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       splashLoad = true;
       setState(() {});
     }
-    events = await FsAdvanced.getHomeEvents(user?.age ?? 0);
+    events = await FsAdvanced.getHomeEvents(adminMode ? null : user?.age);
 
     // events = sortByDistance(events, user!);
     events = sortByType(events, user!);
@@ -120,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ListView(
               children: [
                 const SizedBox(height: 15),
-                buildHomeTitle(context),
+                buildHomeTitle(context, isShowAdminRequest),
                 const SizedBox(height: 15),
                 buildTagsRow(),
                 events.isEmpty && !splashLoad
@@ -163,7 +165,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           .px(10)
                           .py(5)
                           .onTap(() {
-                        openWhatsapp(context, text: 'היי, הגעתי אלייך מהאתר Around', whatsapp: '+972584770076');
+                        openWhatsapp(context,
+                            text: 'היי, הגעתי אלייך מהאתר Around',
+                            whatsapp: '+972584770076');
                       }).center,
                       const SizedBox(width: 10),
                       'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
@@ -207,68 +211,56 @@ class _MyHomePageState extends State<MyHomePage> {
       elevation: 3,
       title: Row(
         children: [
-          aroundLogo().pOnly(right: 7, left: 0),
-          if (adminMode) 'Admin'.toText(fontSize: 12, medium: true).offset(0, 2),
+          aroundLogo(),
           const Spacer(),
           'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
         ],
       ).py(5).onTap(() {
-        _showAdminDialog(context);
+        var box = Hive.box('uniBox');
+        if (adminMode) {
+          adminMode = false;
+          box.put('adminMode', adminMode);
+          setState(() {});
+        } else {
+          isShowAdminRequest = !isShowAdminRequest;
+          box.put('adminMode', isShowAdminRequest);
+          setState(() {});
+        }
       }, longPressMode: true, radius: 5),
     );
   }
 
-  Future<void> _showAdminDialog(
-    BuildContext context,
-  ) async {
-    var passController = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          // title: 'האם למחוק את האירוע'.toText(bold: true),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                'יש להזין סיסמת מנהל בת 4 ספרות:'.toText(bold: true),
-                TextField(
-                  controller: passController,
-                  keyboardType: TextInputType.number,
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: 'מצב מנהל'.toText(bold: true, color: Colors.purple),
-              onPressed: () {
-                if (passController.text == '2003') {
-                  adminMode = true;
-                  setState(() {});
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-            TextButton(
-              child: 'ביטול'.toText(),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Column buildHomeTitle(BuildContext context) {
+  Column buildHomeTitle(BuildContext context, bool showAdmin) {
     // 'קבוצות שהזמינו אותך להצטרף אליהם (:'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
     // 'הזמנות קרובות אלייך לבני גיל 19'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
     // 'הזמנות לקבוצות עבורך'.toText(fontSize: 16),
+    var passController = TextEditingController();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        if (isShowAdminRequest)
+          ListBody(
+            children: <Widget>[
+              'יש להזין סיסמת מנהל בת 4 ספרות:'.toText(bold: true),
+              TextField(
+                controller: passController,
+                keyboardType: TextInputType.number,
+              ),
+              TextButton(
+                child: 'הפעל מצב מנהל'.toText(bold: true, color: Colors.purple),
+                onPressed: () {
+                  if (passController.text == '2003') {
+                    adminMode = true;
+                    isShowAdminRequest = false;
+                    setState(() {});
+                  }
+                },
+              ).centerRight,
+              const SizedBox(height: 20),
+            ],
+          ).px(20),
+
         // Row(
         //   mainAxisAlignment: MainAxisAlignment.end,
         //   children: [
@@ -303,7 +295,8 @@ class _MyHomePageState extends State<MyHomePage> {
             }),
             const Spacer(),
             if (user != null)
-              'לגלאי ${user?.age}, באיזור ${user?.address?.name}'
+              '${adminMode ? 'כל הגילאים ' : 'לגלאי ${user?.age}'}'
+                      ', באיזור ${user?.address?.name}'
                   .toText(fontSize: 14, color: Colors.black54, medium: true)
                   .px(15),
           ],
@@ -424,6 +417,8 @@ Widget aroundLogo() {
       Assets.wtspLocationGroupIconSolid.image(height: 22).px(1).offset(0, 1),
       // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
       'und'.toText(bold: true, fontSize: 20, color: wtspGreen), // .offset(-2, 0),
+      const SizedBox(width: 5),
+      if (adminMode) '(מצב מנהל)'.toText(fontSize: 12, medium: true).offset(0, 1)
     ],
   ).ltr;
   // .sizedBox(100, null);

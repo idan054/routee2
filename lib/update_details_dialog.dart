@@ -288,7 +288,7 @@ Widget updateInfoForm(
                       ? null
                       : () {
                           // print('ageController.text ${ageController.text}');
-                          print('age ${age}');
+                          print('age $age');
                           print('selectedAddress $selectedAddress');
 
                           // if (isDisabled) {
@@ -298,6 +298,7 @@ Widget updateInfoForm(
                           // }
 
                           var intAge = int.parse(age);
+                          if(intAge >= 60) intAge = 60; // MAX
                           var box = Hive.box('uniBox');
                           box.put('userAge', intAge);
                           box.put('userAddress', selectedAddress?.toJson());

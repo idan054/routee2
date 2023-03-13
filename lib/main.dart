@@ -1,6 +1,7 @@
 import 'package:around/common/constants.dart';
 import 'package:around/common/widget_ext.dart';
 import 'package:around/pages/home_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -23,6 +24,7 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseAnalytics.instance.logAppOpen();
 
   // path_provider no need on web
   if (!kIsWeb) {

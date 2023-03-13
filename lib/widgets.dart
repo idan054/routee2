@@ -3,6 +3,7 @@ import 'package:around/common/database.dart';
 import 'package:around/pages/category_page.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_file.dart';
@@ -78,6 +79,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
             }
             // var time = timeFormat(eventItem.eventAt!, withDay: true);
             print('phone $phone');
+
             openWhatsapp(context, whatsapp: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around 
  https://around-proj.web.app
@@ -85,7 +87,29 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
 אשמח להצטרף!''');
+
+            print('START: logEvent()');
+
+            //> variables can be String / numbers ONLY
+            var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
+            var analyticsItem = {
+              'id': eventItem.id,
+              'title': eventItem.title,
+              'phone': eventItem.phone,
+              'minAge': eventItem.ageRange?.first,
+              'maxAge': eventItem.ageRange?.last,
+              'address': eventItem.address,
+              'latitude': eventItem.latitude,
+              'longitude': eventItem.longitude,
+              'createdAt': createdAt,
+              'categoryName': eventItem.eventCategory?.categoryName,
+              'categoryType': eventItem.eventCategory?.categoryType?.name,
+            };
+
+            Analytics.logEvent(EventTypes.joinGroup, analyticsItem);
+            Analytics.logSimpleEvent(EventTypes.joinGroup, eventItem.id.toString());
           },
+
           onLongPress: adminMode
               ? () {
                   print('START: onLongPress()');
@@ -156,11 +180,11 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
     mainAxisAlignment: MainAxisAlignment.end,
     // mainAxisSize: MainAxisSize.min,
     children: [
-              'נוצר '
-          '${date.toString().contains('היום') ? '' : 'ב'}'
-          '$date'
-          ' - '
-      'ע"י $createdBy'
+      'נוצר '
+              '${date.toString().contains('היום') ? '' : 'ב'}'
+              '$date'
+              ' - '
+              'ע"י $createdBy'
           .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
       // .sizedBox(130, null),
       const SizedBox(width: 3),

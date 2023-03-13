@@ -212,12 +212,21 @@ Row buildAgeText(String ageRange, double subSize, bool distanceMode) {
 
 Widget buildAddressText(EventItem eventItem, double subSize, bool distanceMode) {
   var address = eventItem.address.toString();
+  var diff = DateTime.now().difference(eventItem.createdAt!).inDays;
+  var ago = '';
+  if(diff == 0) ago = 'נוסף היום!';
+  if(diff == 1) ago = 'נוסף אתמול!';
+  if(diff != 0 && diff != 1) ago = 'נוסף לפני $diff ימים ';
+
+  var addressAndAgo = '$address' ' - ' '$ago';
 
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     // mainAxisSize: MainAxisSize.min,
     children: [
-      address.toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
+      // address.toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
+      addressAndAgo.toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
+
       // .sizedBox(130, null),
       const SizedBox(width: 3),
       Icons.place_outlined

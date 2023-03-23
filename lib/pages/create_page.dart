@@ -94,6 +94,8 @@ class _CreatePageState extends State<CreatePage> {
   AddressResult? selectedAddress;
   List<AddressResult> suggestions = [];
 
+  final List<bool> isFeeEvent = <bool>[false, false];
+
   @override
   void initState() {
     var box = Hive.box('uniBox');
@@ -233,11 +235,11 @@ class _CreatePageState extends State<CreatePage> {
                 //   (" מיועד לכל הגילאים ")
                 //       .toText(color: Colors.black54, fontSize: 13, bold: true),
                 // ] else ...[
-                  (" מיועד לגיל ${_currentRangeValues.start.round()}")
-                      .toText(color: Colors.black54, fontSize: 13, bold: true),
-                  const Spacer(),
-                  (" עד ${_currentRangeValues.end.round()}")
-                      .toText(color: Colors.black54, fontSize: 13, bold: true),
+                (" מיועד לגיל ${_currentRangeValues.start.round()}")
+                    .toText(color: Colors.black54, fontSize: 13, bold: true),
+                const Spacer(),
+                (" עד ${_currentRangeValues.end.round()}")
+                    .toText(color: Colors.black54, fontSize: 13, bold: true),
                 // ],
               ]).px(22),
               RangeSlider(
@@ -259,12 +261,40 @@ class _CreatePageState extends State<CreatePage> {
                   _currentRangeValues = values;
                   setState(() {});
                 },
-              ),
-              const SizedBox(height: 15),
-              'מטרת הקבוצה'.toText(bold: true, fontSize: 16).centerRight,
+              ).px(10),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  'סוג הקבוצה'.toText(bold: true, fontSize: 16),
+                  const Spacer(),
+                  // const SizedBox(width: 10),
+                  ToggleButtons(
+                    direction: Axis.horizontal,
+                    borderWidth: 1.75,
+                    borderColor: Colors.black38,
+                    selectedBorderColor: Colors.black54,
+                    fillColor: bgColorDark,
+                    onPressed: (int index) {
+                      for (int i = 0; i < isFeeEvent.length; i++) {
+                        isFeeEvent[i] = i == index;
+                      }
+                      // print('isFeeEvent.first ${isFeeEvent.first}');
+                      // print('isFeeEvent.last ${isFeeEvent.last}');
+                      setState(() {});
+                    },
+                    borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    isSelected: isFeeEvent,
+                    children: [
+                      'בתשלום'.toText(fontSize: 13, bold: true, color: Colors.black.withOpacity(0.70)).px(15),
+                      'בחינם'.toText(fontSize: 13, bold: true, color: Colors.black.withOpacity(0.70)).px(15),
+                    ],
+                  ).sizedBox(null, 30),
+                ],
+              ).pOnly(right: 25, left: 20),
               const SizedBox(height: 15),
               buildTags(),
               // const SizedBox(height: 10),
+              const SizedBox(height: 20),
               const SizedBox(height: 10),
             ],
           ).px(10),
@@ -285,14 +315,10 @@ class _CreatePageState extends State<CreatePage> {
         children: [
           // 'קבוצות מסביבך'.toText(bold: true, fontSize: 18),
           // 'Around'.toText(bold: true, fontSize: 18),
-          const Spacer(),
           // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
-          const SizedBox(width: 5),
           // Assets.wtspLocationGroupIconSolid.image(height: 22).px(1),
           'קבוצה חדשה'.toText(bold: true, fontSize: 18),
           const Spacer(),
-          // const SizedBox(width: 50),
-          const SizedBox(width: 80),
 
           TextButton(
             onPressed: () {
@@ -315,8 +341,15 @@ class _CreatePageState extends State<CreatePage> {
                 return;
               }
 
+              if (isFeeEvent.contains(true) == false) { // AKA not .contains
+                errText = 'בחר האם הקבוצה בתשלום או בחינם';
+                setState(() {});
+                return;
+              }
+
               if (selectedCategory == null) {
-                errText = 'יש לבחור את מטרת הקבוצה';
+                // errText = 'יש לבחור את מטרת הקבוצה';
+                errText = 'יש לבחור את סוג הקבוצה';
                 setState(() {});
                 return;
               }
@@ -330,6 +363,7 @@ class _CreatePageState extends State<CreatePage> {
                 latitude: selectedAddress?.lat,
                 longitude: selectedAddress?.lng,
                 ageRange: ageRange,
+                withFee: isFeeEvent.first,
                 // minAge: _currentRangeValues.start.round(),
                 // maxAge: _currentRangeValues.end.round(),
               );

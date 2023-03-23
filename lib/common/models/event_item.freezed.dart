@@ -37,6 +37,7 @@ mixin _$EventItem {
   String? get address => throw _privateConstructorUsedError;
   String? get latitude => throw _privateConstructorUsedError;
   String? get longitude => throw _privateConstructorUsedError;
+  bool? get withFee => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +60,8 @@ abstract class $EventItemCopyWith<$Res> {
       int? distanceFromUser,
       String? address,
       String? latitude,
-      String? longitude});
+      String? longitude,
+      bool? withFee});
 
   $EventCategoryCopyWith<$Res>? get eventCategory;
 }
@@ -87,6 +89,7 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? address = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? withFee = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -129,6 +132,10 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as String?,
+      withFee: freezed == withFee
+          ? _value.withFee
+          : withFee // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 
@@ -162,7 +169,8 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
       int? distanceFromUser,
       String? address,
       String? latitude,
-      String? longitude});
+      String? longitude,
+      bool? withFee});
 
   @override
   $EventCategoryCopyWith<$Res>? get eventCategory;
@@ -189,6 +197,7 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? address = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? withFee = freezed,
   }) {
     return _then(_$_EventItem(
       id: freezed == id
@@ -231,6 +240,10 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as String?,
+      withFee: freezed == withFee
+          ? _value.withFee
+          : withFee // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -249,7 +262,8 @@ class _$_EventItem implements _EventItem {
       this.distanceFromUser,
       this.address,
       this.latitude,
-      this.longitude})
+      this.longitude,
+      this.withFee})
       : _ageRange = ageRange;
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
@@ -290,10 +304,12 @@ class _$_EventItem implements _EventItem {
   final String? latitude;
   @override
   final String? longitude;
+  @override
+  final bool? withFee;
 
   @override
   String toString() {
-    return 'EventItem(id: $id, title: $title, eventCategory: $eventCategory, createdAt: $createdAt, phone: $phone, ageRange: $ageRange, distanceFromUser: $distanceFromUser, address: $address, latitude: $latitude, longitude: $longitude)';
+    return 'EventItem(id: $id, title: $title, eventCategory: $eventCategory, createdAt: $createdAt, phone: $phone, ageRange: $ageRange, distanceFromUser: $distanceFromUser, address: $address, latitude: $latitude, longitude: $longitude, withFee: $withFee)';
   }
 
   @override
@@ -315,7 +331,8 @@ class _$_EventItem implements _EventItem {
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
+                other.longitude == longitude) &&
+            (identical(other.withFee, withFee) || other.withFee == withFee));
   }
 
   @JsonKey(ignore: true)
@@ -331,7 +348,8 @@ class _$_EventItem implements _EventItem {
       distanceFromUser,
       address,
       latitude,
-      longitude);
+      longitude,
+      withFee);
 
   @JsonKey(ignore: true)
   @override
@@ -358,7 +376,8 @@ abstract class _EventItem implements EventItem {
       final int? distanceFromUser,
       final String? address,
       final String? latitude,
-      final String? longitude}) = _$_EventItem;
+      final String? longitude,
+      final bool? withFee}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -386,6 +405,8 @@ abstract class _EventItem implements EventItem {
   String? get latitude;
   @override
   String? get longitude;
+  @override
+  bool? get withFee;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

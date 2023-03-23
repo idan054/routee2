@@ -29,6 +29,7 @@ class EventItem with _$EventItem {
     String? address,
     String? latitude,
     String? longitude,
+    bool? withFee,
 
   }) = _EventItem;
 

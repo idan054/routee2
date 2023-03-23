@@ -44,6 +44,9 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
   var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
   if (distanceKm.length < 4) distanceKm += '.01'; // Needed when user distance = 0
   distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
+
+  if(eventItem.withFee == true) distanceKm = '₪ | $distanceKm';
+
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
   if (eventItem.ageRange?.last == 60) {
     ageRange = '${eventItem.ageRange?.first}+';
@@ -72,6 +75,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
         ],
         InkWell(
           onTap: () {
+            // region onTap
             print(eventItem.phone);
             var phone = eventItem.phone.toString();
             if (eventItem.phone?.length == 10) {
@@ -108,8 +112,8 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
 
             Analytics.logEvent(EventTypes.joinGroup, analyticsItem);
             Analytics.logSimpleEvent(EventTypes.joinGroup, eventItem.id.toString());
+            // endregion onTap
           },
-
           onLongPress: adminMode
               ? () {
                   print('START: onLongPress()');
@@ -185,6 +189,8 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
               '$date'
               ' - '
               'ע"י $createdBy'
+              // ' - '
+      '${eventItem.withFee == true ? '(בתשלום)' : ''}'
           .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
       // .sizedBox(130, null),
       const SizedBox(width: 3),

@@ -21,6 +21,7 @@ _$_EventItem _$$_EventItemFromJson(Map<String, dynamic> json) => _$_EventItem(
       address: json['address'] as String?,
       latitude: json['latitude'] as String?,
       longitude: json['longitude'] as String?,
+      withFee: json['withFee'] as bool?,
     );
 
 Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
@@ -35,4 +36,5 @@ Map<String, dynamic> _$$_EventItemToJson(_$_EventItem instance) =>
       'address': instance.address,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'withFee': instance.withFee,
     };

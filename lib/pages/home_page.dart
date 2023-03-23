@@ -149,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           return Column(
                             children: [
                               if (isAddTitle) buildCategoryTitle(events[i]),
-                              buildEventCard(context, events[i]).px(5),
+                              buildEventCard(context, events[i], user!).px(5),
                             ],
                           );
                         },

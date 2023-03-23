@@ -4,7 +4,7 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 1.7;
+var appVersion = 1.70;
 var adminMode = false;
 
 const bgColor = Color(0xfff7f4ed);

@@ -228,7 +228,7 @@ class _CreatePageState extends State<CreatePage> {
                   .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
                   .pOnly(right: 25)
                   .centerRight,
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               Row(children: [
                 // if (_currentRangeValues.start.round() == 10 &&
                 //     _currentRangeValues.end.round() == 60) ...[
@@ -261,7 +261,7 @@ class _CreatePageState extends State<CreatePage> {
                   _currentRangeValues = values;
                   setState(() {});
                 },
-              ).px(10),
+              ),
               const SizedBox(height: 5),
               Row(
                 children: [
@@ -290,7 +290,7 @@ class _CreatePageState extends State<CreatePage> {
                     ],
                   ).sizedBox(null, 30),
                 ],
-              ).pOnly(right: 25, left: 20),
+              ).pOnly(right: 15, left: 15),
               const SizedBox(height: 15),
               buildTags(),
               // const SizedBox(height: 10),

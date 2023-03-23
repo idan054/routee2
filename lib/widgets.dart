@@ -33,7 +33,7 @@ OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed
       onPressed: onPressed);
 }
 
-Widget buildEventCard(BuildContext context, EventItem eventItem,
+Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
     {bool distanceMode = false}) {
   bool showDeleteOption = false;
   var subSize = 11.0;
@@ -90,28 +90,29 @@ Widget buildEventCard(BuildContext context, EventItem eventItem,
 
 לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
  ונפגש ב${eventItem.address}
-אשמח להצטרף!''');
+הגיל שלי הוא ${user.age} ואשמח להצטרף!''');
 
             print('START: logEvent()');
 
             //> variables can be String / numbers ONLY
-            var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
-            var analyticsItem = {
-              'id': eventItem.id,
-              'title': eventItem.title,
-              'phone': eventItem.phone,
-              'minAge': eventItem.ageRange?.first,
-              'maxAge': eventItem.ageRange?.last,
-              'address': eventItem.address,
-              'latitude': eventItem.latitude,
-              'longitude': eventItem.longitude,
-              'createdAt': createdAt,
-              'categoryName': eventItem.eventCategory?.categoryName,
-              'categoryType': eventItem.eventCategory?.categoryType?.name,
-            };
+            // var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
+            // var analyticsItem = {
+            //   'id': eventItem.id,
+            //   'title': eventItem.title,
+            //   'phone': eventItem.phone,
+            //   'minAge': eventItem.ageRange?.first,
+            //   'maxAge': eventItem.ageRange?.last,
+            //   'address': eventItem.address,
+            //   'latitude': eventItem.latitude,
+            //   'longitude': eventItem.longitude,
+            //   'createdAt': createdAt,
+            //   'categoryName': eventItem.eventCategory?.categoryName,
+            //   'categoryType': eventItem.eventCategory?.categoryType?.name,
+            // };
 
-            Analytics.logEvent(EventTypes.joinGroup, analyticsItem);
-            Analytics.logSimpleEvent(EventTypes.joinGroup, eventItem.id.toString());
+            FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
+            // Analytics.logEvent(EventTypes.joinGroup, analyticsItem);
+            // Analytics.logSimpleEvent(EventTypes.joinGroup, eventItem.id.toString());
             // endregion onTap
           },
           onLongPress: adminMode

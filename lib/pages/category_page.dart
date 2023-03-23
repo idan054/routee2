@@ -103,7 +103,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           'כל הקבוצות '
                                   // 'קבוצות מסביבך '
                                   '${widget.eventCategory.categoryName}'
-                          '${adminMode ? ' (${events.length})' : ''}'
+                                  '${adminMode ? ' (${events.length})' : ''}'
                               .toText(fontSize: 18, color: Colors.black, bold: true)
                               .px(5),
                           const SizedBox(width: 5),
@@ -161,7 +161,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                   .px(15)
                                   .pOnly(top: 10, bottom: 10);
                             }),
-                          buildEventCard(context, events[i],
+                          buildEventCard(context, events[i], widget.user,
                                   distanceMode: !isShowLastedEvents)
                               .px(5),
                         ],

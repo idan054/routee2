@@ -125,9 +125,9 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
               };
 
               // var name = eventItem.title.toString();
-                // name = name + (' ') + (eventItem.phone.toString().length == 10
-                //   ? eventItem.phone.toString()
-                //   : eventItem.phone?.split('.com/')[1]).toString();
+              // name = name + (' ') + (eventItem.phone.toString().length == 10
+              //   ? eventItem.phone.toString()
+              //   : eventItem.phone?.split('.com/')[1]).toString();
 
               // FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
               printTrackEvent(eventItem.title.toString(), properties: analyticsItem);
@@ -148,18 +148,11 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
               child: Column(
                 children: [
                   ListTile(
-                    title: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        eventItem.title.toString().toText(
-                              medium: true,
-                              fontSize: titleSize,
-                              color: Colors.black,
-                            ),
-                        const SizedBox(width: 4),
-                      ],
-                    ),
+                    title: eventItem.title.toString().toText(
+                          medium: true,
+                          fontSize: titleSize,
+                          color: Colors.black,
+                        ),
                     leading: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,

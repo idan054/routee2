@@ -189,7 +189,8 @@ Widget updateInfoForm(
           if (!fromUpdateButton)
             Row(
               children: [
-                'פרטים להצטרפות'.toText(color: Colors.black54).centerRight.px(15),
+                // 'פרטים להצטרפות'.toText(color: Colors.black54).centerRight.px(15),
+                'פרטים להתאמה עבורך:'.toText(color: Colors.black54).centerRight.px(15),
                 SizedBox(width: width * 0.085),
                 if (showLoader) const CircularProgressIndicator().sizedBox(15, 15),
               ],

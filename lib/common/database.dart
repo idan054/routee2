@@ -5,22 +5,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:haversine_distance/haversine_distance.dart';
 
+import 'color_printer.dart';
 import 'models/event_item.dart';
 
 // https://firebase.flutter.dev/docs/analytics/get-started
 enum EventTypes { joinGroup }
 
-class Analytics {
-  static Future logSimpleEvent(EventTypes type, String item) async =>
-      await FirebaseAnalytics.instance.logSelectContent(
-        contentType: type.name, // "Join group"
-        itemId: item, // Group ID
-      );
+// class Analytics {
+//   static Future logSimpleEvent(EventTypes type, String item) async =>
+//       await FirebaseAnalytics.instance.logSelectContent(
+//         contentType: type.name, // "Join group"
+//         itemId: item, // Group ID
+//       );
+//
+//   static Future logEvent(EventTypes type, Map<String, dynamic> json) async =>
+//       await FirebaseAnalytics.instance.logEvent(
+//           name: type.name, // "Join group"
+//           parameters: json);
+// }
 
-  static Future logEvent(EventTypes type, Map<String, dynamic> json) async =>
-      await FirebaseAnalytics.instance.logEvent(
-          name: type.name, // "Join group"
-          parameters: json);
+void printTrackEvent(String val, {Map<String, dynamic>? properties}) {
+  printPurple('Mixpanel PRINT: $val');
+  if (properties != null) printWhite('Mixpanel JSON: $properties');
+  mixpanel.track(val, properties: properties);
 }
 
 class Database {

@@ -1,20 +1,27 @@
-import 'dart:math';
+import 'dart:convert';
+import 'dart:html' as html;
+
+// import 'dart:math';
+import 'package:around/upload_services.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:around/common/database.dart';
 import 'package:around/pages/category_page.dart';
 import 'package:around/common/string_ext.dart';
 import 'package:around/common/widget_ext.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_file.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 import 'common/assets.gen.dart';
 import 'common/constants.dart';
 import 'common/models/event_category.dart';
 import 'common/models/event_item.dart';
 import 'package:intl/intl.dart' as intl;
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
+
+import 'dart:developer';
 
 import '../common/assets.gen.dart';
 
@@ -45,7 +52,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
   if (distanceKm.length < 4) distanceKm += '.01'; // Needed when user distance = 0
   distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
 
-  if(eventItem.withFee == true) distanceKm = '₪ | $distanceKm';
+  if (eventItem.withFee == true) distanceKm = '₪ | $distanceKm';
 
   var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
   if (eventItem.ageRange?.last == 60) {
@@ -55,36 +62,41 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
     ageRange = '- כולם מוזמנים!';
   }
 
-  return StatefulBuilder(builder: (context, cardSetState) {
-    return Column(
-      children: [
-        if (showDeleteOption) ...[
-          const SizedBox(height: 5),
-          Row(
-            children: [
-              'מחק קבוצה'.toText(bold: true, color: Colors.red).py(15).px(10).onTap(() {
-                Database.deleteDoc(collection: 'events', docName: eventItem.id);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        'הקבוצה נמחקה בהצלחה!'.toText(bold: true, color: Colors.white)));
-              }, radius: 10),
-              const Spacer(),
-              'האם למחוק את הקבוצה?'.toText().px(10)
-            ],
-          ),
-        ],
-        InkWell(
-          onTap: () {
-            // region onTap
-            print(eventItem.phone);
-            var phone = eventItem.phone.toString();
-            if (eventItem.phone?.length == 10) {
-              phone = '+972${eventItem.phone?.substring(1)}';
-            }
-            // var time = timeFormat(eventItem.eventAt!, withDay: true);
-            print('phone $phone');
+  // WidgetsToImageController to access widget
+  WidgetsToImageController controller = WidgetsToImageController();
 
-            openWhatsapp(context, whatsapp: phone, text: '''
+  return WidgetsToImage(
+    controller: controller,
+    child: StatefulBuilder(builder: (context, cardSetState) {
+      return Column(
+        children: [
+          if (showDeleteOption) ...[
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                'מחק קבוצה'.toText(bold: true, color: Colors.red).py(15).px(10).onTap(() {
+                  Database.deleteDoc(collection: 'events', docName: eventItem.id);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: 'הקבוצה נמחקה בהצלחה!'
+                          .toText(bold: true, color: Colors.white)));
+                }, radius: 10),
+                const Spacer(),
+                'האם למחוק את הקבוצה?'.toText().px(10)
+              ],
+            ),
+          ],
+          InkWell(
+            onTap: () async {
+              // region onTap
+              print(eventItem.phone);
+              var phone = eventItem.phone.toString();
+              if (eventItem.phone?.length == 10) {
+                phone = '+972${eventItem.phone?.substring(1)}';
+              }
+              // var time = timeFormat(eventItem.eventAt!, withDay: true);
+              print('phone $phone');
+
+              openWhatsapp(context, whatsapp: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around 
  https://around-proj.web.app
 
@@ -92,88 +104,109 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
  ונפגש ב${eventItem.address}
 הגיל שלי הוא ${user.age} ואשמח להצטרף!''');
 
-            print('START: logEvent()');
+              print('START: logEvent()');
 
-            //> variables can be String / numbers ONLY
-            // var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
-            // var analyticsItem = {
-            //   'id': eventItem.id,
-            //   'title': eventItem.title,
-            //   'phone': eventItem.phone,
-            //   'minAge': eventItem.ageRange?.first,
-            //   'maxAge': eventItem.ageRange?.last,
-            //   'address': eventItem.address,
-            //   'latitude': eventItem.latitude,
-            //   'longitude': eventItem.longitude,
-            //   'createdAt': createdAt,
-            //   'categoryName': eventItem.eventCategory?.categoryName,
-            //   'categoryType': eventItem.eventCategory?.categoryType?.name,
-            // };
+              //> variables can be String / numbers ONLY
+              var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
+              var analyticsItem = {
+                'id': eventItem.id,
+                'title': eventItem.title,
+                'phone': eventItem.phone,
+                'minAge': eventItem.ageRange?.first,
+                'maxAge': eventItem.ageRange?.last,
+                'address': eventItem.address,
+                'latitude': eventItem.latitude,
+                'longitude': eventItem.longitude,
+                'createdAt': createdAt,
+                'categoryName': eventItem.eventCategory?.categoryName,
+                'categoryType': eventItem.eventCategory?.categoryType?.name,
+                'currUserAge': user.age,
+                'currUserAddress': user.address?.toJson()
+              };
 
-            FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
-            // Analytics.logEvent(EventTypes.joinGroup, analyticsItem);
-            // Analytics.logSimpleEvent(EventTypes.joinGroup, eventItem.id.toString());
-            // endregion onTap
-          },
-          onLongPress: adminMode
-              ? () {
-                  print('START: onLongPress()');
-                  showDeleteOption = !showDeleteOption;
-                  cardSetState(() {});
-                }
-              : null,
-          child: Card(
-            color: Colors.white,
-            elevation: 3,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-            child: Column(
-              children: [
-                ListTile(
-                  title: eventItem.title.toString().toText(
-                        medium: true,
-                        fontSize: titleSize,
-                        color: Colors.black,
-                      ),
-                  leading: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      Container(
-                              color: bgColor.withOpacity(0.8),
-                              // child: (distanceMode ? distanceKm : ageRange)
-                              child: (distanceKm)
-                                  .toText(
-                                    fontSize: subSize - 2,
-                                    medium: true,
-                                    color: Colors.black54,
-                                  )
-                                  .px(7)
-                                  .py(5))
-                          .rounded(radius: 20),
-                    ],
+              // var name = eventItem.title.toString();
+                // name = name + (' ') + (eventItem.phone.toString().length == 10
+                //   ? eventItem.phone.toString()
+                //   : eventItem.phone?.split('.com/')[1]).toString();
+
+              FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
+              printTrackEvent(eventItem.title.toString(), properties: analyticsItem);
+
+              // endregion onTap
+            },
+            onLongPress: adminMode
+                ? () {
+                    print('START: onLongPress()');
+                    showDeleteOption = !showDeleteOption;
+                    cardSetState(() {});
+                  }
+                : null,
+            child: Card(
+              color: Colors.white,
+              elevation: 3,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        eventItem.title.toString().toText(
+                              medium: true,
+                              fontSize: titleSize,
+                              color: Colors.black,
+                            ),
+                        const SizedBox(width: 4),
+                      ],
+                    ),
+                    leading: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                                color: bgColor.withOpacity(0.8),
+                                // child: (distanceMode ? distanceKm : ageRange)
+                                child: (distanceKm)
+                                    .toText(
+                                      fontSize: subSize - 2,
+                                      medium: true,
+                                      color: Colors.black54,
+                                    )
+                                    .px(7)
+                                    .py(5))
+                            .rounded(radius: 20),
+                        const SizedBox(width: 4),
+                        if (adminMode)
+                          buildShareButton(context, controller, eventItem, subSize),
+
+                        // if (!distanceMode) buildShareButton(subSize).offset(0, 2),
+                      ],
+                    ),
                   ),
-                ),
-                if (adminMode)
-                  buildInfo(eventItem, subSize, distanceMode).pOnly(right: 15, bottom: 5),
-                buildAddressText(eventItem, subSize, distanceMode).pOnly(right: 15),
-                // buildCreatedAt(eventItem, subSize, distanceMode).pOnly(right: 15),
-                Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    if (!distanceMode) buildWhatsappJoin(subSize),
-                    const Spacer(),
-                    buildAgeText(ageRange, subSize, distanceMode).py(3),
-                  ],
-                  // ).pOnly(right: 75, top: 2),
-                ).pOnly(right: 15, top: 2),
-              ],
-            ).pOnly(bottom: 10, top: 5),
+                  if (adminMode)
+                    buildInfo(eventItem, subSize, distanceMode)
+                        .pOnly(right: 15, bottom: 5),
+                  buildAddressText(eventItem, subSize, distanceMode).pOnly(right: 15),
+                  // buildCreatedAt(eventItem, subSize, distanceMode).pOnly(right: 15),
+                  Row(
+                    children: [
+                      const SizedBox(width: 15),
+                      if (!distanceMode) buildWhatsappJoin(subSize),
+                      const Spacer(),
+                      buildAgeText(ageRange, subSize, distanceMode).py(3),
+                    ],
+                    // ).pOnly(right: 75, top: 2),
+                  ).pOnly(right: 15, top: 2),
+                ],
+              ).pOnly(bottom: 10, top: 5),
+            ),
+            // .onTap(() {}, radius: 5),
           ),
-          // .onTap(() {}, radius: 5),
-        ),
-      ],
-    );
-  });
+        ],
+      );
+    }),
+  );
 }
 
 Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
@@ -191,7 +224,7 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
               ' - '
               'ע"י $createdBy'
               // ' - '
-      '${eventItem.withFee == true ? '(בתשלום)' : ''}'
+              '${eventItem.withFee == true ? '(בתשלום)' : ''}'
           .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
       // .sizedBox(130, null),
       const SizedBox(width: 3),
@@ -221,9 +254,9 @@ Widget buildAddressText(EventItem eventItem, double subSize, bool distanceMode) 
   var address = eventItem.address.toString();
   var diff = DateTime.now().difference(eventItem.createdAt!).inDays;
   var ago = '';
-  if(diff == 0) ago = 'נוסף היום!';
-  if(diff == 1) ago = 'נוסף אתמול!';
-  if(diff != 0 && diff != 1) ago = 'נוסף לפני $diff ימים ';
+  if (diff == 0) ago = 'נוסף היום!';
+  if (diff == 1) ago = 'נוסף אתמול!';
+  if (diff != 0 && diff != 1) ago = 'נוסף לפני $diff ימים ';
 
   var addressAndAgo = '$address' ' - ' '$ago';
 
@@ -263,6 +296,88 @@ Widget buildWhatsappJoin(double subSize) {
       // )
     ],
   );
+}
+
+Widget buildShareButton(
+  BuildContext context,
+  WidgetsToImageController controller,
+  EventItem eventItem,
+  double subSize,
+) {
+  var ageRange = 'לגילאי ' '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
+  if (eventItem.ageRange?.last == 60) {
+    ageRange = 'לגילאי ' '${eventItem.ageRange?.first}+';
+  }
+  if (eventItem.ageRange?.first == 10 && eventItem.ageRange?.last == 60) {
+    ageRange = 'לכל הגילאים';
+  }
+
+  return CircleAvatar(
+    backgroundColor: bgColor,
+    // backgroundColor: Colors.transparent,
+    radius: 10,
+    // child: Icons.reply.icon(color: Colors.black38, size: subSize + 2), // New share
+
+    // Todo while upload, change the icon to loader.
+    child: Icons.share.icon(color: Colors.black38, size: subSize + 1), // Classic share
+  ).pad(0).onTap(() async {
+    final bytes = await controller.capture();
+    String base64Image = base64Encode(bytes!);
+    // var file = File.fromUri(Uri.file(base64Image));
+    var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
+
+    var address = eventItem.address?.replaceAll(', ישראל', '');
+    var desc =
+        // 'קבוצה חדשה '
+        '"${eventItem.title}"'
+        ' '
+        '$ageRange'
+        // '${eventItem.eventCategory?.categoryName}'
+        ', מוזמנים אל '
+        '$address'
+        '\n'
+        '\n'
+        'כדי להצטרף או למצוא עוד קבוצות מסביבכם'
+        ' הכנסו לאתר Around 😀 \n';
+
+    try {
+      // Share.share('text');
+      html.window.navigator.share({
+        'title': desc,
+        'description': desc,
+        'text': desc,
+        'image': imageUrl,
+        'url': 'https://around-proj.web.app/'
+      });
+    } on Exception catch (e, s) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: 'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
+      print(s);
+    }
+  });
+  //   Row(
+  //   mainAxisSize: MainAxisSize.min,
+  //   children: [
+  //     // ('הצטרף ')
+  //     // if (distanceMode)
+  //     //   '($ageRange)'.toText(color: Colors.grey, fontSize: subSize),
+  //     const SizedBox(width: 5),
+  //     // Icons.reply.icon(color: Colors.black38, size: subSize + 5),
+  //     (
+  //         'שיתוף'
+  //         ' | '
+  //     ).toText(color: Colors.black38, fontSize: subSize, medium: true),
+  //     // Assets.svg.whatsappOutline.svg(color: wtspGreen, height: 18)
+  //     // const Opacity(
+  //     //   opacity: 0.6,
+  //     //   child: SizedBox(
+  //     //     height: 13,
+  //     //     width: 13,
+  //     //     child: Image(image: AssetImage('assets/whatsapp-xxl.png'), fit: BoxFit.cover),
+  //     //   ),
+  //     // )
+  //   ],
+  // );
 }
 
 String? timeFormat(DateTime timestamp, {bool withDay = true}) {

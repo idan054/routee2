@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: bgColor,
       appBar: buildHomeAppBar(),
       body: RefreshIndicator(
-        color: Colors.black,
+        color: Colors.purple,
         backgroundColor: bgColorDark,
         onRefresh: () async => fetchEvents(),
         child: Stack(
@@ -188,11 +188,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        extendedPadding: EdgeInsets.symmetric(horizontal: 3),
+        extendedPadding: const EdgeInsets.symmetric(horizontal: 3),
         backgroundColor: bgColorDark,
         label: Row(
           children: [
             Assets.addOnlyWhite.image(height: 42).roundedFull,
+            // Assets.addOnlyBlack.image(height: 42).roundedFull,
             'קבוצה חדשה'.toText(bold: true).pOnly(left: 10).offset(5, 0),
           ],
         ),
@@ -377,7 +378,8 @@ class _MyHomePageState extends State<MyHomePage> {
         const SizedBox(height: 50),
         Icons.keyboard_double_arrow_left.icon(color: Colors.black54),
         'לפי מרחק'
-            .toText(fontSize: 12, color: Colors.black54, medium: true).offset(0, -1)
+            .toText(fontSize: 12, color: Colors.black54, medium: true)
+            .offset(0, -1)
             .px(4),
         const SizedBox(width: 5),
         // 'עוד'.toText(fontSize: 12.0, color: color, bold: true),

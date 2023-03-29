@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 1.70;
+var appVersion = 1.8;
 var adminMode = false;
+var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 
 const bgColor = Color(0xfff7f4ed);
 const wtspGreen = Color(0xff25d366);

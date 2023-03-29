@@ -8,8 +8,10 @@ import 'package:hive/hive.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'package:path_provider/path_provider.dart';
+import 'common/database.dart';
 import 'firebase_options.dart';
 
 import 'package:flutter/material.dart';
@@ -25,6 +27,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseAnalytics.instance.logAppOpen();
+  mixpanel =
+      await Mixpanel.init('5def6b5a71bef4c9d148132ff4bcead2', trackAutomaticEvents: true);
 
   // path_provider no need on web
   if (!kIsWeb) {
@@ -35,6 +39,7 @@ void main() async {
   await initializeDateFormatting('he_IL', null);
   print('kIsWeb: $kIsWeb kDebugMode: $kDebugMode');
   // if (kDebugMode) await Hive.box('uniBox').clear();
+  printTrackEvent(kDebugMode ? 'Debug Session start' : 'Live Session start');
   runApp(const MyApp());
 }
 

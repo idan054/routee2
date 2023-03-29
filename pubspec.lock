@@ -190,6 +190,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.3+4"
   crypto:
     dependency: transitive
     description:
@@ -555,6 +562,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  mixpanel_flutter:
+    dependency: "direct main"
+    description:
+      name: mixpanel_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   omni_datetime_picker:
     dependency: "direct main"
     description:
@@ -688,6 +702,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  rich_console:
+    dependency: "direct main"
+    description:
+      name: rich_console
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   share:
     dependency: "direct main"
     description:
@@ -695,6 +716,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
+  share_plus:
+    dependency: "direct main"
+    description:
+      name: share_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.3.1"
+  share_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: share_plus_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   shelf:
     dependency: transitive
     description:
@@ -854,6 +889,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.4"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:
@@ -875,6 +917,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.0"
+  widgets_to_image:
+    dependency: "direct main"
+    description:
+      name: widgets_to_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   win32:
     dependency: transitive
     description:

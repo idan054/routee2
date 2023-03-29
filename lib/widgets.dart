@@ -129,7 +129,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                 //   ? eventItem.phone.toString()
                 //   : eventItem.phone?.split('.com/')[1]).toString();
 
-              FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
+              // FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
               printTrackEvent(eventItem.title.toString(), properties: analyticsItem);
 
               // endregion onTap

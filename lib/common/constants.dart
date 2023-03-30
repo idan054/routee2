@@ -5,7 +5,7 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 2.2;
+var appVersion = 2.24;
 var adminMode = false;
 var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 

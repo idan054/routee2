@@ -3,6 +3,7 @@ import 'dart:html' as html;
 
 // import 'dart:math';
 import 'package:around/upload_services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:around/common/database.dart';
 import 'package:around/pages/category_page.dart';
@@ -304,49 +305,62 @@ Widget buildShareButton(
   if (eventItem.ageRange?.first == 10 && eventItem.ageRange?.last == 60) {
     ageRange = 'לכל הגילאים';
   }
+  bool isLoading = false;
 
-  return CircleAvatar(
-    backgroundColor: bgColor,
-    // backgroundColor: Colors.transparent,
-    radius: 10,
-    // child: Icons.reply.icon(color: Colors.black38, size: subSize + 2), // New share
+  return StatefulBuilder(builder: (context, stfState) {
+    return CircleAvatar(
+      backgroundColor: bgColor,
+      // backgroundColor: Colors.transparent,
+      radius: 10,
+      // child: Icons.reply.icon(color: Colors.black38, size: subSize + 2), // New share
 
-    // Todo while upload, change the icon to loader.
-    child: Icons.share.icon(color: Colors.black38, size: subSize + 1), // Classic share
-  ).pad(0).onTap(() async {
-    final bytes = await controller.capture();
-    String base64Image = base64Encode(bytes!);
-    // var file = File.fromUri(Uri.file(base64Image));
-    var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
+      // Todo while upload, change the icon to loader.
+      child: isLoading
+          ? const CircularProgressIndicator(color: Colors.purple, strokeWidth: 2,).sizedBox(10, 10)
+          : Icons.share.icon(color: Colors.black38, size: subSize + 1), // Classic share
+    ).pad(0).onTap(() async {
+      isLoading = true;
+      stfState(() {});
+      await Future.delayed(const Duration(milliseconds: 250));
 
-    var address = eventItem.address?.replaceAll(', ישראל', '');
-    var desc =
-        // 'קבוצה חדשה '
-        '"${eventItem.title}"'
-        ' '
-        '$ageRange'
-        // '${eventItem.eventCategory?.categoryName}'
-        ', מוזמנים אל '
-        '$address'
-        '\n'
-        '\n'
-        'כדי להצטרף או למצוא עוד קבוצות מסביבכם'
-        ' הכנסו לאתר Around 😀 \n';
+      // final bytes = await controller.capture();
+      // String base64Image = base64Encode(bytes!);
+      // // var file = File.fromUri(Uri.file(base64Image));
+      // var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
 
-    try {
-      // Share.share('text');
-      html.window.navigator.share({
-        'title': desc,
-        'description': desc,
-        'text': desc,
-        'image': imageUrl,
-        'url': 'https://around-proj.web.app/'
-      });
-    } on Exception catch (e, s) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: 'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
-      print(s);
-    }
+      isLoading = false;
+      stfState(() {});
+
+      var address = eventItem.address?.replaceAll(', ישראל', '');
+      var desc =
+          // 'קבוצה חדשה '
+          '"${eventItem.title}"'
+          ' '
+          '$ageRange'
+          // '${eventItem.eventCategory?.categoryName}'
+          ', מוזמנים אל '
+          '$address'
+          '\n'
+          '\n'
+          'כדי להצטרף או למצוא עוד קבוצות מסביבכם'
+          ' הכנסו לאתר Around 😀 \n';
+
+      try {
+        // Share.share('text');
+        html.window.navigator.share({
+          'title': desc,
+          'description': desc,
+          'text': desc,
+          // 'image': imageUrl,
+          'image': 'https://i.ibb.co/rsHsT2v/74db0f2a539b.png',
+          'url': 'https://around-proj.web.app/'
+        });
+      } on Exception catch (e, s) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: 'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
+        print(s);
+      }
+    });
   });
   //   Row(
   //   mainAxisSize: MainAxisSize.min,

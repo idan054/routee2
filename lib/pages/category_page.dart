@@ -120,7 +120,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               .toText(fontSize: 12, color: Colors.black54, bold: false)
                               .px(15),
                           const Spacer(),
-                          '${adminMode ? 'לכל הגילאים' : 'לגלאי ${widget.user.age}'}'
+                          '${(adminMode || widget.user.age == null) ? 'לכל הגילאים' : 'לגלאי ${widget.user.age}'}'
                                   ', באיזור ${widget.user.address?.name}'
                               .toText(fontSize: 14, color: Colors.black54, medium: true)
                               .px(15),

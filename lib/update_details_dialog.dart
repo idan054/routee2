@@ -153,7 +153,16 @@ Widget updateInfoForm(
           // 'להצטרף וליצור ' 'קבוצות חברתיות'
           // 'קבוצות חברתיות מסביבך'
 
-          SizedBox(height: fromUpdateButton ? 20 : 50),
+          if (!fromUpdateButton)
+            // 'דלג'.toText(color: Colors.black54, underline: true)
+            Icons.close.icon(color: Colors.black54).px(10).py(10).onTap(
+              () {
+                onConfirm(null);
+                Navigator.pop(context);
+              },
+              radius: 5,
+            ).centerRight,
+          SizedBox(height: fromUpdateButton ? 20 : 40),
           // Assets.appIcon.image(height: 80),
           Assets.wtspLocationGroupIconSolid.image(height: 80),
           // aroundLogo(),
@@ -299,7 +308,7 @@ Widget updateInfoForm(
                           // }
 
                           var intAge = int.parse(age);
-                          if(intAge >= 60) intAge = 60; // MAX
+                          if (intAge >= 60) intAge = 60; // MAX
                           var box = Hive.box('uniBox');
                           box.put('userAge', intAge);
                           box.put('userAddress', selectedAddress?.toJson());
@@ -312,16 +321,9 @@ Widget updateInfoForm(
                       bold: true,
                       color: isDisabled ? Colors.black26 : Colors.black),
                 ).centerRight;
-              }).px(15),
-              const Spacer(),
-              if (false)
-                'דלג'.toText(color: Colors.black54, underline: true).px(15).py(10).onTap(
-                  () {
-                    onConfirm(null);
-                    Navigator.pop(context);
-                  },
-                  radius: 5,
-                ),
+              }).pOnly(right: 15, left: 5),
+              // const Spacer(),
+              // if (false)
               const SizedBox(width: 5),
             ],
           ),

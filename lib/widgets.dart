@@ -50,8 +50,15 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
   // var time = timeFormat(eventItem.eventAt!).toString();
 
   var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
-  if (distanceKm.length < 4) distanceKm += '.01'; // Needed when user distance = 0
-  distanceKm = '${distanceKm.substring(0, 4)} ק"מ';
+  // print('distanceKm A ${distanceKm}');
+  distanceKm = distanceKm.split('.').first;
+  if (distanceKm == '0') distanceKm = '0.1'; // Needed when user distance = 0
+
+  // distanceKm = distanceKm.substring(0, 4);
+  // if (distanceKm[3] == '.') distanceKm = distanceKm.replaceAll('.', '');
+
+  distanceKm += ' ק"מ';
+  // print('distanceKm B ${distanceKm}');
 
   if (eventItem.withFee == true) distanceKm = '₪ | $distanceKm';
 
@@ -252,7 +259,7 @@ Widget buildAddressText(EventItem eventItem, double subSize, bool distanceMode) 
   if (diff == 1) ago = 'נוסף אתמול!';
   if (diff != 0 && diff != 1) ago = 'נוסף לפני $diff ימים ';
 
-  var addressAndAgo = '$address' ' - ' '$ago';
+  var addressAndAgo = adminMode ? ('$address' ' - ' '$ago') : address;
 
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -316,7 +323,10 @@ Widget buildShareButton(
 
       // Todo while upload, change the icon to loader.
       child: isLoading
-          ? const CircularProgressIndicator(color: Colors.purple, strokeWidth: 2,).sizedBox(10, 10)
+          ? const CircularProgressIndicator(
+              color: Colors.purple,
+              strokeWidth: 2,
+            ).sizedBox(10, 10)
           : Icons.share.icon(color: Colors.black38, size: subSize + 1), // Classic share
     ).pad(0).onTap(() async {
       isLoading = true;

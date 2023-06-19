@@ -25,7 +25,7 @@ class CreatePage extends StatefulWidget {
 }
 
 class _CreatePageState extends State<CreatePage> {
-  RangeValues _currentRangeValues = const RangeValues(10, 60);
+  RangeValues _currentRangeValues = const RangeValues(10, 55); // This NOT set Min & Max
 
   // region ageList
   var ageRange = [
@@ -75,11 +75,11 @@ class _CreatePageState extends State<CreatePage> {
     53,
     54,
     55,
-    56,
-    57,
-    58,
-    59,
-    60,
+    // 56,
+    // 57,
+    // 58,
+    // 59,
+    // 60,
   ];
 
   // endregion ageList
@@ -119,14 +119,14 @@ class _CreatePageState extends State<CreatePage> {
             children: [
               // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
               // 'ב Around תיצרו ותצטרפו ' 'לקבוצות מסביבך'.toText(bold: true, maxLines: 5, fontSize: 16).centerRight,
-              const SizedBox(height: 15),
+              const SizedBox(height: 13),
               if (errText != null)
                 // 'אנא מלא את כל הפרטים'
                 errText
                     .toString()
                     .toText(bold: true, fontSize: 16, color: Colors.red)
                     .center,
-              const SizedBox(height: 15),
+              const SizedBox(height: 13),
 
               Row(
                 children: [
@@ -137,12 +137,11 @@ class _CreatePageState extends State<CreatePage> {
                       .expanded(),
                 ],
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 13),
               // "מומלץ להוסיף אימוג'י 🤘 "
               //     .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
               //     .pOnly(right: 25)
               //     .centerRight,
-              const SizedBox(height: 10),
               Row(
                 children: [
                   // buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
@@ -194,14 +193,15 @@ class _CreatePageState extends State<CreatePage> {
                 ],
               ),
 
-              const SizedBox(height: 15),
+              const SizedBox(height: 13),
               Row(
                 children: [
                   '3'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
-                    'קישור קבוצה / ווטסאפ לבקשות הצטרפות',
+                    // 'קישור קבוצה / '
+                        'ווטסאפ לבקשות הצטרפות',
                     // "קישור קבוצה / מס' ווטסאפ",
                     phoneController,
                     pinLabel: false,
@@ -235,11 +235,13 @@ class _CreatePageState extends State<CreatePage> {
                 //   (" מיועד לכל הגילאים ")
                 //       .toText(color: Colors.black54, fontSize: 13, bold: true),
                 // ] else ...[
-                (" מיועד לגיל ${_currentRangeValues.start.round()}")
-                    .toText(color: Colors.black54, fontSize: 13, bold: true),
-                const Spacer(),
-                (" עד ${_currentRangeValues.end.round()}")
-                    .toText(color: Colors.black54, fontSize: 13, bold: true),
+                  (" מיועד מגיל ${_currentRangeValues.start.round()}")
+                      .toText(color: Colors.black54, fontSize: 13, bold: true),
+                  const Spacer(),
+                  (_currentRangeValues.end.round() == 60
+                          ? "60+"
+                          : (" עד ${_currentRangeValues.end.round()}"))
+                      .toText(color: Colors.black54, fontSize: 13, bold: true),
                 // ],
               ]).px(22),
               RangeSlider(
@@ -270,9 +272,9 @@ class _CreatePageState extends State<CreatePage> {
                   // const SizedBox(width: 10),
                   ToggleButtons(
                     direction: Axis.horizontal,
-                    borderWidth: 1.75,
-                    borderColor: Colors.black38,
-                    selectedBorderColor: Colors.black54,
+                    borderWidth: 1.65, // 1.75
+                    borderColor: Colors.black.withOpacity(0.42),
+                    selectedBorderColor: Colors.black.withOpacity(0.70),
                     fillColor: bgColorDark,
                     onPressed: (int index) {
                       for (int i = 0; i < isFeeEvent.length; i++) {
@@ -282,11 +284,22 @@ class _CreatePageState extends State<CreatePage> {
                       // print('isFeeEvent.last ${isFeeEvent.last}');
                       setState(() {});
                     },
-                    borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    // borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     isSelected: isFeeEvent,
                     children: [
-                      'בתשלום'.toText(fontSize: 13, bold: true, color: Colors.black.withOpacity(0.70)).px(15),
-                      'בחינם'.toText(fontSize: 13, bold: true, color: Colors.black.withOpacity(0.70)).px(15),
+                      'בתשלום'
+                          .toText(
+                              fontSize: 13,
+                              bold: true,
+                              color: Colors.black.withOpacity(0.66))
+                          .px(15),
+                      'בחינם'
+                          .toText(
+                              fontSize: 13,
+                              bold: true,
+                              color: Colors.black.withOpacity(0.66))
+                          .px(15),
                     ],
                   ).sizedBox(null, 30),
                 ],
@@ -341,7 +354,8 @@ class _CreatePageState extends State<CreatePage> {
                 return;
               }
 
-              if (isFeeEvent.contains(true) == false) { // AKA not .contains
+              if (isFeeEvent.contains(true) == false) {
+                // AKA not .contains
                 errText = 'בחר האם הקבוצה בתשלום או בחינם';
                 setState(() {});
                 return;

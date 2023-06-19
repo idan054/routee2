@@ -5,7 +5,7 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
-var appVersion = 2.24;
+var appVersion = 2.26;
 var adminMode = false;
 var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 
@@ -53,7 +53,6 @@ var categoryColors = const [
 var categories = [
   EventCategory(
       categoryType: CategoryType.sport,
-      // categoryName: 'קבוצות 18-24 לאימונים וספורט',
       // categoryName: 'לאימונים וספורט',
       categoryName: 'לספורט',
           // ' 👟',
@@ -62,22 +61,21 @@ var categories = [
 
   EventCategory(
       categoryType: CategoryType.weekend,
-      // categoryName: 'קבוצות 18-24 ליציאה בסופש',
       // categoryName: 'ליציאות בסופש',
       categoryName: 'ליציאות בסופש',
           // ' 🍻',
       categoryColor: categoryColors[0],
       coverImagePath: 'assets/covers/weekend.png'),
+
   // EventCategory(
   //     categoryType: CategoryType.barPub,
-  //     // categoryName: 'קבוצות 18-24 לברים ומועדונים',
   //     // categoryName: 'לברים ומועדונים',
   //     categoryName: 'לברים ומועדונים',
   //     categoryColor: categoryColors[0], // 1
   //     coverImagePath: 'assets/covers/bar_pub.png'),
+
   EventCategory(
       categoryType: CategoryType.boardGames,
-      // categoryName: 'קבוצות 18-24 למשחקי קופסא',
       // categoryName: 'למשחקי קופסא',
       categoryName: 'למשחקי שולחן',
           // ' 🎲',
@@ -85,7 +83,6 @@ var categories = [
       coverImagePath: 'assets/covers/board_games.png'),
   EventCategory(
       categoryType: CategoryType.otherEvent,
-      // categoryName: 'קבוצות 18-24 למפגשים ספונטנים',
       // categoryName: 'למפגשים ספונטנים',
       categoryName: 'למפגשים ספונטנים',
           // ' 👋',
@@ -94,7 +91,6 @@ var categories = [
 
   // EventCategory(
   //     categoryType: CategoryType.party,
-  //     // categoryName: 'קבוצות 18-24 למסיבות ואירועים',
   //     // categoryName: 'למסיבות ואירועים',
   //     categoryName: 'למסיבות ואירועים',
   //     categoryColor: categoryColors[6],
@@ -102,7 +98,6 @@ var categories = [
 
   EventCategory(
       categoryType: CategoryType.show,
-      // categoryName: 'קבוצות 18-24 ללכת להופעות',
       // categoryName: 'ללכת להופעות',
       categoryName: 'להופעות ומסיבות',
           // ' 🎉',
@@ -110,7 +105,6 @@ var categories = [
       coverImagePath: 'assets/covers/show.png'),
   EventCategory(
       categoryType: CategoryType.trip,
-      // categoryName: 'קבוצות 18-24 לטיולים וחופשות',
       // categoryName: 'לטיולים וחופשות',
       categoryName: 'לטיולים',
           // ' 🍃',
@@ -118,7 +112,6 @@ var categories = [
       coverImagePath: 'assets/covers/trip.png'),
   EventCategory(
       categoryType: CategoryType.lecture,
-      // categoryName: 'קבוצות 18-24 לסדנאות והרצאות',
       // categoryName: 'לסדנאות והרצאות',
       categoryName: 'לאירועים מיוחדים',
       categoryColor: categoryColors[6],

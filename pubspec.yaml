@@ -32,8 +32,8 @@ dependencies:
   widgets_to_image: ^0.0.2
   mixpanel_flutter: ^2.1.1
   rich_console: ^1.0.4
+  cloud_functions: ^4.2.0
 #  text_selection_controls: ^0.0.2
-
 
 
 dev_dependencies:

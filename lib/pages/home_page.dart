@@ -81,6 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
       print('userData ${userData.age}');
       print('userData ${userData.address?.name}');
       user = userData;
+    } else {
+      final defaultUser = UserData(
+          null,
+          const AddressResult(
+            name: 'תל אביב',
+            lat: '32.0852999',
+            placeId: 'ChIJH3w7GaZMHRURkD-WwKJy-8E',
+            lng: '34.78176759999999',
+          ));
+      user = defaultUser;
     }
     fetchEvents(withLoader: withLoader);
     // setState(() {});
@@ -93,7 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     events = await FsAdvanced.getHomeEvents(adminMode ? null : user?.age);
 
-    // events = sortByDistance(events, user!);
     events = sortByType(events, user!);
     splashLoad = false;
     setState(() {});
@@ -281,22 +290,29 @@ class _MyHomePageState extends State<MyHomePage> {
         // ),
         Row(
           children: [
-            'עדכון'
-                .toText(fontSize: 12, color: Colors.black54, bold: false, underline: true)
-                .px(15)
-                .onTap(() {
-              showUpdateDetailsDialog(
-                context,
-                fromUpdateButton: true,
-                user: user,
-                onConfirm: (UserData? userData) {
-                  _onUpdateUserInfo(userData, withLoader: true);
-                },
-              );
+            Builder(builder: (context) {
+              final boldMode = events.isNotEmpty && user?.age == null;
+              return 'עדכון'
+                  .toText(
+                      fontSize: boldMode ? 13 : 12,
+                      color: boldMode ? Colors.purple : Colors.black54,
+                      bold: boldMode,
+                      underline: true)
+                  .px(15)
+                  .onTap(() {
+                showUpdateDetailsDialog(
+                  context,
+                  fromUpdateButton: true,
+                  user: user,
+                  onConfirm: (UserData? userData) {
+                    _onUpdateUserInfo(userData, withLoader: true);
+                  },
+                );
+              }, radius: 5);
             }),
             const Spacer(),
             if (user != null)
-              '${adminMode ? 'כל הגילאים ' : 'לגלאי ${user?.age}'}'
+              '${(adminMode || user?.age == null) ? 'כל הגילאים ' : 'לגלאי ${user?.age}'}'
                       ', באיזור ${user?.address?.name}'
                   .toText(fontSize: 14, color: Colors.black54, medium: true)
                   .px(15),

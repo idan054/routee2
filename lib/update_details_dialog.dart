@@ -232,7 +232,7 @@ Widget updateInfoForm(
                         const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                     counterText: '',
                     labelText: 'גיל',
-                    hintText: ageHint,
+                    hintText: ageHint == 'null' ? '' : ageHint,
                     labelStyle: TextStyle(
                         color: Colors.black.withOpacity(0.70),
                         fontWeight: FontWeight.bold),

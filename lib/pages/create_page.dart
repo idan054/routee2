@@ -1,21 +1,16 @@
-import 'dart:math';
-import 'package:around/common/models/event_category.dart';
-import 'package:around/common/string_ext.dart';
-import 'package:around/common/widget_ext.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:routee/common/models/event_category.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/widget_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+
 import '../common/constants.dart';
 import '../common/database.dart';
 import '../common/google_location_complete.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_item.dart';
-import '../common/assets.gen.dart';
 import '../update_details_dialog.dart';
-import '../widgets.dart';
-import 'category_page.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({Key? key}) : super(key: key);
@@ -201,7 +196,7 @@ class _CreatePageState extends State<CreatePage> {
                       .pOnly(left: 10),
                   buildTextFormField(
                     // 'קישור קבוצה / '
-                        'ווטסאפ לבקשות הצטרפות',
+                    'ווטסאפ לבקשות הצטרפות',
                     // "קישור קבוצה / מס' ווטסאפ",
                     phoneController,
                     pinLabel: false,
@@ -235,13 +230,13 @@ class _CreatePageState extends State<CreatePage> {
                 //   (" מיועד לכל הגילאים ")
                 //       .toText(color: Colors.black54, fontSize: 13, bold: true),
                 // ] else ...[
-                  (" מיועד מגיל ${_currentRangeValues.start.round()}")
-                      .toText(color: Colors.black54, fontSize: 13, bold: true),
-                  const Spacer(),
-                  (_currentRangeValues.end.round() == 60
-                          ? "60+"
-                          : (" עד ${_currentRangeValues.end.round()}"))
-                      .toText(color: Colors.black54, fontSize: 13, bold: true),
+                (" מיועד מגיל ${_currentRangeValues.start.round()}")
+                    .toText(color: Colors.black54, fontSize: 13, bold: true),
+                const Spacer(),
+                (_currentRangeValues.end.round() == 60
+                        ? "60+"
+                        : (" עד ${_currentRangeValues.end.round()}"))
+                    .toText(color: Colors.black54, fontSize: 13, bold: true),
                 // ],
               ]).px(22),
               RangeSlider(
@@ -373,13 +368,11 @@ class _CreatePageState extends State<CreatePage> {
                 createdAt: DateTime.now(),
                 phone: phoneController.text,
                 eventCategory: selectedCategory,
-                address: selectedAddress?.name.toString(),
-                latitude: selectedAddress?.lat,
-                longitude: selectedAddress?.lng,
-                ageRange: ageRange,
-                withFee: isFeeEvent.first,
-                // minAge: _currentRangeValues.start.round(),
-                // maxAge: _currentRangeValues.end.round(),
+                // address: selectedAddress?.name.toString(),
+                originLat: selectedAddress?.lat,
+                originLong: selectedAddress?.lng,
+                // ageRange: ageRange,
+                // withFee: isFeeEvent.first,
               );
 
               print('newEvent.toJson() ${newEvent.toJson()}');

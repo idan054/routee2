@@ -5,14 +5,22 @@ import 'models/address_result.dart';
 import 'models/event_category.dart';
 import 'models/event_item.dart';
 
+// var
+// final
+// const
+
 var appVersion = 2.26;
 var adminMode = false;
 var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 
-const bgColor = Color(0xfff7f4ed);
-const wtspGreen = Color(0xff25d366);
+// const bgColor = Color(0xfff7f4ed);
+// const bgColor = Color(0xfffdfaed);
+const bgColor = Color(0xfffbfaf3);
+// const bgColorLight = Color(0xfffbfaf3);
+const bgColorDark = Color(0xfffbf4d0);
+// const wtspGreen = Color(0xff25d49d);
+const wtspGreen = Color(0xffa95a1e);
 const wtspGreenLight = Color(0xffdaf9c4);
-const bgColorDark = Color(0xffE1DBD1);
 
 class UserData {
   int? age;
@@ -55,7 +63,7 @@ var categories = [
       categoryType: CategoryType.sport,
       // categoryName: 'לאימונים וספורט',
       categoryName: 'לספורט',
-          // ' 👟',
+      // ' 👟',
       categoryColor: categoryColors[4],
       coverImagePath: 'assets/covers/sport.png'),
 
@@ -63,7 +71,7 @@ var categories = [
       categoryType: CategoryType.weekend,
       // categoryName: 'ליציאות בסופש',
       categoryName: 'ליציאות בסופש',
-          // ' 🍻',
+      // ' 🍻',
       categoryColor: categoryColors[0],
       coverImagePath: 'assets/covers/weekend.png'),
 
@@ -78,14 +86,14 @@ var categories = [
       categoryType: CategoryType.boardGames,
       // categoryName: 'למשחקי קופסא',
       categoryName: 'למשחקי שולחן',
-          // ' 🎲',
+      // ' 🎲',
       categoryColor: categoryColors[2],
       coverImagePath: 'assets/covers/board_games.png'),
   EventCategory(
       categoryType: CategoryType.otherEvent,
       // categoryName: 'למפגשים ספונטנים',
       categoryName: 'למפגשים ספונטנים',
-          // ' 👋',
+      // ' 👋',
       categoryColor: categoryColors[3],
       coverImagePath: 'assets/covers/other_event.png'),
 
@@ -100,14 +108,14 @@ var categories = [
       categoryType: CategoryType.show,
       // categoryName: 'ללכת להופעות',
       categoryName: 'להופעות ומסיבות',
-          // ' 🎉',
+      // ' 🎉',
       categoryColor: categoryColors[1],
       coverImagePath: 'assets/covers/show.png'),
   EventCategory(
       categoryType: CategoryType.trip,
       // categoryName: 'לטיולים וחופשות',
       categoryName: 'לטיולים',
-          // ' 🍃',
+      // ' 🍃',
       categoryColor: categoryColors[7],
       coverImagePath: 'assets/covers/trip.png'),
   EventCategory(
@@ -125,12 +133,17 @@ var categories = [
 ];
 
 var sampleEvent = EventItem(
-  title: 'באולינג בקניון של רחובות כולם מוזמנים',
-  // eventAt: DateTime.now(),
+  title: 'סמי טריילר להובלת עצים, 45 ק"מ',
+  id: '121',
+  destinationAddress: 'חבקוק 114, גדרה',
+  destinationLat: '433224',
+  destinationLong: '334241',
+  distanceFromUser: 12,
+  feeValue: 115,
+  truckType: 'משאית',
   createdAt: DateTime.now(),
-  address: 'חבקוק 114, גדרה',
-  eventCategory: categories.first,
-  latitude: '433224',
-  longitude: '334241',
+  originAddress: 'חבקוק 114, גדרה',
+  originLat: '433224',
+  originLong: '334241',
   phone: '+972584770076',
 );

@@ -1,30 +1,16 @@
-import 'dart:convert';
-import 'dart:html' as html;
-
-// import 'dart:math';
-import 'package:around/upload_services.dart';
-import 'package:flutter/foundation.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:around/common/database.dart';
-import 'package:around/pages/category_page.dart';
-import 'package:around/common/string_ext.dart';
-import 'package:around/common/widget_ext.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_file.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
-import 'common/assets.gen.dart';
-import 'common/constants.dart';
-import 'common/models/event_category.dart';
-import 'common/models/event_item.dart';
-import 'package:intl/intl.dart' as intl;
 import 'dart:io' show File, Platform;
 
-import 'dart:developer';
+import 'package:routee/common/database.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/widget_ext.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
-import '../common/assets.gen.dart';
+import 'common/constants.dart';
+import 'common/models/event_item.dart';
 
 OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed}) {
   return OutlinedButton.icon(
@@ -43,35 +29,17 @@ OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed
 
 Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
     {bool distanceMode = false}) {
+  WidgetsToImageController controller = WidgetsToImageController();
   bool showDeleteOption = false;
   var subSize = 11.0;
   var titleSize = 14.0;
-  var eventCategory = eventItem.eventCategory;
-  // var time = timeFormat(eventItem.eventAt!).toString();
 
   var distanceKm = ((eventItem.distanceFromUser ?? 10) / 1000).toString();
-  // print('distanceKm A ${distanceKm}');
   distanceKm = distanceKm.split('.').first;
-  if (distanceKm == '0') distanceKm = '0.1'; // Needed when user distance = 0
+  if (distanceKm == '0') distanceKm = '115';
 
-  // distanceKm = distanceKm.substring(0, 4);
-  // if (distanceKm[3] == '.') distanceKm = distanceKm.replaceAll('.', '');
-
-  distanceKm += ' ק"מ';
-  // print('distanceKm B ${distanceKm}');
-
-  if (eventItem.withFee == true) distanceKm = '₪ | $distanceKm';
-
-  var ageRange = '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
-  if (eventItem.ageRange?.last == 60) {
-    ageRange = '${eventItem.ageRange?.first}+';
-  }
-  if (eventItem.ageRange?.first == 10 && eventItem.ageRange?.last == 60) {
-    ageRange = '- כולם מוזמנים!';
-  }
-
-  // WidgetsToImageController to access widget
-  WidgetsToImageController controller = WidgetsToImageController();
+  distanceKm += '₪';
+  const ageRange = '10-15';
 
   return WidgetsToImage(
     controller: controller,
@@ -94,54 +62,57 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
             ),
           ],
           InkWell(
-            onTap: () async {
-              // region onTap
-              print(eventItem.phone);
-              var phone = eventItem.phone.toString();
-              if (eventItem.phone?.length == 10) {
-                phone = '+972${eventItem.phone?.substring(1)}';
-              }
-              // var time = timeFormat(eventItem.eventAt!, withDay: true);
-              print('phone $phone');
+            onTap: true
+                ? () {}
+                : () async {
+                    // region onTap
+                    print(eventItem.phone);
+                    var phone = eventItem.phone.toString();
+                    if (eventItem.phone?.length == 10) {
+                      phone = '+972${eventItem.phone?.substring(1)}';
+                    }
+                    // var time = timeFormat(eventItem.eventAt!, withDay: true);
+                    print('phone $phone');
 
-              openWhatsapp(context, whatsapp: phone, text: '''
+                    openWhatsapp(context, whatsapp: phone, text: '''
 היי, ראיתי את הקבוצה *${eventItem.title}* שלך באתר Around 
  https://around-proj.web.app
 
-לפי הפרטים הקבוצה עבור בני ${eventItem.ageRange?.first}-${eventItem.ageRange?.last}
- ונפגש ב${eventItem.address}
+לפי הפרטים הקבוצה עבור בני eventItem.ageRange?.first-eventItem.ageRange?.last}
+ ונפגש ב eventItem.address
 הגיל שלי הוא ${user.age} ואשמח להצטרף!''');
 
-              print('START: logEvent()');
+                    print('START: logEvent()');
 
-              //> variables can be String / numbers ONLY
-              var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
-              var analyticsItem = {
-                'id': eventItem.id,
-                'title': eventItem.title,
-                'phone': eventItem.phone,
-                'minAge': eventItem.ageRange?.first,
-                'maxAge': eventItem.ageRange?.last,
-                'address': eventItem.address,
-                'latitude': eventItem.latitude,
-                'longitude': eventItem.longitude,
-                'createdAt': createdAt,
-                'categoryName': eventItem.eventCategory?.categoryName,
-                'categoryType': eventItem.eventCategory?.categoryType?.name,
-                'currUserAge': user.age,
-                'currUserAddress': user.address?.toJson()
-              };
+                    //> variables can be String / numbers ONLY
+                    var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
+                    var analyticsItem = {
+                      'id': 'eventItem.id',
+                      'title': 'eventItem.title',
+                      'phone': 'eventItem.phone',
+                      'minAge': 'eventItem.ageRange?.first',
+                      'maxAge': 'eventItem.ageRange?.last',
+                      'address': 'eventItem.address',
+                      'latitude': 'eventItem.latitude',
+                      'longitude': 'eventItem.longitude',
+                      'createdAt': 'createdAt',
+                      'categoryName': 'eventItem.eventCategory?.categoryName',
+                      'categoryType': 'eventItem.eventCategory?.categoryType?.name',
+                      'currUserAge': user.age,
+                      'currUserAddress': user.address?.toJson()
+                    };
 
-              // var name = eventItem.title.toString();
-              // name = name + (' ') + (eventItem.phone.toString().length == 10
-              //   ? eventItem.phone.toString()
-              //   : eventItem.phone?.split('.com/')[1]).toString();
+                    // var name = eventItem.title.toString();
+                    // name = name + (' ') + (eventItem.phone.toString().length == 10
+                    //   ? eventItem.phone.toString()
+                    //   : eventItem.phone?.split('.com/')[1]).toString();
 
-              // FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
-              printTrackEvent(eventItem.title.toString(), properties: analyticsItem);
+                    // FirebaseAnalytics.instance.logJoinGroup(groupId: eventItem.id.toString());
+                    printTrackEvent(eventItem.title.toString(),
+                        properties: analyticsItem);
 
-              // endregion onTap
-            },
+                    // endregion onTap
+                  },
             onLongPress: adminMode
                 ? () {
                     print('START: onLongPress()');
@@ -151,7 +122,10 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                 : null,
             child: Card(
               color: Colors.white,
-              elevation: 3,
+              // color: bgColorLight,
+              // color: bgColorDark,
+              elevation: 2,
+              // elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
               child: Column(
                 children: [
@@ -166,11 +140,13 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                                color: bgColor.withOpacity(0.8),
+                                // color: bgColor?.withOpacity(0.8),
+                                color: bgColorDark,
                                 // child: (distanceMode ? distanceKm : ageRange)
                                 child: (distanceKm)
                                     .toText(
-                                      fontSize: subSize - 2,
+                                      // fontSize: subSize - 2,
+                                      fontSize: subSize,
                                       medium: true,
                                       color: Colors.black54,
                                     )
@@ -188,14 +164,15 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                   if (adminMode)
                     buildInfo(eventItem, subSize, distanceMode)
                         .pOnly(right: 15, bottom: 5),
-                  buildAddressText(eventItem, subSize, distanceMode).pOnly(right: 15),
+                  buildOriginAddressText(eventItem, subSize, distanceMode)
+                      .pOnly(right: 15),
                   // buildCreatedAt(eventItem, subSize, distanceMode).pOnly(right: 15),
                   Row(
                     children: [
                       const SizedBox(width: 15),
                       if (!distanceMode) buildWhatsappJoin(subSize),
                       const Spacer(),
-                      buildAgeText(ageRange, subSize, distanceMode).py(3),
+                      buildDestinationText(ageRange, subSize, distanceMode).py(3),
                     ],
                     // ).pOnly(right: 75, top: 2),
                   ).pOnly(right: 15, top: 2),
@@ -225,7 +202,7 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
               ' - '
               'ע"י $createdBy'
               // ' - '
-              '${eventItem.withFee == true ? '(בתשלום)' : ''}'
+              '${eventItem.feeValue != null ? '(בתשלום)' : ''}'
           .toText(color: Colors.grey, fontSize: subSize, maxLines: 1),
       // .sizedBox(130, null),
       const SizedBox(width: 3),
@@ -235,24 +212,23 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
   );
 }
 
-Row buildAgeText(String ageRange, double subSize, bool distanceMode) {
+Row buildDestinationText(String ageRange, double subSize, bool distanceMode) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     mainAxisSize: MainAxisSize.min,
     children: [
-      'גילאים $ageRange'
+      'חיפה, ויצמן 90'
           .toString()
           .toText(color: Colors.grey, fontSize: subSize)
           .sizedBox(110, null),
       const SizedBox(width: 3),
-      Icons.group_outlined
-          .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+      Icons.flag.icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
     ],
   );
 }
 
-Widget buildAddressText(EventItem eventItem, double subSize, bool distanceMode) {
-  var address = eventItem.address.toString();
+Widget buildOriginAddressText(EventItem eventItem, double subSize, bool distanceMode) {
+  var address = 'תל אביב'.toString();
   var diff = DateTime.now().difference(eventItem.createdAt!).inDays;
   var ago = '';
   if (diff == 0) ago = 'נוסף היום!';
@@ -283,18 +259,13 @@ Widget buildWhatsappJoin(double subSize) {
       // ('הצטרף ')
       // if (distanceMode)
       //   '($ageRange)'.toText(color: Colors.grey, fontSize: subSize),
-      ('לקבוצה').toText(color: wtspGreen, fontSize: subSize, bold: true),
+      ('להובלה').toText(color: wtspGreen, fontSize: subSize, bold: true),
       const SizedBox(width: 5),
-      // Icons.near_me_outlined.icon(color: Colors.grey, size: subSize),
-      Assets.svg.whatsappOutline.svg(color: wtspGreen, height: 18)
-      // const Opacity(
-      //   opacity: 0.6,
-      //   child: SizedBox(
-      //     height: 13,
-      //     width: 13,
-      //     child: Image(image: AssetImage('assets/whatsapp-xxl.png'), fit: BoxFit.cover),
-      //   ),
-      // )
+      Transform.scale(
+        scaleX: -1, // 1
+        child: Icons.local_shipping.icon(color: wtspGreen, size: subSize + 5),
+      )
+      // Assets.svg.whatsappOutline.svg(color: wtspGreen, height: 18)
     ],
   );
 }
@@ -305,13 +276,8 @@ Widget buildShareButton(
   EventItem eventItem,
   double subSize,
 ) {
-  var ageRange = 'לגילאי ' '${eventItem.ageRange?.first}-${eventItem.ageRange?.last}';
-  if (eventItem.ageRange?.last == 60) {
-    ageRange = 'לגילאי ' '${eventItem.ageRange?.first}+';
-  }
-  if (eventItem.ageRange?.first == 10 && eventItem.ageRange?.last == 60) {
-    ageRange = 'לכל הגילאים';
-  }
+  var ageRange = 'לגילאי ' '10-30';
+
   bool isLoading = false;
 
   return StatefulBuilder(builder: (context, stfState) {
@@ -341,7 +307,7 @@ Widget buildShareButton(
       isLoading = false;
       stfState(() {});
 
-      var address = eventItem.address?.replaceAll(', ישראל', '');
+      var address = 'eventItem.address?'.replaceAll(', ישראל', '');
       var desc =
           // 'קבוצה חדשה '
           '"${eventItem.title}"'
@@ -357,14 +323,15 @@ Widget buildShareButton(
 
       try {
         // Share.share('text');
-        html.window.navigator.share({
-          'title': desc,
-          'description': desc,
-          'text': desc,
-          // 'image': imageUrl,
-          'image': 'https://i.ibb.co/rsHsT2v/74db0f2a539b.png',
-          'url': 'https://around-proj.web.app/'
-        });
+
+        // html.window.navigator.share({
+        //   'title': desc,
+        //   'description': desc,
+        //   'text': desc,
+        //   // 'image': imageUrl,
+        //   'image': 'https://i.ibb.co/rsHsT2v/74db0f2a539b.png',
+        //   'url': 'https://around-proj.web.app/'
+        // });
       } on Exception catch (e, s) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: 'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));

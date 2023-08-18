@@ -1,27 +1,25 @@
-import 'package:around/common/constants.dart';
-import 'package:around/common/widget_ext.dart';
-import 'package:around/pages/home_page.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
-
-import 'package:path_provider/path_provider.dart';
-import 'common/database.dart';
-import 'firebase_options.dart';
-
-import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
-
+import 'package:routee/common/widget_ext.dart';
+import 'package:routee/pages/home_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 // import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/date_symbol_data_local.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:routee/common/constants.dart';
+
+import 'common/database.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

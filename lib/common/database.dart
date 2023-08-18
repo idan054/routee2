@@ -1,8 +1,7 @@
 // .set() / .update() = WRITE.
-import 'package:around/common/constants.dart';
-import 'package:around/common/models/event_category.dart';
+import 'package:routee/common/constants.dart';
+import 'package:routee/common/models/event_category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:haversine_distance/haversine_distance.dart';
 
 import 'color_printer.dart';
@@ -126,8 +125,8 @@ EventItem setDistance(UserData user, EventItem event) {
     double.parse('${user.address?.lng}'),
   );
   final endCoordinate = Location(
-    double.parse('${event.latitude}'),
-    double.parse('${event.longitude}'),
+    double.parse('${event.originLat}'),
+    double.parse('${event.originLong}'),
   );
 
   var distance =

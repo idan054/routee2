@@ -23,21 +23,20 @@ mixin _$EventItem {
 // String? imagePngName,
   String? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  EventCategory? get eventCategory =>
-      throw _privateConstructorUsedError; // @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
+  EventCategory? get eventCategory => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get createdAt => throw _privateConstructorUsedError;
-  String? get phone => throw _privateConstructorUsedError;
-  List<dynamic>? get ageRange =>
-      throw _privateConstructorUsedError; // int? maxAge,
-// int? minAge,
+  String? get phone => throw _privateConstructorUsedError; // To contact
   int? get distanceFromUser =>
       throw _privateConstructorUsedError; // Example 50 Meter away...
-// AKA AddressResult()
-  String? get address => throw _privateConstructorUsedError;
-  String? get latitude => throw _privateConstructorUsedError;
-  String? get longitude => throw _privateConstructorUsedError;
-  bool? get withFee => throw _privateConstructorUsedError;
+  String? get truckType => throw _privateConstructorUsedError;
+  String? get originLat => throw _privateConstructorUsedError;
+  String? get originLong => throw _privateConstructorUsedError;
+  String? get originAddress => throw _privateConstructorUsedError;
+  String? get destinationLat => throw _privateConstructorUsedError;
+  String? get destinationLong => throw _privateConstructorUsedError;
+  String? get destinationAddress => throw _privateConstructorUsedError;
+  int? get feeValue => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,12 +55,15 @@ abstract class $EventItemCopyWith<$Res> {
       EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? createdAt,
       String? phone,
-      List<dynamic>? ageRange,
       int? distanceFromUser,
-      String? address,
-      String? latitude,
-      String? longitude,
-      bool? withFee});
+      String? truckType,
+      String? originLat,
+      String? originLong,
+      String? originAddress,
+      String? destinationLat,
+      String? destinationLong,
+      String? destinationAddress,
+      int? feeValue});
 
   $EventCategoryCopyWith<$Res>? get eventCategory;
 }
@@ -84,12 +86,15 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? eventCategory = freezed,
     Object? createdAt = freezed,
     Object? phone = freezed,
-    Object? ageRange = freezed,
     Object? distanceFromUser = freezed,
-    Object? address = freezed,
-    Object? latitude = freezed,
-    Object? longitude = freezed,
-    Object? withFee = freezed,
+    Object? truckType = freezed,
+    Object? originLat = freezed,
+    Object? originLong = freezed,
+    Object? originAddress = freezed,
+    Object? destinationLat = freezed,
+    Object? destinationLong = freezed,
+    Object? destinationAddress = freezed,
+    Object? feeValue = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -112,30 +117,42 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
-      ageRange: freezed == ageRange
-          ? _value.ageRange
-          : ageRange // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
       distanceFromUser: freezed == distanceFromUser
           ? _value.distanceFromUser
           : distanceFromUser // ignore: cast_nullable_to_non_nullable
               as int?,
-      address: freezed == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
+      truckType: freezed == truckType
+          ? _value.truckType
+          : truckType // ignore: cast_nullable_to_non_nullable
               as String?,
-      latitude: freezed == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
+      originLat: freezed == originLat
+          ? _value.originLat
+          : originLat // ignore: cast_nullable_to_non_nullable
               as String?,
-      longitude: freezed == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
+      originLong: freezed == originLong
+          ? _value.originLong
+          : originLong // ignore: cast_nullable_to_non_nullable
               as String?,
-      withFee: freezed == withFee
-          ? _value.withFee
-          : withFee // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      originAddress: freezed == originAddress
+          ? _value.originAddress
+          : originAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationLat: freezed == destinationLat
+          ? _value.destinationLat
+          : destinationLat // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationLong: freezed == destinationLong
+          ? _value.destinationLong
+          : destinationLong // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationAddress: freezed == destinationAddress
+          ? _value.destinationAddress
+          : destinationAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      feeValue: freezed == feeValue
+          ? _value.feeValue
+          : feeValue // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -165,12 +182,15 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
       EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? createdAt,
       String? phone,
-      List<dynamic>? ageRange,
       int? distanceFromUser,
-      String? address,
-      String? latitude,
-      String? longitude,
-      bool? withFee});
+      String? truckType,
+      String? originLat,
+      String? originLong,
+      String? originAddress,
+      String? destinationLat,
+      String? destinationLong,
+      String? destinationAddress,
+      int? feeValue});
 
   @override
   $EventCategoryCopyWith<$Res>? get eventCategory;
@@ -192,12 +212,15 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? eventCategory = freezed,
     Object? createdAt = freezed,
     Object? phone = freezed,
-    Object? ageRange = freezed,
     Object? distanceFromUser = freezed,
-    Object? address = freezed,
-    Object? latitude = freezed,
-    Object? longitude = freezed,
-    Object? withFee = freezed,
+    Object? truckType = freezed,
+    Object? originLat = freezed,
+    Object? originLong = freezed,
+    Object? originAddress = freezed,
+    Object? destinationLat = freezed,
+    Object? destinationLong = freezed,
+    Object? destinationAddress = freezed,
+    Object? feeValue = freezed,
   }) {
     return _then(_$_EventItem(
       id: freezed == id
@@ -220,30 +243,42 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
-      ageRange: freezed == ageRange
-          ? _value._ageRange
-          : ageRange // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
       distanceFromUser: freezed == distanceFromUser
           ? _value.distanceFromUser
           : distanceFromUser // ignore: cast_nullable_to_non_nullable
               as int?,
-      address: freezed == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
+      truckType: freezed == truckType
+          ? _value.truckType
+          : truckType // ignore: cast_nullable_to_non_nullable
               as String?,
-      latitude: freezed == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
+      originLat: freezed == originLat
+          ? _value.originLat
+          : originLat // ignore: cast_nullable_to_non_nullable
               as String?,
-      longitude: freezed == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
+      originLong: freezed == originLong
+          ? _value.originLong
+          : originLong // ignore: cast_nullable_to_non_nullable
               as String?,
-      withFee: freezed == withFee
-          ? _value.withFee
-          : withFee // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      originAddress: freezed == originAddress
+          ? _value.originAddress
+          : originAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationLat: freezed == destinationLat
+          ? _value.destinationLat
+          : destinationLat // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationLong: freezed == destinationLong
+          ? _value.destinationLong
+          : destinationLong // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationAddress: freezed == destinationAddress
+          ? _value.destinationAddress
+          : destinationAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      feeValue: freezed == feeValue
+          ? _value.feeValue
+          : feeValue // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -258,13 +293,15 @@ class _$_EventItem implements _EventItem {
       this.eventCategory,
       @DateTimeStampConv() this.createdAt,
       this.phone,
-      final List<dynamic>? ageRange,
       this.distanceFromUser,
-      this.address,
-      this.latitude,
-      this.longitude,
-      this.withFee})
-      : _ageRange = ageRange;
+      this.truckType,
+      this.originLat,
+      this.originLong,
+      this.originAddress,
+      this.destinationLat,
+      this.destinationLong,
+      this.destinationAddress,
+      this.feeValue});
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
       _$$_EventItemFromJson(json);
@@ -276,40 +313,35 @@ class _$_EventItem implements _EventItem {
   final String? title;
   @override
   final EventCategory? eventCategory;
-// @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
   @override
   @DateTimeStampConv()
   final DateTime? createdAt;
   @override
   final String? phone;
-  final List<dynamic>? _ageRange;
-  @override
-  List<dynamic>? get ageRange {
-    final value = _ageRange;
-    if (value == null) return null;
-    if (_ageRange is EqualUnmodifiableListView) return _ageRange;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-// int? maxAge,
-// int? minAge,
+// To contact
   @override
   final int? distanceFromUser;
 // Example 50 Meter away...
-// AKA AddressResult()
   @override
-  final String? address;
+  final String? truckType;
   @override
-  final String? latitude;
+  final String? originLat;
   @override
-  final String? longitude;
+  final String? originLong;
   @override
-  final bool? withFee;
+  final String? originAddress;
+  @override
+  final String? destinationLat;
+  @override
+  final String? destinationLong;
+  @override
+  final String? destinationAddress;
+  @override
+  final int? feeValue;
 
   @override
   String toString() {
-    return 'EventItem(id: $id, title: $title, eventCategory: $eventCategory, createdAt: $createdAt, phone: $phone, ageRange: $ageRange, distanceFromUser: $distanceFromUser, address: $address, latitude: $latitude, longitude: $longitude, withFee: $withFee)';
+    return 'EventItem(id: $id, title: $title, eventCategory: $eventCategory, createdAt: $createdAt, phone: $phone, distanceFromUser: $distanceFromUser, truckType: $truckType, originLat: $originLat, originLong: $originLong, originAddress: $originAddress, destinationLat: $destinationLat, destinationLong: $destinationLong, destinationAddress: $destinationAddress, feeValue: $feeValue)';
   }
 
   @override
@@ -324,15 +356,24 @@ class _$_EventItem implements _EventItem {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.phone, phone) || other.phone == phone) &&
-            const DeepCollectionEquality().equals(other._ageRange, _ageRange) &&
             (identical(other.distanceFromUser, distanceFromUser) ||
                 other.distanceFromUser == distanceFromUser) &&
-            (identical(other.address, address) || other.address == address) &&
-            (identical(other.latitude, latitude) ||
-                other.latitude == latitude) &&
-            (identical(other.longitude, longitude) ||
-                other.longitude == longitude) &&
-            (identical(other.withFee, withFee) || other.withFee == withFee));
+            (identical(other.truckType, truckType) ||
+                other.truckType == truckType) &&
+            (identical(other.originLat, originLat) ||
+                other.originLat == originLat) &&
+            (identical(other.originLong, originLong) ||
+                other.originLong == originLong) &&
+            (identical(other.originAddress, originAddress) ||
+                other.originAddress == originAddress) &&
+            (identical(other.destinationLat, destinationLat) ||
+                other.destinationLat == destinationLat) &&
+            (identical(other.destinationLong, destinationLong) ||
+                other.destinationLong == destinationLong) &&
+            (identical(other.destinationAddress, destinationAddress) ||
+                other.destinationAddress == destinationAddress) &&
+            (identical(other.feeValue, feeValue) ||
+                other.feeValue == feeValue));
   }
 
   @JsonKey(ignore: true)
@@ -344,12 +385,15 @@ class _$_EventItem implements _EventItem {
       eventCategory,
       createdAt,
       phone,
-      const DeepCollectionEquality().hash(_ageRange),
       distanceFromUser,
-      address,
-      latitude,
-      longitude,
-      withFee);
+      truckType,
+      originLat,
+      originLong,
+      originAddress,
+      destinationLat,
+      destinationLong,
+      destinationAddress,
+      feeValue);
 
   @JsonKey(ignore: true)
   @override
@@ -372,12 +416,15 @@ abstract class _EventItem implements EventItem {
       final EventCategory? eventCategory,
       @DateTimeStampConv() final DateTime? createdAt,
       final String? phone,
-      final List<dynamic>? ageRange,
       final int? distanceFromUser,
-      final String? address,
-      final String? latitude,
-      final String? longitude,
-      final bool? withFee}) = _$_EventItem;
+      final String? truckType,
+      final String? originLat,
+      final String? originLong,
+      final String? originAddress,
+      final String? destinationLat,
+      final String? destinationLong,
+      final String? destinationAddress,
+      final int? feeValue}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -388,25 +435,29 @@ abstract class _EventItem implements EventItem {
   String? get title;
   @override
   EventCategory? get eventCategory;
-  @override // @DateTimeStampConv() DateTime? eventAt, // Actually no need for Groups...
+  @override
   @DateTimeStampConv()
   DateTime? get createdAt;
   @override
   String? get phone;
-  @override
-  List<dynamic>? get ageRange;
-  @override // int? maxAge,
-// int? minAge,
+  @override // To contact
   int? get distanceFromUser;
   @override // Example 50 Meter away...
-// AKA AddressResult()
-  String? get address;
+  String? get truckType;
   @override
-  String? get latitude;
+  String? get originLat;
   @override
-  String? get longitude;
+  String? get originLong;
   @override
-  bool? get withFee;
+  String? get originAddress;
+  @override
+  String? get destinationLat;
+  @override
+  String? get destinationLong;
+  @override
+  String? get destinationAddress;
+  @override
+  int? get feeValue;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

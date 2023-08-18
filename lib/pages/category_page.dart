@@ -1,33 +1,32 @@
-import 'dart:math';
-
-import 'package:around/common/string_ext.dart';
-import 'package:around/common/string_ext.dart';
-import 'package:around/common/string_ext.dart';
-import 'package:around/common/widget_ext.dart';
 import 'dart:convert';
 import 'dart:math';
-import 'package:around/common/database.dart';
-import 'package:around/common/string_ext.dart';
-import 'package:around/common/widget_ext.dart';
-import 'package:around/pages/home_page.dart';
+import 'dart:math';
+
+import 'package:routee/common/database.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/widget_ext.dart';
+import 'package:routee/common/widget_ext.dart';
+import 'package:routee/pages/home_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+
+import '../common/assets.gen.dart';
+import '../common/constants.dart';
 import '../common/constants.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_category.dart';
+import '../common/models/event_category.dart';
 import '../common/models/event_item.dart';
-import '../common/assets.gen.dart';
+import '../main.dart';
 import '../update_details_dialog.dart';
+import '../widgets.dart';
 import '../widgets.dart';
 import 'category_page.dart';
 import 'create_page.dart';
-
-import 'package:flutter/material.dart';
-
-import '../common/constants.dart';
-import '../common/models/event_category.dart';
-import '../main.dart';
-import '../widgets.dart';
 
 // 1) Compare every location to user > 5KM Away..
 // 2) Sort by distance

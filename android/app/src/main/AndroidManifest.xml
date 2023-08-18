@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.biton.around.around">
+    package="com.biton.routee">
    <application
-        android:label="Around"
+        android:label="Routee"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

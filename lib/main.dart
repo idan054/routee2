@@ -58,8 +58,9 @@ class MyApp extends StatelessWidget {
               appBar: buildHomeAppBar(),
               body: Row(
                 children: [
-                  const MyHomePage(showAppBar: false).expanded(),
-                  const CreatePage(showAppBar: false).expanded()
+                  const MyHomePage(showAppBar: false).expanded(flex: 60),
+                  const SizedBox(width: 15),
+                  const CreatePage(showAppBar: false).expanded(flex: 40),
                   // MyHomePage().expanded(),
                 ],
               ).px(width * 0.15),

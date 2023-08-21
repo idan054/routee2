@@ -1,11 +1,11 @@
 import 'dart:io' show File, Platform;
 
-import 'package:routee/common/database.dart';
-import 'package:routee/common/string_ext.dart';
-import 'package:routee/common/widget_ext.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:routee/common/database.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/widget_ext.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 

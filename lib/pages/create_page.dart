@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:routee/common/models/event_category.dart';
+import 'package:routee/common/num_extensions.dart';
 import 'package:routee/common/string_ext.dart';
 import 'package:routee/common/widget_ext.dart';
 
@@ -126,16 +127,26 @@ class _CreatePageState extends State<CreatePage> {
               const SizedBox(height: 13),
               Row(
                 children: [
+                  // Transform.scale(scaleX: 1, child: Icons.inventory.icon(color: Colors.black38, size: 22),).pOnly(left: 10),
                   '1'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField('פרטי הובלה', titleController, pinLabel: false)
-                      .expanded(),
+                      .expanded(flex: 75),
+                  const SizedBox(width: 10),
+                  buildTextFormField(
+                    'מחיר ₪',
+                    phoneController,
+                    pinLabel: false,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {},
+                  ).expanded(flex: 25),
                 ],
               ),
               const SizedBox(height: 13),
               Row(
                 children: [
+                  // Icons.place.icon(color: Colors.black38, size: 24).pOnly(left: 5),
                   '2'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
@@ -174,7 +185,8 @@ class _CreatePageState extends State<CreatePage> {
               const SizedBox(height: 13),
               Row(
                 children: [
-                  '2'
+                  // Icons.flag.icon(color: Colors.black38, size: 24).pOnly(left: 5),
+                  '3'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
@@ -182,7 +194,7 @@ class _CreatePageState extends State<CreatePage> {
                     destController,
                     pinLabel: false,
                     onChanged: (value) async {
-                      destSuggestions = await searchAddress(value) ?? [];
+                      // destSuggestions = await searchAddress(value) ?? [];
                       setState(() {});
                     },
                   ).expanded(),
@@ -209,39 +221,30 @@ class _CreatePageState extends State<CreatePage> {
                     }),
                 ],
               ),
-              const SizedBox(height: 13),
+              const SizedBox(height: 20),
               Row(
                 children: [
-                  '3'
+                  // Transform.scale(scaleX: 1, child: Icons.inventory.icon(color: Colors.black38, size: 22),).pOnly(left: 10),
+                  '4'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
-                  buildTextFormField(
-                    'ווטסאפ לבקשות הצטרפות',
-                    phoneController,
-                    pinLabel: false,
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      var box = Hive.box('uniBox');
-                      box.put('userPhone', phoneController.text);
-                    },
-                  ).expanded(),
+                  buildTextFormField('סוג משאית', titleController, pinLabel: false)
+                      .expanded(),
                 ],
               ),
-              const SizedBox(height: 5),
-              // "לדוגמא:  " "0545551234".toText(color: Colors.black54, fontSize: 13, maxLines: 10).pOnly(right: 25).centerRight,
-              const SizedBox(height: 15),
-              _buildRangeSlider(),
-              const SizedBox(height: 5),
-              _buildGroupType(),
-              const SizedBox(height: 15),
-              _buildTags(),
               const SizedBox(height: 20),
               TextButton(
-                child: 'יצירה'.toText(bold: true, color: Colors.purple[500]!),
+                style: TextButton.styleFrom(
+                    side: BorderSide(color: Colors.purple[500]!, width: 1.5),
+                    shape: 5.roundedShape),
+                child: 'צור הובלה'
+                    .toText(bold: true, color: Colors.purple[500]!)
+                    .px(20)
+                    .py(10),
                 onPressed: () {
-                  onSubmit();
+                  // onSubmit();
                 },
-              ).centerLeft,
+              ),
               const SizedBox(height: 10),
             ],
           ).px(10),

@@ -1,9 +1,9 @@
-import 'package:routee/common/models/event_category.dart';
-import 'package:routee/common/string_ext.dart';
-import 'package:routee/common/widget_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:routee/common/models/event_category.dart';
+import 'package:routee/common/string_ext.dart';
+import 'package:routee/common/widget_ext.dart';
 
 import '../common/constants.dart';
 import '../common/database.dart';
@@ -11,9 +11,12 @@ import '../common/google_location_complete.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_item.dart';
 import '../update_details_dialog.dart';
+import 'home_page.dart';
 
 class CreatePage extends StatefulWidget {
-  const CreatePage({Key? key}) : super(key: key);
+  final bool showAppBar;
+
+  const CreatePage({this.showAppBar = true, Key? key}) : super(key: key);
 
   @override
   State<CreatePage> createState() => _CreatePageState();
@@ -107,7 +110,7 @@ class _CreatePageState extends State<CreatePage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: bgColor,
-        appBar: buildAppBar(),
+        appBar: widget.showAppBar ? buildHomeAppBar() : null,
         body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -267,7 +270,8 @@ class _CreatePageState extends State<CreatePage> {
                   // const SizedBox(width: 10),
                   ToggleButtons(
                     direction: Axis.horizontal,
-                    borderWidth: 1.65, // 1.75
+                    borderWidth: 1.65,
+                    // 1.75
                     borderColor: Colors.black.withOpacity(0.42),
                     selectedBorderColor: Colors.black.withOpacity(0.70),
                     fillColor: bgColorDark,

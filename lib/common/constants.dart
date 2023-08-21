@@ -9,7 +9,7 @@ import 'models/event_item.dart';
 // final
 // const
 
-var appVersion = 2.26;
+var appVersion = 1.1;
 var adminMode = false;
 var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 

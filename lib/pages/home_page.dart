@@ -15,7 +15,9 @@ import 'category_page.dart';
 import 'create_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  final bool showAppBar;
+
+  const MyHomePage({this.showAppBar = true, Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -122,7 +124,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: buildHomeAppBar(),
+      appBar: widget.showAppBar
+          ? buildHomeAppBar(onHoldTap: () {
+              var box = Hive.box('uniBox');
+              if (adminMode) {
+                adminMode = false;
+                box.put('adminMode', adminMode);
+                setState(() {});
+              } else {
+                isShowAdminRequest = !isShowAdminRequest;
+                box.put('adminMode', isShowAdminRequest);
+                setState(() {});
+              }
+            })
+          : null,
       body: RefreshIndicator(
         color: Colors.purple,
         backgroundColor: bgColorDark,
@@ -169,22 +184,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 10),
                 if (events.isEmpty && !splashLoad) const SizedBox(height: 300),
                 // if (!splashLoad)
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     'צור קשר'
-                //         .toText(color: Colors.grey, fontSize: 12, underline: true)
-                //         .px(10)
-                //         .py(5)
-                //         .onTap(() {
-                //       openWhatsapp(context,
-                //           text: 'היי, הגעתי אלייך מהאתר Around',
-                //           whatsapp: '+972584770076');
-                //     }).center,
-                //     const SizedBox(width: 10),
-                //     'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // 'צור קשר'
+                    //     .toText(color: Colors.grey, fontSize: 12, underline: true)
+                    //     .px(10)
+                    //     .py(5)
+                    //     .onTap(() {
+                    //   openWhatsapp(context,
+                    //       text: 'היי, הגעתי אלייך מהאתר Around',
+                    //       whatsapp: '+972584770076');
+                    // }).center,
+                    // const SizedBox(width: 10),
+                    'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
+                  ],
+                ),
                 const SizedBox(height: 5),
               ],
             ),
@@ -213,34 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
       //     _handleCreateEvent();
       //   },
       // ).rtl,
-    );
-  }
-
-  AppBar buildHomeAppBar() {
-    return AppBar(
-      // backgroundColor: bgColor,
-      backgroundColor: bgColorDark,
-      // backgroundColor: Colors.white70,
-      elevation: 2,
-      // elevation: 0,
-      title: Row(
-        children: [
-          aroundLogo(),
-          const Spacer(),
-          'איתך בכל הובלה'.toText(fontSize: 18),
-        ],
-      ).py(5).onTap(() {
-        var box = Hive.box('uniBox');
-        if (adminMode) {
-          adminMode = false;
-          box.put('adminMode', adminMode);
-          setState(() {});
-        } else {
-          isShowAdminRequest = !isShowAdminRequest;
-          box.put('adminMode', isShowAdminRequest);
-          setState(() {});
-        }
-      }, longPressMode: true, radius: 5),
     );
   }
 
@@ -433,6 +420,23 @@ class _MyHomePageState extends State<MyHomePage> {
       MaterialPageRoute(builder: (context) => const CreatePage()),
     );
   }
+}
+
+AppBar buildHomeAppBar({GestureTapCallback? onHoldTap}) {
+  return AppBar(
+    // backgroundColor: bgColor,
+    backgroundColor: bgColorDark,
+    // backgroundColor: Colors.white70,
+    elevation: 2,
+    // elevation: 0,
+    title: Row(
+      children: [
+        aroundLogo(),
+        const Spacer(),
+        'איתך בכל הובלה'.toText(fontSize: 18),
+      ],
+    ).py(5).onTap(onHoldTap, longPressMode: true, radius: 5),
+  );
 }
 
 Widget aroundLogo() {

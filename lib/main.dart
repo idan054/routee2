@@ -1,22 +1,14 @@
-import 'dart:io' show Platform;
-
-import 'package:routee/common/widget_ext.dart';
-import 'package:routee/pages/home_page.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 // import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/date_symbol_data_local.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:routee/common/constants.dart';
+import 'package:routee/common/widget_ext.dart';
+import 'package:routee/pages/home_page.dart';
 
 import 'common/database.dart';
 import 'firebase_options.dart';
@@ -54,12 +46,24 @@ class MyApp extends StatelessWidget {
 
         if (size.maxWidth < 700) {
           // Mobile
-          return materialApp;
+          return buildMaterialApp(home: const MyHomePage());
         } else {
           // Web
           return Container(
             color: bgColorDark,
-            child: materialApp.px(width * 0.25),
+            child: buildMaterialApp(
+                home: Scaffold(
+              backgroundColor: bgColor,
+              appBar: buildHomeAppBar(),
+              body: Row(
+                children: [
+                  const MyHomePage(showAppBar: false).expanded(),
+                  const MyHomePage(showAppBar: false).expanded(),
+                  // const CreatePage(showAppBar: false).expanded()
+                  // MyHomePage().expanded(),
+                ],
+              ).px(width * 0.15),
+            )),
           );
         }
       },
@@ -67,11 +71,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Widget get materialApp => MaterialApp(
-    locale: const Locale('he'),
-    title: 'Around',
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      primarySwatch: Colors.purple,
-    ),
-    home: const MyHomePage());
+Widget buildMaterialApp({required Widget home}) => MaterialApp(
+      locale: const Locale('he'),
+      title: 'Around',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.purple),
+      home: home,
+    );

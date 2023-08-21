@@ -115,17 +115,13 @@ class _CreatePageState extends State<CreatePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 'ב Around ניתן להזמין ולקבל הזמנות בקלות'
-              // 'ב Around תיצרו ותצטרפו ' 'לקבוצות מסביבך'.toText(bold: true, maxLines: 5, fontSize: 16).centerRight,
               const SizedBox(height: 13),
               if (errText != null)
-                // 'אנא מלא את כל הפרטים'
                 errText
                     .toString()
                     .toText(bold: true, fontSize: 16, color: Colors.red)
                     .center,
               const SizedBox(height: 13),
-
               Row(
                 children: [
                   '1'
@@ -136,24 +132,8 @@ class _CreatePageState extends State<CreatePage> {
                 ],
               ),
               const SizedBox(height: 13),
-              // "מומלץ להוסיף אימוג'י 🤘 "
-              //     .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
-              //     .pOnly(right: 25)
-              //     .centerRight,
               Row(
                 children: [
-                  // buildTextFormField('מתי נפגש?', dateTimeController, enabled: false)
-                  //     .onTap(() async {
-                  //   selectedDateTime = await showOmniDateTimePicker(
-                  //     context: context,
-                  //     is24HourMode: true,
-                  //     startFirstDate: DateTime.now(),
-                  //   );
-                  //   if (selectedDateTime == null) return;
-                  //   dateTimeController.text = timeFormat(selectedDateTime!).toString();
-                  //   setState(() {});
-                  // }).expanded(),
-
                   '2'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
@@ -168,7 +148,6 @@ class _CreatePageState extends State<CreatePage> {
                   ).expanded(),
                 ],
               ),
-
               Column(
                 children: [
                   if (suggestions.isNotEmpty) const SizedBox(height: 10),
@@ -190,7 +169,6 @@ class _CreatePageState extends State<CreatePage> {
                     }),
                 ],
               ),
-
               const SizedBox(height: 13),
               Row(
                 children: [
@@ -198,9 +176,7 @@ class _CreatePageState extends State<CreatePage> {
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
-                    // 'קישור קבוצה / '
                     'ווטסאפ לבקשות הצטרפות',
-                    // "קישור קבוצה / מס' ווטסאפ",
                     phoneController,
                     pinLabel: false,
                     keyboardType: TextInputType.number,
@@ -212,15 +188,6 @@ class _CreatePageState extends State<CreatePage> {
                 ],
               ),
               const SizedBox(height: 5),
-              // if (errText != null && errText!.contains('טלפון'))
-              //           "טלפון לדוגמא:  "
-              //           "0545551234"
-              // "\n"
-              // "קבוצה לדוגמא:  "
-              //         "\n"
-              // "chat.whatsapp.com/BAnak"
-              // "\n"
-
               "לדוגמא:  "
                       "0545551234"
                   .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
@@ -228,11 +195,6 @@ class _CreatePageState extends State<CreatePage> {
                   .centerRight,
               const SizedBox(height: 15),
               Row(children: [
-                // if (_currentRangeValues.start.round() == 10 &&
-                //     _currentRangeValues.end.round() == 60) ...[
-                //   (" מיועד לכל הגילאים ")
-                //       .toText(color: Colors.black54, fontSize: 13, bold: true),
-                // ] else ...[
                 (" מיועד מגיל ${_currentRangeValues.start.round()}")
                     .toText(color: Colors.black54, fontSize: 13, bold: true),
                 const Spacer(),
@@ -240,17 +202,11 @@ class _CreatePageState extends State<CreatePage> {
                         ? "60+"
                         : (" עד ${_currentRangeValues.end.round()}"))
                     .toText(color: Colors.black54, fontSize: 13, bold: true),
-                // ],
               ]).px(22),
               RangeSlider(
                 values: _currentRangeValues,
                 min: 10,
                 max: 60,
-                // divisions: 25,
-                // labels: RangeLabels(
-                //   _currentRangeValues.start.round().toString(),
-                //   _currentRangeValues.end.round().toString(),
-                // ),
                 onChanged: (RangeValues values) {
                   print('START: onChanged()');
                   ageRange = [];
@@ -279,11 +235,8 @@ class _CreatePageState extends State<CreatePage> {
                       for (int i = 0; i < isFeeEvent.length; i++) {
                         isFeeEvent[i] = i == index;
                       }
-                      // print('isFeeEvent.first ${isFeeEvent.first}');
-                      // print('isFeeEvent.last ${isFeeEvent.last}');
                       setState(() {});
                     },
-                    // borderRadius: const BorderRadius.all(Radius.circular(99)),
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     isSelected: isFeeEvent,
                     children: [
@@ -305,14 +258,73 @@ class _CreatePageState extends State<CreatePage> {
               ).pOnly(right: 15, left: 15),
               const SizedBox(height: 15),
               buildTags(),
-              // const SizedBox(height: 10),
               const SizedBox(height: 20),
+              TextButton(
+                child: 'יצירה'.toText(bold: true, color: Colors.purple[500]!),
+                onPressed: () {
+                  onSubmit();
+                },
+              ).centerLeft,
               const SizedBox(height: 10),
             ],
           ).px(10),
         ),
       ),
     );
+  }
+
+  void onSubmit() {
+    if (titleController.text.isEmpty) {
+      errText = '1. הזן מה בתכנון?';
+      setState(() {});
+      return;
+    }
+
+    if (locationController.text.isEmpty || selectedAddress == null) {
+      errText = '2. בחר איפה נפגש?';
+      setState(() {});
+      return;
+    }
+
+    if (phoneController.text.length != 10 &&
+        !(phoneController.text.contains('chat.whatsapp'))) {
+      errText = '3. הזן קישור קבוצת ווטסאפ או טלפון תקין';
+      setState(() {});
+      return;
+    }
+
+    if (isFeeEvent.contains(true) == false) {
+      // AKA not .contains
+      errText = 'בחר האם הקבוצה בתשלום או בחינם';
+      setState(() {});
+      return;
+    }
+
+    if (selectedCategory == null) {
+      // errText = 'יש לבחור את מטרת הקבוצה';
+      errText = 'יש לבחור את סוג הקבוצה';
+      setState(() {});
+      return;
+    }
+
+    var newEvent = EventItem(
+      title: titleController.text,
+      createdAt: DateTime.now(),
+      phone: phoneController.text,
+      eventCategory: selectedCategory,
+      // address: selectedAddress?.name.toString(),
+      originLat: selectedAddress?.lat,
+      originLong: selectedAddress?.lng,
+      // ageRange: ageRange,
+      // withFee: isFeeEvent.first,
+    );
+
+    print('newEvent.toJson() ${newEvent.toJson()}');
+    Database.updateFirestore(
+      collection: 'events',
+      toJson: newEvent.toJson(),
+    );
+    Navigator.pop(context);
   }
 
   AppBar buildAppBar() {
@@ -329,64 +341,14 @@ class _CreatePageState extends State<CreatePage> {
           // 'Around'.toText(bold: true, fontSize: 18),
           // const Image(image: AssetImage('assets/GPS-icon-White.png'), width: 35),
           // Assets.wtspLocationGroupIconSolid.image(height: 22).px(1),
-          'קבוצה חדשה'.toText(bold: true, fontSize: 18),
+          'הובלה חדשה'.toText(bold: true, fontSize: 18),
           const Spacer(),
 
           TextButton(
-            onPressed: () {
-              if (titleController.text.isEmpty) {
-                errText = '1. הזן מה בתכנון?';
-                setState(() {});
-                return;
-              }
-
-              if (locationController.text.isEmpty || selectedAddress == null) {
-                errText = '2. בחר איפה נפגש?';
-                setState(() {});
-                return;
-              }
-
-              if (phoneController.text.length != 10 &&
-                  !(phoneController.text.contains('chat.whatsapp'))) {
-                errText = '3. הזן קישור קבוצת ווטסאפ או טלפון תקין';
-                setState(() {});
-                return;
-              }
-
-              if (isFeeEvent.contains(true) == false) {
-                // AKA not .contains
-                errText = 'בחר האם הקבוצה בתשלום או בחינם';
-                setState(() {});
-                return;
-              }
-
-              if (selectedCategory == null) {
-                // errText = 'יש לבחור את מטרת הקבוצה';
-                errText = 'יש לבחור את סוג הקבוצה';
-                setState(() {});
-                return;
-              }
-
-              var newEvent = EventItem(
-                title: titleController.text,
-                createdAt: DateTime.now(),
-                phone: phoneController.text,
-                eventCategory: selectedCategory,
-                // address: selectedAddress?.name.toString(),
-                originLat: selectedAddress?.lat,
-                originLong: selectedAddress?.lng,
-                // ageRange: ageRange,
-                // withFee: isFeeEvent.first,
-              );
-
-              print('newEvent.toJson() ${newEvent.toJson()}');
-              Database.updateFirestore(
-                collection: 'events',
-                toJson: newEvent.toJson(),
-              );
-              Navigator.pop(context);
-            },
             child: 'יצירה'.toText(bold: true, color: Colors.purple[500]!),
+            onPressed: () {
+              onSubmit();
+            },
           ),
           //
         ],

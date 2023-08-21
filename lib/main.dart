@@ -8,6 +8,7 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:routee/common/constants.dart';
 import 'package:routee/common/widget_ext.dart';
+import 'package:routee/pages/create_page.dart';
 import 'package:routee/pages/home_page.dart';
 
 import 'common/database.dart';
@@ -58,8 +59,7 @@ class MyApp extends StatelessWidget {
               body: Row(
                 children: [
                   const MyHomePage(showAppBar: false).expanded(),
-                  const MyHomePage(showAppBar: false).expanded(),
-                  // const CreatePage(showAppBar: false).expanded()
+                  const CreatePage(showAppBar: false).expanded()
                   // MyHomePage().expanded(),
                 ],
               ).px(width * 0.15),

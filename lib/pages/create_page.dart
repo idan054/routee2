@@ -84,13 +84,15 @@ class _CreatePageState extends State<CreatePage> {
   var titleController = TextEditingController();
   var dateTimeController = TextEditingController();
   var phoneController = TextEditingController();
-  var locationController = TextEditingController();
+  var originController = TextEditingController();
+  var destController = TextEditingController();
   String? errText;
   int? sValue;
   int? catIndex;
   EventCategory? selectedCategory;
   AddressResult? selectedAddress;
-  List<AddressResult> suggestions = [];
+  List<AddressResult> originSuggestions = [];
+  List<AddressResult> destSuggestions = [];
 
   final List<bool> isFeeEvent = <bool>[false, false];
 
@@ -127,7 +129,7 @@ class _CreatePageState extends State<CreatePage> {
                   '1'
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
-                  buildTextFormField('מה בתכנון?', titleController, pinLabel: false)
+                  buildTextFormField('פרטי הובלה', titleController, pinLabel: false)
                       .expanded(),
                 ],
               ),
@@ -138,11 +140,11 @@ class _CreatePageState extends State<CreatePage> {
                       .toText(color: Colors.black38, fontSize: 24, bold: true)
                       .pOnly(left: 10),
                   buildTextFormField(
-                    'איפה נפגש?',
-                    locationController,
+                    'כתובת מוצא',
+                    originController,
                     pinLabel: false,
                     onChanged: (value) async {
-                      suggestions = await searchAddress(value) ?? [];
+                      originSuggestions = await searchAddress(value) ?? [];
                       setState(() {});
                     },
                   ).expanded(),
@@ -150,8 +152,8 @@ class _CreatePageState extends State<CreatePage> {
               ),
               Column(
                 children: [
-                  if (suggestions.isNotEmpty) const SizedBox(height: 10),
-                  for (var sug in suggestions)
+                  if (originSuggestions.isNotEmpty) const SizedBox(height: 10),
+                  for (var sug in originSuggestions)
                     Card(
                       color: bgColorDark,
                       child: ListTile(
@@ -159,8 +161,46 @@ class _CreatePageState extends State<CreatePage> {
                         bold: true,
                       )),
                     ).onTap(() async {
-                      suggestions = [];
-                      locationController.text = sug.name.toString();
+                      originSuggestions = [];
+                      originController.text = sug.name.toString();
+                      FocusScope.of(context).unfocus();
+                      selectedAddress = await getDetailsFromPlaceId(sug);
+                      print('selectedAddress ${selectedAddress?.lng}');
+                      print('selectedAddress ${selectedAddress?.lat}');
+                      setState(() {});
+                    }),
+                ],
+              ),
+              const SizedBox(height: 13),
+              Row(
+                children: [
+                  '2'
+                      .toText(color: Colors.black38, fontSize: 24, bold: true)
+                      .pOnly(left: 10),
+                  buildTextFormField(
+                    'כתובת יעד',
+                    destController,
+                    pinLabel: false,
+                    onChanged: (value) async {
+                      destSuggestions = await searchAddress(value) ?? [];
+                      setState(() {});
+                    },
+                  ).expanded(),
+                ],
+              ),
+              Column(
+                children: [
+                  if (destSuggestions.isNotEmpty) const SizedBox(height: 10),
+                  for (var sug in destSuggestions)
+                    Card(
+                      color: bgColorDark,
+                      child: ListTile(
+                          title: '${sug.name}'.toText(
+                        bold: true,
+                      )),
+                    ).onTap(() async {
+                      destSuggestions = [];
+                      destController.text = sug.name.toString();
                       FocusScope.of(context).unfocus();
                       selectedAddress = await getDetailsFromPlaceId(sug);
                       print('selectedAddress ${selectedAddress?.lng}');
@@ -188,76 +228,13 @@ class _CreatePageState extends State<CreatePage> {
                 ],
               ),
               const SizedBox(height: 5),
-              "לדוגמא:  "
-                      "0545551234"
-                  .toText(color: Colors.black54, fontSize: 13, maxLines: 10)
-                  .pOnly(right: 25)
-                  .centerRight,
+              // "לדוגמא:  " "0545551234".toText(color: Colors.black54, fontSize: 13, maxLines: 10).pOnly(right: 25).centerRight,
               const SizedBox(height: 15),
-              Row(children: [
-                (" מיועד מגיל ${_currentRangeValues.start.round()}")
-                    .toText(color: Colors.black54, fontSize: 13, bold: true),
-                const Spacer(),
-                (_currentRangeValues.end.round() == 60
-                        ? "60+"
-                        : (" עד ${_currentRangeValues.end.round()}"))
-                    .toText(color: Colors.black54, fontSize: 13, bold: true),
-              ]).px(22),
-              RangeSlider(
-                values: _currentRangeValues,
-                min: 10,
-                max: 60,
-                onChanged: (RangeValues values) {
-                  print('START: onChanged()');
-                  ageRange = [];
-                  for (int i = values.start.round(); i <= values.end; i++) {
-                    ageRange.add(i);
-                    // print(i);
-                  }
-                  _currentRangeValues = values;
-                  setState(() {});
-                },
-              ),
+              _buildRangeSlider(),
               const SizedBox(height: 5),
-              Row(
-                children: [
-                  'סוג הקבוצה'.toText(bold: true, fontSize: 16),
-                  const Spacer(),
-                  // const SizedBox(width: 10),
-                  ToggleButtons(
-                    direction: Axis.horizontal,
-                    borderWidth: 1.65,
-                    // 1.75
-                    borderColor: Colors.black.withOpacity(0.42),
-                    selectedBorderColor: Colors.black.withOpacity(0.70),
-                    fillColor: bgColorDark,
-                    onPressed: (int index) {
-                      for (int i = 0; i < isFeeEvent.length; i++) {
-                        isFeeEvent[i] = i == index;
-                      }
-                      setState(() {});
-                    },
-                    borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    isSelected: isFeeEvent,
-                    children: [
-                      'בתשלום'
-                          .toText(
-                              fontSize: 13,
-                              bold: true,
-                              color: Colors.black.withOpacity(0.66))
-                          .px(15),
-                      'בחינם'
-                          .toText(
-                              fontSize: 13,
-                              bold: true,
-                              color: Colors.black.withOpacity(0.66))
-                          .px(15),
-                    ],
-                  ).sizedBox(null, 30),
-                ],
-              ).pOnly(right: 15, left: 15),
+              _buildGroupType(),
               const SizedBox(height: 15),
-              buildTags(),
+              _buildTags(),
               const SizedBox(height: 20),
               TextButton(
                 child: 'יצירה'.toText(bold: true, color: Colors.purple[500]!),
@@ -280,7 +257,7 @@ class _CreatePageState extends State<CreatePage> {
       return;
     }
 
-    if (locationController.text.isEmpty || selectedAddress == null) {
+    if (originController.text.isEmpty || selectedAddress == null) {
       errText = '2. בחר איפה נפגש?';
       setState(() {});
       return;
@@ -327,7 +304,7 @@ class _CreatePageState extends State<CreatePage> {
     Navigator.pop(context);
   }
 
-  AppBar buildAppBar() {
+  AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: bgColorDark,
       // centerTitle: true,
@@ -356,7 +333,72 @@ class _CreatePageState extends State<CreatePage> {
     );
   }
 
-  Wrap buildTags() {
+  Widget _buildRangeSlider() {
+    return Column(
+      children: [
+        Row(children: [
+          (" מיועד מגיל ${_currentRangeValues.start.round()}")
+              .toText(color: Colors.black54, fontSize: 13, bold: true),
+          const Spacer(),
+          (_currentRangeValues.end.round() == 60
+                  ? "60+"
+                  : (" עד ${_currentRangeValues.end.round()}"))
+              .toText(color: Colors.black54, fontSize: 13, bold: true),
+        ]).px(22),
+        RangeSlider(
+          values: _currentRangeValues,
+          min: 10,
+          max: 60,
+          onChanged: (RangeValues values) {
+            print('START: onChanged()');
+            ageRange = [];
+            for (int i = values.start.round(); i <= values.end; i++) {
+              ageRange.add(i);
+              // print(i);
+            }
+            _currentRangeValues = values;
+            setState(() {});
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGroupType() {
+    return Row(
+      children: [
+        'סוג הקבוצה'.toText(bold: true, fontSize: 16),
+        const Spacer(),
+        // const SizedBox(width: 10),
+        ToggleButtons(
+          direction: Axis.horizontal,
+          borderWidth: 1.65,
+          // 1.75
+          borderColor: Colors.black.withOpacity(0.42),
+          selectedBorderColor: Colors.black.withOpacity(0.70),
+          fillColor: bgColorDark,
+          onPressed: (int index) {
+            for (int i = 0; i < isFeeEvent.length; i++) {
+              isFeeEvent[i] = i == index;
+            }
+            setState(() {});
+          },
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+          isSelected: isFeeEvent,
+          children: [
+            'בתשלום'
+                .toText(fontSize: 13, bold: true, color: Colors.black.withOpacity(0.66))
+                .px(15),
+            'בחינם'
+                .toText(fontSize: 13, bold: true, color: Colors.black.withOpacity(0.66))
+                .px(15),
+          ],
+        ).sizedBox(null, 30),
+      ],
+    ).pOnly(right: 15, left: 15);
+  }
+
+  Wrap _buildTags() {
     return Wrap(
       textDirection: TextDirection.rtl,
       runSpacing: 10, // up / down

@@ -23,10 +23,8 @@ mixin _$EventItem {
 // String? imagePngName,
   String? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  EventCategory? get eventCategory => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get createdAt => throw _privateConstructorUsedError;
-  String? get phone => throw _privateConstructorUsedError; // To contact
   int? get distanceFromUser =>
       throw _privateConstructorUsedError; // Example 50 Meter away...
   String? get truckType => throw _privateConstructorUsedError;
@@ -36,7 +34,7 @@ mixin _$EventItem {
   String? get destinationLat => throw _privateConstructorUsedError;
   String? get destinationLong => throw _privateConstructorUsedError;
   String? get destinationAddress => throw _privateConstructorUsedError;
-  int? get feeValue => throw _privateConstructorUsedError;
+  String? get price => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,9 +50,7 @@ abstract class $EventItemCopyWith<$Res> {
   $Res call(
       {String? id,
       String? title,
-      EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? createdAt,
-      String? phone,
       int? distanceFromUser,
       String? truckType,
       String? originLat,
@@ -63,9 +59,7 @@ abstract class $EventItemCopyWith<$Res> {
       String? destinationLat,
       String? destinationLong,
       String? destinationAddress,
-      int? feeValue});
-
-  $EventCategoryCopyWith<$Res>? get eventCategory;
+      String? price});
 }
 
 /// @nodoc
@@ -83,9 +77,7 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   $Res call({
     Object? id = freezed,
     Object? title = freezed,
-    Object? eventCategory = freezed,
     Object? createdAt = freezed,
-    Object? phone = freezed,
     Object? distanceFromUser = freezed,
     Object? truckType = freezed,
     Object? originLat = freezed,
@@ -94,7 +86,7 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? destinationLat = freezed,
     Object? destinationLong = freezed,
     Object? destinationAddress = freezed,
-    Object? feeValue = freezed,
+    Object? price = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -105,18 +97,10 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      eventCategory: freezed == eventCategory
-          ? _value.eventCategory
-          : eventCategory // ignore: cast_nullable_to_non_nullable
-              as EventCategory?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      phone: freezed == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
-              as String?,
       distanceFromUser: freezed == distanceFromUser
           ? _value.distanceFromUser
           : distanceFromUser // ignore: cast_nullable_to_non_nullable
@@ -149,23 +133,11 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.destinationAddress
           : destinationAddress // ignore: cast_nullable_to_non_nullable
               as String?,
-      feeValue: freezed == feeValue
-          ? _value.feeValue
-          : feeValue // ignore: cast_nullable_to_non_nullable
-              as int?,
+      price: freezed == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $EventCategoryCopyWith<$Res>? get eventCategory {
-    if (_value.eventCategory == null) {
-      return null;
-    }
-
-    return $EventCategoryCopyWith<$Res>(_value.eventCategory!, (value) {
-      return _then(_value.copyWith(eventCategory: value) as $Val);
-    });
   }
 }
 
@@ -179,9 +151,7 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
   $Res call(
       {String? id,
       String? title,
-      EventCategory? eventCategory,
       @DateTimeStampConv() DateTime? createdAt,
-      String? phone,
       int? distanceFromUser,
       String? truckType,
       String? originLat,
@@ -190,10 +160,7 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
       String? destinationLat,
       String? destinationLong,
       String? destinationAddress,
-      int? feeValue});
-
-  @override
-  $EventCategoryCopyWith<$Res>? get eventCategory;
+      String? price});
 }
 
 /// @nodoc
@@ -209,9 +176,7 @@ class __$$_EventItemCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? title = freezed,
-    Object? eventCategory = freezed,
     Object? createdAt = freezed,
-    Object? phone = freezed,
     Object? distanceFromUser = freezed,
     Object? truckType = freezed,
     Object? originLat = freezed,
@@ -220,7 +185,7 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? destinationLat = freezed,
     Object? destinationLong = freezed,
     Object? destinationAddress = freezed,
-    Object? feeValue = freezed,
+    Object? price = freezed,
   }) {
     return _then(_$_EventItem(
       id: freezed == id
@@ -231,18 +196,10 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      eventCategory: freezed == eventCategory
-          ? _value.eventCategory
-          : eventCategory // ignore: cast_nullable_to_non_nullable
-              as EventCategory?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      phone: freezed == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
-              as String?,
       distanceFromUser: freezed == distanceFromUser
           ? _value.distanceFromUser
           : distanceFromUser // ignore: cast_nullable_to_non_nullable
@@ -275,10 +232,10 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.destinationAddress
           : destinationAddress // ignore: cast_nullable_to_non_nullable
               as String?,
-      feeValue: freezed == feeValue
-          ? _value.feeValue
-          : feeValue // ignore: cast_nullable_to_non_nullable
-              as int?,
+      price: freezed == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -290,9 +247,7 @@ class _$_EventItem implements _EventItem {
   const _$_EventItem(
       {this.id,
       this.title,
-      this.eventCategory,
       @DateTimeStampConv() this.createdAt,
-      this.phone,
       this.distanceFromUser,
       this.truckType,
       this.originLat,
@@ -301,7 +256,7 @@ class _$_EventItem implements _EventItem {
       this.destinationLat,
       this.destinationLong,
       this.destinationAddress,
-      this.feeValue});
+      this.price});
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
       _$$_EventItemFromJson(json);
@@ -312,13 +267,8 @@ class _$_EventItem implements _EventItem {
   @override
   final String? title;
   @override
-  final EventCategory? eventCategory;
-  @override
   @DateTimeStampConv()
   final DateTime? createdAt;
-  @override
-  final String? phone;
-// To contact
   @override
   final int? distanceFromUser;
 // Example 50 Meter away...
@@ -337,11 +287,11 @@ class _$_EventItem implements _EventItem {
   @override
   final String? destinationAddress;
   @override
-  final int? feeValue;
+  final String? price;
 
   @override
   String toString() {
-    return 'EventItem(id: $id, title: $title, eventCategory: $eventCategory, createdAt: $createdAt, phone: $phone, distanceFromUser: $distanceFromUser, truckType: $truckType, originLat: $originLat, originLong: $originLong, originAddress: $originAddress, destinationLat: $destinationLat, destinationLong: $destinationLong, destinationAddress: $destinationAddress, feeValue: $feeValue)';
+    return 'EventItem(id: $id, title: $title, createdAt: $createdAt, distanceFromUser: $distanceFromUser, truckType: $truckType, originLat: $originLat, originLong: $originLong, originAddress: $originAddress, destinationLat: $destinationLat, destinationLong: $destinationLong, destinationAddress: $destinationAddress, price: $price)';
   }
 
   @override
@@ -351,11 +301,8 @@ class _$_EventItem implements _EventItem {
             other is _$_EventItem &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.eventCategory, eventCategory) ||
-                other.eventCategory == eventCategory) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.distanceFromUser, distanceFromUser) ||
                 other.distanceFromUser == distanceFromUser) &&
             (identical(other.truckType, truckType) ||
@@ -372,8 +319,7 @@ class _$_EventItem implements _EventItem {
                 other.destinationLong == destinationLong) &&
             (identical(other.destinationAddress, destinationAddress) ||
                 other.destinationAddress == destinationAddress) &&
-            (identical(other.feeValue, feeValue) ||
-                other.feeValue == feeValue));
+            (identical(other.price, price) || other.price == price));
   }
 
   @JsonKey(ignore: true)
@@ -382,9 +328,7 @@ class _$_EventItem implements _EventItem {
       runtimeType,
       id,
       title,
-      eventCategory,
       createdAt,
-      phone,
       distanceFromUser,
       truckType,
       originLat,
@@ -393,7 +337,7 @@ class _$_EventItem implements _EventItem {
       destinationLat,
       destinationLong,
       destinationAddress,
-      feeValue);
+      price);
 
   @JsonKey(ignore: true)
   @override
@@ -413,9 +357,7 @@ abstract class _EventItem implements EventItem {
   const factory _EventItem(
       {final String? id,
       final String? title,
-      final EventCategory? eventCategory,
       @DateTimeStampConv() final DateTime? createdAt,
-      final String? phone,
       final int? distanceFromUser,
       final String? truckType,
       final String? originLat,
@@ -424,7 +366,7 @@ abstract class _EventItem implements EventItem {
       final String? destinationLat,
       final String? destinationLong,
       final String? destinationAddress,
-      final int? feeValue}) = _$_EventItem;
+      final String? price}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -434,13 +376,9 @@ abstract class _EventItem implements EventItem {
   @override
   String? get title;
   @override
-  EventCategory? get eventCategory;
-  @override
   @DateTimeStampConv()
   DateTime? get createdAt;
   @override
-  String? get phone;
-  @override // To contact
   int? get distanceFromUser;
   @override // Example 50 Meter away...
   String? get truckType;
@@ -457,7 +395,7 @@ abstract class _EventItem implements EventItem {
   @override
   String? get destinationAddress;
   @override
-  int? get feeValue;
+  String? get price;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

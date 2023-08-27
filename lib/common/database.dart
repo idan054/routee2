@@ -1,8 +1,8 @@
 // .set() / .update() = WRITE.
-import 'package:routee/common/constants.dart';
-import 'package:routee/common/models/event_category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haversine_distance/haversine_distance.dart';
+import 'package:routee/common/constants.dart';
+import 'package:routee/common/models/event_category.dart';
 
 import 'color_printer.dart';
 import 'models/event_item.dart';
@@ -51,7 +51,7 @@ class Database {
     required Map<String, dynamic> toJson,
     bool merge = true,
   }) async {
-    db
+    await db
         .collection(collection)
         .doc(docName)
         .set(toJson, SetOptions(merge: merge)) // Almost always true
@@ -65,28 +65,15 @@ class FsAdvanced {
   // Get 3 location close + Category filter
 
   static final db = FirebaseFirestore.instance;
-  static final reqBase = db
-      .collection('events')
-      // .where('eventAt', isGreaterThanOrEqualTo: DateTime.now() // Hide DONE events;
-      .orderBy('createdAt', descending: true);
+  static final reqBase = db.collection('events').orderBy('createdAt', descending: true);
 
   //~ The 3 start soon events of each category:
-  static Future<List<EventItem>> getHomeEvents(int? age) async {
+  static Future<List<EventItem>> getHomeEvents() async {
     print('START: getHomeEvents()');
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> eventDocs = [];
     List<EventItem> events = [];
-    var homeReqBase = reqBase;
-    if (age != null) homeReqBase = reqBase.where('ageRange', arrayContains: age);
 
-    for (var category in categories) {
-      print('category ${category.categoryName}');
-      var snap = await homeReqBase
-          .where('eventCategory.categoryType', isEqualTo: category.categoryType?.name)
-          .limit(3)
-          .get();
-      eventDocs.addAll(snap.docs);
-    }
-    events = eventDocs.map((doc) {
+    var snap = await reqBase.get();
+    events = snap.docs.map((doc) {
       var event = EventItem.fromJson(doc.data());
       event = event.copyWith(id: doc.id);
       return event;

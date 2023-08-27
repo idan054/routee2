@@ -1,4 +1,7 @@
+import 'dart:html' as html;
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -7,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:routee/common/constants.dart';
+import 'package:routee/common/num_extensions.dart';
 import 'package:routee/common/widget_ext.dart';
 import 'package:routee/pages/create_page.dart';
 import 'package:routee/pages/home_page.dart';
@@ -20,7 +24,12 @@ void main() async {
 
   // FirebaseAnalytics.instance.logAppOpen();
   mixpanel =
-      await Mixpanel.init('5def6b5a71bef4c9d148132ff4bcead2', trackAutomaticEvents: true);
+      await Mixpanel.init('5664c39fdf1da3a6f3e3ff3d716ebcfc', trackAutomaticEvents: true);
+
+  final remoteConfig = FirebaseRemoteConfig.instance;
+  await remoteConfig.setConfigSettings(
+      RemoteConfigSettings(fetchTimeout: 1.minutes, minimumFetchInterval: 1.minutes));
+  await remoteConfig.fetchAndActivate();
 
   // path_provider no need on web
   if (!kIsWeb) {
@@ -41,41 +50,73 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, size) {
-        double width = size.maxWidth;
-
-        if (size.maxWidth < 700) {
-          // Mobile
-          return buildMaterialApp(home: const MyHomePage());
-        } else {
-          // Web
-          return Container(
-            color: bgColorDark,
-            child: buildMaterialApp(
-                home: Scaffold(
-              backgroundColor: bgColor,
-              appBar: buildHomeAppBar(),
-              body: Row(
-                children: [
-                  const MyHomePage(showAppBar: false).expanded(flex: 60),
-                  const SizedBox(width: 15),
-                  const CreatePage(showAppBar: false).expanded(flex: 40),
-                  // MyHomePage().expanded(),
-                ],
-              ).px(width * 0.15),
-            )),
-          );
-        }
-      },
+    return MaterialApp(
+      locale: const Locale('he'),
+      title: 'Routee',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.purple),
+      home: const Dashboard(),
     );
   }
 }
 
-Widget buildMaterialApp({required Widget home}) => MaterialApp(
-      locale: const Locale('he'),
-      title: 'Around',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.purple),
-      home: home,
-    );
+class Dashboard extends StatefulWidget {
+  const Dashboard({Key? key}) : super(key: key);
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    _isAdminMode();
+
+    super.initState();
+  }
+
+  void _isAdminMode() {
+    print('START: _isAdminMode()');
+
+    String hash = html.window.location.href.split('?').last;
+    print('hash $hash');
+    Uri uri = Uri.parse('http://Whatever/?$hash');
+    Map<String?, String?> queryParams = uri.queryParameters;
+    print('queryParams ${queryParams}');
+
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final adminPass = remoteConfig.getString('admin_password');
+    final queryAdminPass = queryParams['admin_password'].toString();
+    adminModeV2 = (queryAdminPass == adminPass);
+    print('adminModeV2 $adminModeV2');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> webWidgets = [
+      const MyHomePage(showAppBar: false),
+      const SizedBox(width: 15),
+      const CreatePage(showAppBar: false),
+    ];
+
+    return kIsWeb
+        ? Scaffold(
+            backgroundColor: bgColor,
+            appBar: buildHomeAppBar(),
+            body: LayoutBuilder(builder: (context, size) {
+              double width = size.maxWidth;
+              if (size.maxWidth < 600) {
+                return ListView(children: webWidgets.toList().reversed.toList());
+              } else {
+                // Wide
+                return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  webWidgets[0].expanded(flex: 60),
+                  webWidgets[1],
+                  if (adminModeV2) webWidgets[2].expanded(flex: 40),
+                ]).px(width < 1000 ? 0 : width * 0.15);
+              }
+            }),
+          )
+        : const MyHomePage();
+  }
+}

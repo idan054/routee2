@@ -6,12 +6,12 @@ import 'package:routee/common/widget_ext.dart';
 
 import '../common/assets.gen.dart';
 import '../common/constants.dart';
+import '../common/database.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_category.dart';
 import '../common/models/event_item.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
-import 'category_page.dart';
 import 'create_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -45,16 +45,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // tagsController.jumpTo(9999.0);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // if (mounted)
-      setUserData();
+      _setUserData();
     });
     super.didChangeDependencies();
   }
 
-  void setUserData() async {
+  void _setUserData() async {
     var box = Hive.box('uniBox');
     var userAge = box.get('userAge');
     var userAddress = box.get('userAddress');
-    adminMode = box.get('adminMode') ?? false;
+    // adminMode = box.get('adminMode') ?? false;
     print('appVersion: $appVersion');
     print('userAge: $userAge');
     print('userAddress: $userAddress');
@@ -95,16 +95,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void fetchEvents({bool withLoader = false}) async {
-    // if (withLoader) {
-    //   splashLoad = true;
-    //   setState(() {});
-    // }
-    // events = await FsAdvanced.getHomeEvents(adminMode ? null : user?.age);
-    events = [
-      sampleEvent,
-      sampleEvent,
-      sampleEvent,
-    ];
+    if (withLoader) {
+      splashLoad = true;
+      setState(() {});
+    }
+    events = await FsAdvanced.getHomeEvents();
+
+    // events = [
+    //   sampleEvent,
+    //   sampleEvent,
+    //   sampleEvent,
+    // ];
 
     // events = sortByType(events, user!);
     splashLoad = false;
@@ -122,29 +123,35 @@ class _MyHomePageState extends State<MyHomePage> {
       Scaffold(backgroundColor: bgColor);
     } // App init
 
-    return Scaffold(
-      backgroundColor: bgColor,
-      appBar: widget.showAppBar
-          ? buildHomeAppBar(onHoldTap: () {
-              var box = Hive.box('uniBox');
-              if (adminMode) {
-                adminMode = false;
-                box.put('adminMode', adminMode);
-                setState(() {});
-              } else {
-                isShowAdminRequest = !isShowAdminRequest;
-                box.put('adminMode', isShowAdminRequest);
-                setState(() {});
-              }
-            })
-          : null,
-      body: RefreshIndicator(
+    return widget.showAppBar
+        ? Scaffold(
+            backgroundColor: bgColor,
+            appBar: widget.showAppBar
+                ? buildHomeAppBar(onHoldTap: () {
+                    // var box = Hive.box('uniBox');
+                    // if (adminMode) {
+                    //   adminMode = false;
+                    //   box.put('adminMode', adminMode);
+                    //   setState(() {});
+                    // } else {
+                    //   isShowAdminRequest = !isShowAdminRequest;
+                    //   box.put('adminMode', isShowAdminRequest);
+                    //   setState(() {});
+                    // }
+                  })
+                : null,
+            body: _body())
+        : _body();
+  }
+
+  Widget _body() => RefreshIndicator(
         color: Colors.purple,
         backgroundColor: bgColorDark,
         onRefresh: () async => fetchEvents(),
         child: Stack(
           children: [
             ListView(
+              shrinkWrap: true,
               children: [
                 const SizedBox(height: 15),
                 // buildHomeTitle(context, isShowAdminRequest),
@@ -165,17 +172,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           // bool isShowTitle = (i ~/ 3) == (i / 3); // AKA Every 4 posts.
 
                           // needed
-                          // bool isAddTitle = true;
-                          // var categoryTitle = events[i].eventCategory?.categoryType?.name;
-                          // if (titlesExist.contains(categoryTitle)) {
-                          //   isAddTitle = false;
-                          // } else {
-                          //   titlesExist.add('$categoryTitle');
-                          // }
+                          bool isAddTitle = true;
+                          var categoryTitle = events[i].truckType;
+                          if (titlesExist.contains(categoryTitle)) {
+                            isAddTitle = false;
+                          } else {
+                            titlesExist.add('$categoryTitle');
+                          }
 
                           return Column(
                             children: [
-                              // if (isAddTitle) buildCategoryTitle(events[i]),
+                              if (isAddTitle) buildCategoryTitle(events[i]),
                               buildEventCard(context, events[i], user!).px(5),
                             ],
                           );
@@ -213,23 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   .center,
           ],
         ),
-      ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   extendedPadding: const EdgeInsets.symmetric(horizontal: 3),
-      //   backgroundColor: bgColorDark,
-      //   label: Row(
-      //     children: [
-      //       Assets.addOnlyWhite.image(height: 42).roundedFull,
-      //       // Assets.addOnlyBlack.image(height: 42).roundedFull,
-      //       'קבוצה חדשה'.toText(bold: true).pOnly(left: 10).offset(5, 0),
-      //     ],
-      //   ),
-      //   onPressed: () {
-      //     _handleCreateEvent();
-      //   },
-      // ).rtl,
-    );
-  }
+      );
 
   Column buildHomeTitle(BuildContext context, bool showAdmin) {
     // 'קבוצות שהזמינו אותך להצטרף אליהם (:'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
@@ -240,27 +231,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (isShowAdminRequest)
-          ListBody(
-            children: <Widget>[
-              'יש להזין סיסמת מנהל בת 4 ספרות:'.toText(bold: true),
-              TextField(
-                controller: passController,
-                keyboardType: TextInputType.number,
-              ),
-              TextButton(
-                child: 'הפעל מצב מנהל'.toText(bold: true, color: Colors.purple),
-                onPressed: () {
-                  if (passController.text == '2003') {
-                    adminMode = true;
-                    isShowAdminRequest = false;
-                    setState(() {});
-                  }
-                },
-              ).centerRight,
-              const SizedBox(height: 20),
-            ],
-          ).px(20),
+        // if (isShowAdminRequest)
+        //   ListBody(
+        //     children: <Widget>[
+        //       'יש להזין סיסמת מנהל בת 4 ספרות:'.toText(bold: true),
+        //       TextField(
+        //         controller: passController,
+        //         keyboardType: TextInputType.number,
+        //       ),
+        //       TextButton(
+        //         child: 'הפעל מצב מנהל'.toText(bold: true, color: Colors.purple),
+        //         onPressed: () {
+        //           if (passController.text == '2003') {
+        //             adminMode = true;
+        //             isShowAdminRequest = false;
+        //             setState(() {});
+        //           }
+        //         },
+        //       ).centerRight,
+        //       const SizedBox(height: 20),
+        //     ],
+        //   ).px(20),
 
         // Row(
         //   mainAxisAlignment: MainAxisAlignment.end,
@@ -302,11 +293,11 @@ class _MyHomePageState extends State<MyHomePage> {
               }, radius: 5);
             }),
             const Spacer(),
-            if (user != null)
-              '${(adminMode || user?.age == null) ? 'כל הגילאים ' : 'לגלאי ${user?.age}'}'
-                      ', באיזור ${user?.address?.name}'
-                  .toText(fontSize: 14, color: Colors.black54, medium: true)
-                  .px(15),
+            // if (user != null)
+            //   '${(adminMode || user?.age == null) ? 'כל הגילאים ' : 'לגלאי ${user?.age}'}'
+            //           ', באיזור ${user?.address?.name}'
+            //       .toText(fontSize: 14, color: Colors.black54, medium: true)
+            //       .px(15),
           ],
         ).px(7),
       ],
@@ -378,40 +369,41 @@ class _MyHomePageState extends State<MyHomePage> {
     //     : categoryColors[Random().nextInt(categoryColors.length)];
 
     // needed
-    var category = categories.firstWhereOrNull((cat) =>
-            cat.categoryType?.name == eventItem.eventCategory?.categoryType?.name) ??
-        eventItem.eventCategory;
+    var currTruck = trucks.firstWhereOrNull((truck) => truck == eventItem.truckType) ??
+        eventItem.truckType;
 
     return Row(
       children: [
-        const SizedBox(height: 50),
-        Icons.keyboard_double_arrow_left.icon(color: Colors.black54),
-        'לפי מרחק'
-            .toText(fontSize: 12, color: Colors.black54, medium: true)
-            .offset(0, -1)
-            .px(4),
+        // const SizedBox(height: 50),
+        // Icons.keyboard_double_arrow_left.icon(color: Colors.black54),
+        // 'לפי מרחק'
+        //     .toText(fontSize: 12, color: Colors.black54, medium: true)
+        //     .offset(0, -1)
+        //     .px(4),
         const SizedBox(width: 5),
         // 'עוד'.toText(fontSize: 12.0, color: color, bold: true),
         const Spacer(),
-        '${category?.categoryName}'
+        '$currTruck'
             // .toText(color: color, fontSize: 15, bold: true)
             .toText(fontSize: 15, bold: true)
             .centerRight,
         const SizedBox(width: 7),
-        CircleAvatar(backgroundColor: category?.categoryColor, radius: 3).pOnly(top: 5)
+        const CircleAvatar(backgroundColor: darkMain, radius: 3).pOnly(top: 5)
       ],
-    ).px(15).onTap(() {
-      _handleGoToCategory(null, null, eventCategory: category);
-    });
+    ).px(15).py(10)
+        // .onTap(() {
+        // _handleGoToCategory(null, null, eventCategory: currTruck);
+        // })
+        ;
   }
 
   void _handleGoToCategory(int? i, Color? color, {EventCategory? eventCategory}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CategoryPage(
-              user!, eventCategory ?? categories[i!].copyWith(categoryColor: color))),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => CategoryPage(
+    //           user!, eventCategory ?? categories[i!].copyWith(categoryColor: color))),
+    // );
   }
 
   void _handleCreateEvent() {
@@ -423,29 +415,31 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 AppBar buildHomeAppBar({GestureTapCallback? onHoldTap}) {
+  ;
   return AppBar(
     // backgroundColor: bgColor,
     backgroundColor: bgColorDark,
     // backgroundColor: Colors.white70,
     elevation: 2,
+    leading: const Offstage(),
     // elevation: 0,
     title: Row(
       children: [
-        aroundLogo(),
+        logo(),
         const Spacer(),
         'איתך בכל הובלה'.toText(fontSize: 18),
       ],
-    ).py(5).onTap(onHoldTap, longPressMode: true, radius: 5),
+    ).py(5).onTap(onHoldTap, longPressMode: true, radius: 5).offset(-25, 0),
   );
 }
 
-Widget aroundLogo() {
+Widget logo() {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
       Assets.routee.image(height: 45).px(1).offset(0, 1),
       const SizedBox(width: 5),
-      if (adminMode) '(מצב מנהל)'.toText(fontSize: 12, medium: true).offset(0, 1)
+      if (adminModeV2) '(פאנל ניהול)'.toText(fontSize: 14, medium: true).offset(0, 1)
     ],
   ).ltr;
   // .sizedBox(100, null);

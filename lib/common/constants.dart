@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
@@ -9,8 +10,9 @@ import 'models/event_item.dart';
 // final
 // const
 
-var appVersion = 1.1;
-var adminMode = false;
+var appVersion = 1.3;
+var adminModeV2 = (false && kDebugMode);
+// var adminMode = false;
 var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 
 // const bgColor = Color(0xfff7f4ed);
@@ -19,7 +21,7 @@ const bgColor = Color(0xfffbfaf3);
 // const bgColorLight = Color(0xfffbfaf3);
 const bgColorDark = Color(0xfffbf4d0);
 // const wtspGreen = Color(0xff25d49d);
-const wtspGreen = Color(0xffa95a1e);
+const darkMain = Color(0xffa95a1e);
 const wtspGreenLight = Color(0xffdaf9c4);
 
 class UserData {
@@ -139,11 +141,10 @@ var sampleEvent = EventItem(
   destinationLat: '433224',
   destinationLong: '334241',
   distanceFromUser: 12,
-  feeValue: 115,
   truckType: 'משאית',
+  price: '300',
   createdAt: DateTime.now(),
   originAddress: 'חבקוק 114, גדרה',
   originLat: '433224',
   originLong: '334241',
-  phone: '+972584770076',
 );

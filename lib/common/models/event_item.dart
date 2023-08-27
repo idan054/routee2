@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../convertors.dart';
-import 'event_category.dart';
 
 part 'event_item.freezed.dart';
 part 'event_item.g.dart';
@@ -16,11 +15,8 @@ class EventItem with _$EventItem {
     // String? imagePngName,
     String? id,
     String? title,
-    EventCategory? eventCategory,
     @DateTimeStampConv() DateTime? createdAt,
-    String? phone, // To contact
     int? distanceFromUser, // Example 50 Meter away...
-
     String? truckType,
     String? originLat,
     String? originLong,
@@ -28,7 +24,7 @@ class EventItem with _$EventItem {
     String? destinationLat,
     String? destinationLong,
     String? destinationAddress,
-    int? feeValue,
+    String? price,
   }) = _EventItem;
 
   factory EventItem.fromJson(Map<String, dynamic> json) => _$EventItemFromJson(json);

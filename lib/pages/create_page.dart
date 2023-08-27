@@ -49,7 +49,7 @@ class _CreatePageState extends State<CreatePage> {
       child: widget.showAppBar
           ? Scaffold(
               backgroundColor: bgColor,
-              appBar: widget.showAppBar ? buildHomeAppBar() : null,
+              appBar: widget.showAppBar ? buildHomeAppBar(context) : null,
               body: _body(),
             )
           : _body(),

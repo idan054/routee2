@@ -10,8 +10,8 @@ import 'models/event_item.dart';
 // final
 // const
 
-var appVersion = 1.39;
-var adminModeV2 = (false && kDebugMode);
+var appVersion = 1.5;
+var adminModeV2 = (true && kDebugMode);
 // var adminMode = false;
 var mixpanel = Mixpanel('PlaceHolder'); // instead nullable
 

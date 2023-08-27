@@ -69,9 +69,9 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   @override
-  void initState() {
+  void didChangeDependencies() {
     _isAdminMode();
-    super.initState();
+    super.didChangeDependencies();
   }
 
   void _isAdminMode() async {
@@ -87,7 +87,9 @@ class _DashboardState extends State<Dashboard> {
     // final adminPass = remoteConfig.getString('admin_password');
 
     final queryAdminPass = queryParams['admin_password'].toString();
-    adminModeV2 = (queryAdminPass == '180218');
+    var box = Hive.box('uniBox');
+    adminModeV2 = box.get('adminMode') ?? kDebugMode || (queryAdminPass == '180218');
+    if (adminModeV2) box.put('adminMode', true);
     print('adminModeV2 $adminModeV2');
   }
 
@@ -100,23 +102,36 @@ class _DashboardState extends State<Dashboard> {
     ];
 
     return kIsWeb
+
+        // WEB MODE:
         ? Scaffold(
             backgroundColor: bgColor,
-            appBar: buildHomeAppBar(),
+            appBar: buildHomeAppBar(context),
             body: LayoutBuilder(builder: (context, size) {
               double width = size.maxWidth;
               if (size.maxWidth < 600) {
-                return ListView(children: webWidgets.toList().reversed.toList());
+                return ListView(
+                  children: [
+                    if (adminModeV2) webWidgets[2],
+                    webWidgets[1],
+                    webWidgets[0],
+                  ],
+                );
               } else {
                 // Wide
-                return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  webWidgets[0].expanded(flex: 60),
-                  webWidgets[1],
-                  if (adminModeV2) webWidgets[2].expanded(flex: 40),
-                ]).px(width < 1000 ? 0 : width * 0.15);
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    webWidgets[0].expanded(flex: 60),
+                    webWidgets[1],
+                    if (adminModeV2) webWidgets[2].expanded(flex: 40),
+                  ],
+                ).px(width < 1000 ? 0 : width * 0.15);
               }
             }),
           )
+
+        // APP MODE:
         : const MyHomePage();
   }
 }

@@ -10,6 +10,7 @@ import '../common/database.dart';
 import '../common/models/address_result.dart';
 import '../common/models/event_category.dart';
 import '../common/models/event_item.dart';
+import '../main.dart';
 import '../update_details_dialog.dart';
 import '../widgets.dart';
 import 'create_page.dart';
@@ -127,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ? Scaffold(
             backgroundColor: bgColor,
             appBar: widget.showAppBar
-                ? buildHomeAppBar(onHoldTap: () {
+                ? buildHomeAppBar(context, onHoldTap: () {
                     // var box = Hive.box('uniBox');
                     // if (adminMode) {
                     //   adminMode = false;
@@ -152,6 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             ListView(
               shrinkWrap: true,
+              // physics: const NeverScrollableScrollPhysics(),
+              physics: const ScrollPhysics(),
               children: [
                 const SizedBox(height: 15),
                 // buildHomeTitle(context, isShowAdminRequest),
@@ -217,6 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: BorderRadius.circular(10.0)),
                       child: const CircularProgressIndicator().pad(15))
                   .sizedBox(70, 70)
+                  .py(75)
                   .center,
           ],
         ),
@@ -414,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-AppBar buildHomeAppBar({GestureTapCallback? onHoldTap}) {
+AppBar buildHomeAppBar(BuildContext context, {GestureTapCallback? onHoldTap}) {
   ;
   return AppBar(
     // backgroundColor: bgColor,
@@ -425,22 +429,32 @@ AppBar buildHomeAppBar({GestureTapCallback? onHoldTap}) {
     // elevation: 0,
     title: Row(
       children: [
-        logo(),
+        logo(context),
         const Spacer(),
-        'איתך בכל הובלה'.toText(fontSize: 18),
+        adminModeV2
+            ? 'יציאה'.toText(underline: true).onTap(() {
+                var box = Hive.box('uniBox');
+                box.put('adminMode', null);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Dashboard()),
+                );
+              }, radius: 5).px(5)
+            : 'איתך בכל הובלה'.toText(fontSize: 18),
       ],
-    ).py(5).onTap(onHoldTap, longPressMode: true, radius: 5).offset(-25, 0),
+    ).py(5),
   );
 }
 
-Widget logo() {
+Widget logo(BuildContext context) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
       Assets.routee.image(height: 45).px(1).offset(0, 1),
       const SizedBox(width: 5),
-      if (adminModeV2) '(פאנל ניהול)'.toText(fontSize: 14, medium: true).offset(0, 1)
+      if (adminModeV2) '(פאנל ניהול)'.toText(fontSize: 14, medium: true).offset(0, 1),
+      const SizedBox(width: 5),
     ],
-  ).ltr;
+  ).offset(-50, 0).ltr;
   // .sizedBox(100, null);
 }

@@ -1,7 +1,7 @@
 import 'dart:html' as html;
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
+// import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -10,7 +10,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:routee/common/constants.dart';
-import 'package:routee/common/num_extensions.dart';
 import 'package:routee/common/widget_ext.dart';
 import 'package:routee/pages/create_page.dart';
 import 'package:routee/pages/home_page.dart';
@@ -26,10 +25,11 @@ void main() async {
   mixpanel =
       await Mixpanel.init('5664c39fdf1da3a6f3e3ff3d716ebcfc', trackAutomaticEvents: true);
 
-  final remoteConfig = FirebaseRemoteConfig.instance;
-  await remoteConfig.setConfigSettings(
-      RemoteConfigSettings(fetchTimeout: 1.minutes, minimumFetchInterval: 1.minutes));
-  await remoteConfig.fetchAndActivate();
+  // final remoteConfig = FirebaseRemoteConfig.instance;
+  // await remoteConfig.ensureInitialized();
+  // await remoteConfig.setConfigSettings(
+  //     RemoteConfigSettings(fetchTimeout: 1.minutes, minimumFetchInterval: 1.minutes));
+  // await remoteConfig.fetchAndActivate();
 
   // path_provider no need on web
   if (!kIsWeb) {
@@ -71,11 +71,10 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     _isAdminMode();
-
     super.initState();
   }
 
-  void _isAdminMode() {
+  void _isAdminMode() async {
     print('START: _isAdminMode()');
 
     String hash = html.window.location.href.split('?').last;
@@ -84,10 +83,11 @@ class _DashboardState extends State<Dashboard> {
     Map<String?, String?> queryParams = uri.queryParameters;
     print('queryParams ${queryParams}');
 
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    final adminPass = remoteConfig.getString('admin_password');
+    // final remoteConfig = FirebaseRemoteConfig.instance;
+    // final adminPass = remoteConfig.getString('admin_password');
+
     final queryAdminPass = queryParams['admin_password'].toString();
-    adminModeV2 = (queryAdminPass == adminPass);
+    adminModeV2 = (queryAdminPass == '180218');
     print('adminModeV2 $adminModeV2');
   }
 

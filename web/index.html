@@ -2,6 +2,36 @@
 <!--<html dir="rtl">-->
 <html>
 <head>
+
+  <style>
+   body {
+      background-color: #fbf4d0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 12px solid #fbf4d0; /* bg */
+      border-top: 12px solid #9C27B0; /* main */
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    </style>
+
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -49,6 +79,9 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+<div class="loader"></div>
+
+
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -63,5 +96,15 @@
       });
     });
   </script>
+
+  <script type="application/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        const loader = document.getElementById('loader');
+        if (loader) {
+          loader.remove();
+        }
+      });
+
+</script>
 </body>
 </html>

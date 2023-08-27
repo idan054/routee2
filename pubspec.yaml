@@ -36,7 +36,7 @@ dependencies:
   cloud_functions: ^4.2.0
   another_flushbar: ^1.12.30
   shimmer: ^3.0.0
-  firebase_remote_config: ^4.2.5
+#  firebase_remote_config: ^4.2.5
 #  text_selection_controls: ^0.0.2
 
 

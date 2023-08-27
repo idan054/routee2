@@ -3,7 +3,7 @@
 import 'dart:io' show File, Platform;
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
+// import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
@@ -136,11 +136,12 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                 : () async {
                     // region onTap
 
-                    final remoteConfig = FirebaseRemoteConfig.instance;
-                    final phone = remoteConfig.getString('wtsp_admin_phone');
+                    // final remoteConfig = FirebaseRemoteConfig.instance;
+                    // final phone = remoteConfig.getString('wtsp_admin_phone');
 
                     openWhatsapp(context,
-                        whatsapp: phone,
+                        // whatsapp: phone,
+                        whatsapp: '+972542015649', // NIR
                         text: 'היי, ראיתי את ההובלה '
                             '*${eventItem.title}*'
                             ' ב Routee '

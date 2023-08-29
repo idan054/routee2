@@ -10,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:routee/common/constants.dart';
+import 'package:routee/common/models/event_item.dart';
 import 'package:routee/common/widget_ext.dart';
 import 'package:routee/pages/create_page.dart';
 import 'package:routee/pages/home_page.dart';
@@ -22,8 +23,8 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // FirebaseAnalytics.instance.logAppOpen();
-  mixpanel =
-      await Mixpanel.init('5664c39fdf1da3a6f3e3ff3d716ebcfc', trackAutomaticEvents: true);
+  mixpanel = await Mixpanel.init('5664c39fdf1da3a6f3e3ff3d716ebcfc',
+      trackAutomaticEvents: true);
 
   // final remoteConfig = FirebaseRemoteConfig.instance;
   // await remoteConfig.ensureInitialized();
@@ -61,7 +62,8 @@ class MyApp extends StatelessWidget {
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final EventItem? eventItem;
+  const Dashboard({Key? key, this.eventItem}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -88,7 +90,8 @@ class _DashboardState extends State<Dashboard> {
 
     final queryAdminPass = queryParams['admin_password'].toString();
     var box = Hive.box('uniBox');
-    adminModeV2 = box.get('adminMode') ?? kDebugMode || (queryAdminPass == '180218');
+    adminModeV2 =
+        box.get('adminMode') ?? kDebugMode || (queryAdminPass == '180218');
     if (adminModeV2) box.put('adminMode', true);
     print('adminModeV2 $adminModeV2');
   }
@@ -98,7 +101,10 @@ class _DashboardState extends State<Dashboard> {
     final List<Widget> webWidgets = [
       const MyHomePage(showAppBar: false),
       const SizedBox(width: 15),
-      const CreatePage(showAppBar: false),
+      CreatePage(
+        showAppBar: false,
+        eventItem: widget.eventItem,
+      ),
     ];
 
     return kIsWeb

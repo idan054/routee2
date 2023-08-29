@@ -50,13 +50,15 @@ Widget flushBar(BuildContext context, String text,
   )..show(context);
 }
 
-OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed}) {
+OutlinedButton buildModeButton(bool isShowLastedEvents,
+    {VoidCallback? onPressed}) {
   return OutlinedButton.icon(
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.white12,
         // side: const BorderSide(width: 2.0, color: Colors.white),
         // foregroundColor: AppColors.darkOutline,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
       icon: (isShowLastedEvents ? Icons.schedule : Icons.place_outlined)
           .icon(color: Colors.white, size: 20),
@@ -84,41 +86,56 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
       return Row(
         children: [
           // if (showDeleteOption) ...[
-          if (kIsWeb && adminModeV2) ...[
-            Icons.delete_forever_rounded
-                .icon(color: Colors.red.shade300)
-                .py(10)
-                .px(10)
-                .onTap(() {
-              Database.deleteDoc(collection: 'events', docName: eventItem.id);
+          Column(
+            children: [
+              Icons.edit.icon(color: Colors.grey).py(10).px(10).onTap(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Dashboard(
+                            eventItem: eventItem,
+                          )),
+                );
+              }),
+              if (kIsWeb && adminModeV2) ...[
+                Icons.delete_forever_rounded
+                    .icon(color: Colors.red.shade300)
+                    .py(10)
+                    .px(10)
+                    .onTap(() {
+                  Database.deleteDoc(
+                      collection: 'events', docName: eventItem.id);
 
-              flushBar(
-                context,
-                'ההובלה נוספת לאפליקצייה בהצלחה!',
-                withShadow: true,
-                isShimmer: true,
-                duration: 4,
-                textColor: Colors.white,
-                // bgColor: bgColorDark,
-                bgColor: Colors.purple[500]!,
-              );
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Dashboard()),
-              );
+                  flushBar(
+                    context,
+                    'ההובלה נוספת לאפליקצייה בהצלחה!',
+                    withShadow: true,
+                    isShimmer: true,
+                    duration: 4,
+                    textColor: Colors.white,
+                    // bgColor: bgColorDark,
+                    bgColor: Colors.purple[500]!,
+                  );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Dashboard()),
+                  );
 
-              flushBar(
-                context,
-                'ההובלה "${eventItem.title}" נמחקה בהצלחה!',
-                withShadow: true,
-                isShimmer: true,
-                duration: 4,
-                textColor: Colors.white,
-                // bgColor: bgColorDark,
-                bgColor: Colors.purple[500]!,
-              );
-            }, radius: 10),
-          ],
+                  flushBar(
+                    context,
+                    'ההובלה "${eventItem.title}" נמחקה בהצלחה!',
+                    withShadow: true,
+                    isShimmer: true,
+                    duration: 4,
+                    textColor: Colors.white,
+                    // bgColor: bgColorDark,
+                    bgColor: Colors.purple[500]!,
+                  );
+                }, radius: 10),
+              ],
+            ],
+          ),
+
           InkWell(
             onTap: kIsWeb
                 ? null
@@ -197,67 +214,73 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
 
                     // endregion onTap
                   },
-            child: Card(
-              color: Colors.white,
-              // color: bgColorLight,
-              // color: bgColorDark,
-              elevation: 2,
-              // elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-              child: Column(
-                children: [
-                  ListTile(
-                    title: eventItem.title.toString().toText(
-                          medium: true,
-                          fontSize: titleSize,
-                          color: Colors.black,
-                        ),
-                    leading: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                                // color: bgColor?.withOpacity(0.8),
-                                color: bgColorDark,
-                                // child: (distanceMode ? distanceKm : ageRange)
-                                child: ('₪${eventItem.price}')
-                                    .toText(
-                                      // fontSize: subSize - 2,
-                                      fontSize: subSize,
-                                      medium: true,
-                                      color: Colors.black54,
-                                    )
-                                    .px(7)
-                                    .py(5))
-                            .rounded(radius: 20),
-                        const SizedBox(width: 4),
-                        // if (adminMode)
-                        //   buildShareButton(context, controller, eventItem, subSize),
+            child: Builder(builder: (context) {
+              return Card(
+                color: Colors.white,
+                // color: bgColorLight,
+                // color: bgColorDark,
+                elevation: 2,
+                // elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0)),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title:
+                          "${eventItem.title.toString()}, KG ${eventItem.weight.toString()}"
+                              .toText(
+                        medium: true,
+                        fontSize: titleSize,
+                        color: Colors.black,
+                      ),
+                      leading: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                                  // color: bgColor?.withOpacity(0.8),
+                                  color: bgColorDark,
+                                  // child: (distanceMode ? distanceKm : ageRange)
+                                  child: ('₪${eventItem.price}')
+                                      .toText(
+                                        // fontSize: subSize - 2,
+                                        fontSize: subSize,
+                                        medium: true,
+                                        color: Colors.black54,
+                                      )
+                                      .px(7)
+                                      .py(5))
+                              .rounded(radius: 20),
+                          const SizedBox(width: 4),
+                          // if (adminMode)
+                          //   buildShareButton(context, controller, eventItem, subSize),
 
-                        // if (!distanceMode) buildShareButton(subSize).offset(0, 2),
-                      ],
+                          // if (!distanceMode) buildShareButton(subSize).offset(0, 2),
+                        ],
+                      ),
                     ),
-                  ),
-                  // if (adminModeV2)
-                  //   buildInfo(eventItem, subSize, distanceMode)
-                  //       .pOnly(right: 15, bottom: 5),
+                    // if (adminModeV2)
+                    //   buildInfo(eventItem, subSize, distanceMode)
+                    //       .pOnly(right: 15, bottom: 5),
 
-                  // Text(eventItem.truckType.toString()),
-                  buildOriginAddressText(eventItem, subSize, distanceMode)
-                      .pOnly(right: 15),
-                  // buildCreatedAt(eventItem, subSize, distanceMode).pOnly(right: 15),
-                  Row(
-                    children: [
-                      const SizedBox(width: 15),
-                      if (!distanceMode) buildWhatsappJoin(subSize),
-                      const Spacer(),
-                      buildDestinationText(eventItem, subSize, distanceMode).py(3),
-                    ],
-                    // ).pOnly(right: 75, top: 2),
-                  ).pOnly(right: 15, top: 2),
-                ],
-              ).pOnly(bottom: 10, top: 5),
-            ),
+                    // Text(eventItem.truckType.toString()),
+                    buildOriginAddressText(eventItem, subSize, distanceMode)
+                        .pOnly(right: 15),
+                    // buildCreatedAt(eventItem, subSize, distanceMode).pOnly(right: 15),
+                    Row(
+                      children: [
+                        const SizedBox(width: 15),
+                        if (!distanceMode) buildWhatsappJoin(subSize),
+                        const Spacer(),
+                        buildDestinationText(eventItem, subSize, distanceMode)
+                            .py(3),
+                      ],
+                      // ).pOnly(right: 75, top: 2),
+                    ).pOnly(right: 15, top: 2),
+                  ],
+                ).pOnly(bottom: 10, top: 5),
+              );
+            }),
             // .onTap(() {}, radius: 5),
           ).expanded(),
         ],
@@ -291,7 +314,8 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
   );
 }
 
-Row buildDestinationText(EventItem eventItem, double subSize, bool distanceMode) {
+Row buildDestinationText(
+    EventItem eventItem, double subSize, bool distanceMode) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     mainAxisSize: MainAxisSize.min,
@@ -301,12 +325,14 @@ Row buildDestinationText(EventItem eventItem, double subSize, bool distanceMode)
           .toText(color: Colors.grey, fontSize: subSize)
           .sizedBox(200, null),
       const SizedBox(width: 3),
-      Icons.flag.icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+      Icons.flag
+          .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
     ],
   );
 }
 
-Widget buildOriginAddressText(EventItem eventItem, double subSize, bool distanceMode) {
+Widget buildOriginAddressText(
+    EventItem eventItem, double subSize, bool distanceMode) {
   // var diff = DateTime.now().difference(eventItem.createdAt!).inDays;
   // var ago = '';
   // if (diff == 0) ago = 'נוסף היום!';
@@ -372,7 +398,8 @@ Widget buildShareButton(
               color: Colors.purple,
               strokeWidth: 2,
             ).sizedBox(10, 10)
-          : Icons.share.icon(color: Colors.black38, size: subSize + 1), // Classic share
+          : Icons.share
+              .icon(color: Colors.black38, size: subSize + 1), // Classic share
     ).pad(0).onTap(() async {
       isLoading = true;
       stfState(() {});
@@ -413,7 +440,8 @@ Widget buildShareButton(
         // });
       } on Exception catch (e, s) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: 'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
+            content:
+                'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
         print(s);
       }
     });
@@ -444,9 +472,9 @@ Widget buildShareButton(
 }
 
 String? timeFormat(DateTime timestamp, {bool withDay = true}) {
-  var time =
-      intl.DateFormat(withDay ? 'EEEE ב ' 'HH:mm' ' (dd/MM)' : 'dd/MM ' 'ב HH:mm ', 'he')
-          .format(timestamp);
+  var time = intl.DateFormat(
+          withDay ? 'EEEE ב ' 'HH:mm' ' (dd/MM)' : 'dd/MM ' 'ב HH:mm ', 'he')
+      .format(timestamp);
 
   if (timestamp.day == DateTime.now().day + 1 &&
       timestamp.month == DateTime.now().month &&

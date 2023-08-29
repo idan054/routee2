@@ -18,20 +18,24 @@ import 'home_page.dart';
 
 class CreatePage extends StatefulWidget {
   final bool showAppBar;
+  final EventItem? eventItem;
 
-  const CreatePage({this.showAppBar = true, Key? key}) : super(key: key);
+  const CreatePage({this.showAppBar = true, this.eventItem, Key? key})
+      : super(key: key);
 
   @override
   State<CreatePage> createState() => _CreatePageState();
 }
 
 class _CreatePageState extends State<CreatePage> {
-  RangeValues _currentRangeValues = const RangeValues(10, 55); // This NOT set Min & Max
+  RangeValues _currentRangeValues =
+      const RangeValues(10, 55); // This NOT set Min & Max
 
   // endregion ageList
   var titleController = TextEditingController();
   var dateTimeController = TextEditingController();
   var priceController = TextEditingController();
+  var weightController = TextEditingController();
   var originController = TextEditingController();
   var destController = TextEditingController();
   var truckController = TextEditingController();
@@ -41,6 +45,28 @@ class _CreatePageState extends State<CreatePage> {
   List<AddressResult> originSuggestions = [];
   List<AddressResult> destSuggestions = [];
   List<String> trucksSuggestions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.eventItem != null) {
+      titleController.text = widget.eventItem?.title ?? "";
+      priceController.text = widget.eventItem?.price ?? "";
+      weightController.text = widget.eventItem?.weight ?? "";
+      originController.text = widget.eventItem?.originAddress ?? "";
+      destController.text = widget.eventItem?.destinationAddress ?? "";
+      truckController.text = widget.eventItem?.truckType ?? "";
+      selectedOrigin = AddressResult(
+          name: widget.eventItem?.originAddress,
+          lat: widget.eventItem?.originLat,
+          lng: widget.eventItem?.originLong);
+      selectedDest = AddressResult(
+          name: widget.eventItem?.destinationAddress,
+          lat: widget.eventItem?.destinationLat,
+          lng: widget.eventItem?.destinationLong);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +99,8 @@ class _CreatePageState extends State<CreatePage> {
                 '1'
                     .toText(color: Colors.black38, fontSize: 24, bold: true)
                     .pOnly(left: 10),
-                buildTextFormField('פרטי הובלה', titleController, pinLabel: false)
+                buildTextFormField('פרטי הובלה', titleController,
+                        pinLabel: false)
                     .expanded(flex: 75),
                 const SizedBox(width: 10),
                 buildTextFormField(
@@ -100,7 +127,15 @@ class _CreatePageState extends State<CreatePage> {
                     originSuggestions = await searchAddress(value) ?? [];
                     setState(() {});
                   },
-                ).expanded(),
+                ).expanded(flex: 75),
+                const SizedBox(width: 10),
+                buildTextFormField(
+                  'משקל',
+                  weightController,
+                  pinLabel: false,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {},
+                ).expanded(flex: 25),
               ],
             ),
             Column(
@@ -167,8 +202,8 @@ class _CreatePageState extends State<CreatePage> {
                 '4'
                     .toText(color: Colors.black38, fontSize: 24, bold: true)
                     .pOnly(left: 10),
-                buildTextFormField('סוג משאית', truckController, pinLabel: false,
-                    onChanged: (val) {
+                buildTextFormField('סוג משאית', truckController,
+                    pinLabel: false, onChanged: (val) {
                   trucksSuggestions =
                       trucks.where((truck) => truck.contains(val)).toList();
 
@@ -231,13 +266,20 @@ class _CreatePageState extends State<CreatePage> {
       return;
     }
 
+    if (weightController.text.isEmpty) {
+      errText = '2. נא הזן משקל הובלה';
+      setState(() {});
+      return;
+    }
+
     if (destController.text.isEmpty || selectedDest == null) {
       errText = '3. בחר כתובת מוצא';
       setState(() {});
       return;
     }
 
-    if (truckController.text.isEmpty || !(trucks.contains(truckController.text))) {
+    if (truckController.text.isEmpty ||
+        !(trucks.contains(truckController.text))) {
       errText = '4. בחר סוג משאית';
       setState(() {});
       return;
@@ -251,13 +293,15 @@ class _CreatePageState extends State<CreatePage> {
       title: titleController.text,
       createdAt: DateTime.now(),
       price: priceController.text,
+      weight: weightController.text,
       truckType: truckController.text,
       originLat: selectedOrigin?.lat,
       originLong: selectedOrigin?.lng,
       originAddress: selectedOrigin?.name.toString().replaceAll(', ישראל', ''),
       destinationLat: selectedDest?.lat,
       destinationLong: selectedDest?.lng,
-      destinationAddress: selectedDest?.name.toString().replaceAll(', ישראל', ''),
+      destinationAddress:
+          selectedDest?.name.toString().replaceAll(', ישראל', ''),
     );
     //
     print('newEvent.toJson() ${newEvent.toJson()}');
@@ -284,7 +328,8 @@ class _CreatePageState extends State<CreatePage> {
   }
 }
 
-InputDecoration fieldInputDeco(String? labelText, String? hintText, bool pinLabel) {
+InputDecoration fieldInputDeco(
+    String? labelText, String? hintText, bool pinLabel) {
   return InputDecoration(
     floatingLabelBehavior: pinLabel ? FloatingLabelBehavior.always : null,
     contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
@@ -295,7 +340,8 @@ InputDecoration fieldInputDeco(String? labelText, String? hintText, bool pinLabe
             color: Colors.black.withOpacity(0.70),
             fontWeight: FontWeight.bold,
             fontSize: 13)),
-    hintStyle: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.black54)),
+    hintStyle:
+        GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.black54)),
     fillColor: Colors.black12,
     // filled: !enabled,
     disabledBorder: fieldDisableDeco,
@@ -328,7 +374,8 @@ Widget buildTextFormField(
     onChanged: onChanged,
     textDirection: TextDirection.rtl,
     style: GoogleFonts.openSans(
-        textStyle: TextStyle(color: Colors.black.withOpacity(0.70), fontSize: 14)),
+        textStyle:
+            TextStyle(color: Colors.black.withOpacity(0.70), fontSize: 14)),
     decoration: fieldInputDeco(labelText, hintText, pinLabel),
   );
 }

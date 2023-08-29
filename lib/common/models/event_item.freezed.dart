@@ -35,6 +35,7 @@ mixin _$EventItem {
   String? get destinationLong => throw _privateConstructorUsedError;
   String? get destinationAddress => throw _privateConstructorUsedError;
   String? get price => throw _privateConstructorUsedError;
+  String? get weight => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +60,8 @@ abstract class $EventItemCopyWith<$Res> {
       String? destinationLat,
       String? destinationLong,
       String? destinationAddress,
-      String? price});
+      String? price,
+      String? weight});
 }
 
 /// @nodoc
@@ -87,6 +89,7 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? destinationLong = freezed,
     Object? destinationAddress = freezed,
     Object? price = freezed,
+    Object? weight = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -137,6 +140,10 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as String?,
+      weight: freezed == weight
+          ? _value.weight
+          : weight // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -160,7 +167,8 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
       String? destinationLat,
       String? destinationLong,
       String? destinationAddress,
-      String? price});
+      String? price,
+      String? weight});
 }
 
 /// @nodoc
@@ -186,6 +194,7 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? destinationLong = freezed,
     Object? destinationAddress = freezed,
     Object? price = freezed,
+    Object? weight = freezed,
   }) {
     return _then(_$_EventItem(
       id: freezed == id
@@ -236,6 +245,10 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as String?,
+      weight: freezed == weight
+          ? _value.weight
+          : weight // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -256,7 +269,8 @@ class _$_EventItem implements _EventItem {
       this.destinationLat,
       this.destinationLong,
       this.destinationAddress,
-      this.price});
+      this.price,
+      this.weight});
 
   factory _$_EventItem.fromJson(Map<String, dynamic> json) =>
       _$$_EventItemFromJson(json);
@@ -288,10 +302,12 @@ class _$_EventItem implements _EventItem {
   final String? destinationAddress;
   @override
   final String? price;
+  @override
+  final String? weight;
 
   @override
   String toString() {
-    return 'EventItem(id: $id, title: $title, createdAt: $createdAt, distanceFromUser: $distanceFromUser, truckType: $truckType, originLat: $originLat, originLong: $originLong, originAddress: $originAddress, destinationLat: $destinationLat, destinationLong: $destinationLong, destinationAddress: $destinationAddress, price: $price)';
+    return 'EventItem(id: $id, title: $title, createdAt: $createdAt, distanceFromUser: $distanceFromUser, truckType: $truckType, originLat: $originLat, originLong: $originLong, originAddress: $originAddress, destinationLat: $destinationLat, destinationLong: $destinationLong, destinationAddress: $destinationAddress, price: $price, weight: $weight)';
   }
 
   @override
@@ -319,7 +335,8 @@ class _$_EventItem implements _EventItem {
                 other.destinationLong == destinationLong) &&
             (identical(other.destinationAddress, destinationAddress) ||
                 other.destinationAddress == destinationAddress) &&
-            (identical(other.price, price) || other.price == price));
+            (identical(other.price, price) || other.price == price) &&
+            (identical(other.weight, weight) || other.weight == weight));
   }
 
   @JsonKey(ignore: true)
@@ -337,7 +354,8 @@ class _$_EventItem implements _EventItem {
       destinationLat,
       destinationLong,
       destinationAddress,
-      price);
+      price,
+      weight);
 
   @JsonKey(ignore: true)
   @override
@@ -366,7 +384,8 @@ abstract class _EventItem implements EventItem {
       final String? destinationLat,
       final String? destinationLong,
       final String? destinationAddress,
-      final String? price}) = _$_EventItem;
+      final String? price,
+      final String? weight}) = _$_EventItem;
 
   factory _EventItem.fromJson(Map<String, dynamic> json) =
       _$_EventItem.fromJson;
@@ -396,6 +415,8 @@ abstract class _EventItem implements EventItem {
   String? get destinationAddress;
   @override
   String? get price;
+  @override
+  String? get weight;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemCopyWith<_$_EventItem> get copyWith =>

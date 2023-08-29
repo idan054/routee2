@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('appVersion: $appVersion');
     print('userAge: $userAge');
     print('userAddress: $userAddress');
+    //
 
     if (userAge == null || userAddress == null) {
       _onUpdateUserInfo(null);

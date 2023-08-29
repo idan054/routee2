@@ -90,8 +90,9 @@ class _DashboardState extends State<Dashboard> {
 
     final queryAdminPass = queryParams['admin_password'].toString();
     var box = Hive.box('uniBox');
-    adminModeV2 =
-        box.get('adminMode') ?? kDebugMode || (queryAdminPass == '180218');
+    if(!kDebugMode)
+     adminModeV2 =
+        box.get('adminMode') ?? (queryAdminPass == '180218');
     if (adminModeV2) box.put('adminMode', true);
     print('adminModeV2 $adminModeV2');
   }

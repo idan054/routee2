@@ -118,7 +118,7 @@ class _DashboardState extends State<Dashboard> {
               if (size.maxWidth < 600) {
                 return ListView(
                   children: [
-                    if (adminModeV2) webWidgets[2],
+                    webWidgets[2],
                     webWidgets[1],
                     webWidgets[0],
                   ],
@@ -130,7 +130,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     webWidgets[0].expanded(flex: 60),
                     webWidgets[1],
-                    if (adminModeV2) webWidgets[2].expanded(flex: 40),
+                    webWidgets[2].expanded(flex: 40),
                   ],
                 ).px(width < 1000 ? 0 : width * 0.15);
               }

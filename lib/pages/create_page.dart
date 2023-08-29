@@ -300,6 +300,7 @@ class _CreatePageState extends State<CreatePage> {
       originAddress: selectedOrigin?.name.toString().replaceAll(', ישראל', ''),
       destinationLat: selectedDest?.lat,
       destinationLong: selectedDest?.lng,
+      status: adminModeV2 ? "Approved" : "Pending",
       destinationAddress:
           selectedDest?.name.toString().replaceAll(', ישראל', ''),
     );
@@ -317,7 +318,9 @@ class _CreatePageState extends State<CreatePage> {
 
     flushBar(
       context,
-      'ההובלה נוספת לאפליקצייה בהצלחה!',
+      adminModeV2
+          ? 'ההובלה נוספת לאפליקצייה בהצלחה!'
+          : 'ההובלה ממתינה לאישור ותופיע בקרוב!',
       withShadow: true,
       isShimmer: true,
       duration: 4,

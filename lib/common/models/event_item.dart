@@ -26,6 +26,7 @@ class EventItem with _$EventItem {
     String? destinationAddress,
     String? price,
     String? weight,
+    String? status,
   }) = _EventItem;
 
   factory EventItem.fromJson(Map<String, dynamic> json) => _$EventItemFromJson(json);

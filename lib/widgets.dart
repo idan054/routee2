@@ -88,16 +88,35 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
           // if (showDeleteOption) ...[
           Column(
             children: [
-              Icons.edit.icon(color: Colors.grey).py(10).px(10).onTap(() {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Dashboard(
-                            eventItem: eventItem,
-                          )),
-                );
-              }),
               if (kIsWeb && adminModeV2) ...[
+                eventItem.status == "Pending"
+                    ? Icons.done
+                        .icon(color: Colors.green)
+                        .py(10)
+                        .px(10)
+                        .onTap(() async {
+                        await Database.updateFirestore(
+                          collection: 'events',
+                          docName: eventItem.id,
+                          toJson:
+                              eventItem.copyWith(status: "Approved").toJson(),
+                        );
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Dashboard()),
+                        );
+                      })
+                    : const SizedBox(),
+                Icons.edit.icon(color: Colors.grey).py(10).px(10).onTap(() {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Dashboard(
+                              eventItem: eventItem,
+                            )),
+                  );
+                }),
                 Icons.delete_forever_rounded
                     .icon(color: Colors.red.shade300)
                     .py(10)
@@ -182,7 +201,8 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                     print('START: logEvent()');
 
                     //> variables can be String / numbers ONLY
-                    var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
+                    var createdAt =
+                        timeFormat(eventItem.createdAt!, withDay: true);
                     // var analyticsItem = {
                     //   'id': 'eventItem.id',
                     //   'title': 'eventItem.title',
@@ -526,8 +546,8 @@ void openWhatsapp(BuildContext context,
         whatsappURLIos,
       ));
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Whatsapp not installed")));
     }
   }
 }

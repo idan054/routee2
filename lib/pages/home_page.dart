@@ -146,86 +146,108 @@ class _MyHomePageState extends State<MyHomePage> {
         : _body();
   }
 
-  Widget _body() => RefreshIndicator(
-        color: Colors.purple,
-        backgroundColor: bgColorDark,
-        onRefresh: () async => fetchEvents(),
-        child: Stack(
-          children: [
-            ListView(
-              shrinkWrap: true,
-              // physics: const NeverScrollableScrollPhysics(),
-              physics: const ScrollPhysics(),
-              children: [
-                const SizedBox(height: 15),
-                // buildHomeTitle(context, isShowAdminRequest),
-                // const SizedBox(height: 15),
-                // buildTagsRow(),
-                events.isEmpty && !splashLoad
-                    ? 'אין קבוצות לגלאי ${user?.age} ב${user?.address?.name}. צור קבוצה חדשה!'
-                        .toText()
-                        .center
-                        .pOnly(top: 200)
-                    : ListView.builder(
-                        // reverse: true,
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                        itemCount: events.length,
-                        itemBuilder: (context, i) {
-                          // not needed
-                          // bool isShowTitle = (i ~/ 3) == (i / 3); // AKA Every 4 posts.
+  Widget _body() {
+    if (!adminModeV2) {
+      events.removeWhere((element) => element.status == "Pending");
+    } else {
+      // events.sort((a, b) {
+      //   return a.status.compareTo(b.status!);
+      // });
 
-                          // needed
-                          bool isAddTitle = true;
-                          var categoryTitle = events[i].truckType;
-                          if (titlesExist.contains(categoryTitle)) {
-                            isAddTitle = false;
-                          } else {
-                            titlesExist.add('$categoryTitle');
-                          }
+      events.sort((a, b) {
+        if (b.status == "Approved" && a.status == "Pending") {
+          return -1;
+        } else if (b.status == "Pending" && a.status == "Approved") {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      // events.removeWhere((element) => element.status == "Approved");
+    }
+    return RefreshIndicator(
+      color: Colors.purple,
+      backgroundColor: bgColorDark,
+      onRefresh: () async => fetchEvents(),
+      child: Stack(
+        children: [
+          ListView(
+            shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
+            physics: const ScrollPhysics(),
+            children: [
+              const SizedBox(height: 15),
+              // buildHomeTitle(context, isShowAdminRequest),
+              // const SizedBox(height: 15),
+              // buildTagsRow(),
+              events.isEmpty && !splashLoad
+                  ? 'אין קבוצות לגלאי ${user?.age} ב${user?.address?.name}. צור קבוצה חדשה!'
+                      .toText()
+                      .center
+                      .pOnly(top: 200)
+                  : ListView.builder(
+                      // reverse: true,
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      itemCount: events.length,
+                      itemBuilder: (context, i) {
+                        // not needed
+                        // bool isShowTitle = (i ~/ 3) == (i / 3); // AKA Every 4 posts.
 
-                          return Column(
-                            children: [
-                              if (isAddTitle) buildCategoryTitle(events[i]),
-                              buildEventCard(context, events[i], user!).px(5),
-                            ],
-                          );
-                        },
-                      ),
-                const SizedBox(height: 10),
-                if (events.isEmpty && !splashLoad) const SizedBox(height: 300),
-                // if (!splashLoad)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // 'צור קשר'
-                    //     .toText(color: Colors.grey, fontSize: 12, underline: true)
-                    //     .px(10)
-                    //     .py(5)
-                    //     .onTap(() {
-                    //   openWhatsapp(context,
-                    //       text: 'היי, הגעתי אלייך מהאתר Around',
-                    //       whatsapp: '+972584770076');
-                    // }).center,
-                    // const SizedBox(width: 10),
-                    'גרסא $appVersion'.toText(color: Colors.grey, fontSize: 12).center,
-                  ],
-                ),
-                const SizedBox(height: 5),
-              ],
-            ),
-            if (splashLoad)
-              Card(
-                      color: bgColorDark,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: const CircularProgressIndicator().pad(15))
-                  .sizedBox(70, 70)
-                  .py(75)
-                  .center,
-          ],
-        ),
-      );
+                        // needed
+                        bool isAddTitle = true;
+                        var categoryTitle = events[i].truckType;
+                        if (titlesExist.contains(categoryTitle)) {
+                          isAddTitle = false;
+                        } else {
+                          titlesExist.add('$categoryTitle');
+                        }
+
+                        return Column(
+                          children: [
+                            if (isAddTitle) buildCategoryTitle(events[i]),
+                            buildEventCard(context, events[i], user!).px(5),
+                          ],
+                        );
+                      },
+                    ),
+              const SizedBox(height: 10),
+              if (events.isEmpty && !splashLoad) const SizedBox(height: 300),
+              // if (!splashLoad)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 'צור קשר'
+                  //     .toText(color: Colors.grey, fontSize: 12, underline: true)
+                  //     .px(10)
+                  //     .py(5)
+                  //     .onTap(() {
+                  //   openWhatsapp(context,
+                  //       text: 'היי, הגעתי אלייך מהאתר Around',
+                  //       whatsapp: '+972584770076');
+                  // }).center,
+                  // const SizedBox(width: 10),
+                  'גרסא $appVersion'
+                      .toText(color: Colors.grey, fontSize: 12)
+                      .center,
+                ],
+              ),
+              const SizedBox(height: 5),
+            ],
+          ),
+          if (splashLoad)
+            Card(
+                    color: bgColorDark,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: const CircularProgressIndicator().pad(15))
+                .sizedBox(70, 70)
+                .py(75)
+                .center,
+        ],
+      ),
+    );
+  }
 
   Column buildHomeTitle(BuildContext context, bool showAdmin) {
     // 'קבוצות שהזמינו אותך להצטרף אליהם (:'.toText(fontSize: 14, color: Colors.grey, bold: true).px(15),
@@ -334,14 +356,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 labelPadding: const EdgeInsets.symmetric(horizontal: 8),
                 // labelPadding: const EdgeInsets.only(left: 7.5),
                 // avatar:
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
                 label: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CircleAvatar(backgroundColor: cat.categoryColor, radius: 3),
                     const SizedBox(width: 6),
-                    '${cat.categoryName}'
-                        .toText(fontSize: 13, medium: false, color: Colors.black),
+                    '${cat.categoryName}'.toText(
+                        fontSize: 13, medium: false, color: Colors.black),
                   ],
                 ),
                 // side: BorderSide(color: cat.categoryColor!, width: 2),
@@ -353,7 +376,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   // sValue = selected ? i : null;
                   selectedCategory = cat;
                   // setState(() {});
-                  _handleGoToCategory(null, null, eventCategory: selectedCategory);
+                  _handleGoToCategory(null, null,
+                      eventCategory: selectedCategory);
                 },
               )
                   .sizedBox(null, 30)
@@ -374,8 +398,9 @@ class _MyHomePageState extends State<MyHomePage> {
     //     : categoryColors[Random().nextInt(categoryColors.length)];
 
     // needed
-    var currTruck = trucks.firstWhereOrNull((truck) => truck == eventItem.truckType) ??
-        eventItem.truckType;
+    var currTruck =
+        trucks.firstWhereOrNull((truck) => truck == eventItem.truckType) ??
+            eventItem.truckType;
 
     return Row(
       children: [
@@ -402,7 +427,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ;
   }
 
-  void _handleGoToCategory(int? i, Color? color, {EventCategory? eventCategory}) {
+  void _handleGoToCategory(int? i, Color? color,
+      {EventCategory? eventCategory}) {
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(
@@ -453,7 +479,8 @@ Widget logo(BuildContext context) {
     children: [
       Assets.routee.image(height: 45).px(1).offset(0, 1),
       const SizedBox(width: 5),
-      if (adminModeV2) '(פאנל ניהול)'.toText(fontSize: 14, medium: true).offset(0, 1),
+      if (adminModeV2)
+        '(פאנל ניהול)'.toText(fontSize: 14, medium: true).offset(0, 1),
       const SizedBox(width: 5),
     ],
   ).offset(-50, 0).ltr;

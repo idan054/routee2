@@ -20,16 +20,14 @@ class CreatePage extends StatefulWidget {
   final bool showAppBar;
   final EventItem? eventItem;
 
-  const CreatePage({this.showAppBar = true, this.eventItem, Key? key})
-      : super(key: key);
+  const CreatePage({this.showAppBar = true, this.eventItem, Key? key}) : super(key: key);
 
   @override
   State<CreatePage> createState() => _CreatePageState();
 }
 
 class _CreatePageState extends State<CreatePage> {
-  RangeValues _currentRangeValues =
-      const RangeValues(10, 55); // This NOT set Min & Max
+  RangeValues _currentRangeValues = const RangeValues(10, 55); // This NOT set Min & Max
 
   // endregion ageList
   var titleController = TextEditingController();
@@ -99,9 +97,11 @@ class _CreatePageState extends State<CreatePage> {
                 '1'
                     .toText(color: Colors.black38, fontSize: 24, bold: true)
                     .pOnly(left: 10),
-                buildTextFormField('פרטי הובלה', titleController,
-                        pinLabel: false)
-                    .expanded(flex: 75),
+                buildTextFormField(
+                  'פרטי הובלה',
+                  titleController,
+                  pinLabel: false,
+                ).expanded(flex: 75),
                 const SizedBox(width: 10),
                 buildTextFormField(
                   'מחיר ₪',
@@ -202,8 +202,8 @@ class _CreatePageState extends State<CreatePage> {
                 '4'
                     .toText(color: Colors.black38, fontSize: 24, bold: true)
                     .pOnly(left: 10),
-                buildTextFormField('סוג משאית', truckController,
-                    pinLabel: false, onChanged: (val) {
+                buildTextFormField('סוג משאית', truckController, pinLabel: false,
+                    onChanged: (val) {
                   trucksSuggestions =
                       trucks.where((truck) => truck.contains(val)).toList();
 
@@ -278,8 +278,7 @@ class _CreatePageState extends State<CreatePage> {
       return;
     }
 
-    if (truckController.text.isEmpty ||
-        !(trucks.contains(truckController.text))) {
+    if (truckController.text.isEmpty || !(trucks.contains(truckController.text))) {
       errText = '4. בחר סוג משאית';
       setState(() {});
       return;
@@ -301,8 +300,7 @@ class _CreatePageState extends State<CreatePage> {
       destinationLat: selectedDest?.lat,
       destinationLong: selectedDest?.lng,
       status: adminModeV2 ? "Approved" : "Pending",
-      destinationAddress:
-          selectedDest?.name.toString().replaceAll(', ישראל', ''),
+      destinationAddress: selectedDest?.name.toString().replaceAll(', ישראל', ''),
     );
     //
     print('newEvent.toJson() ${newEvent.toJson()}');
@@ -331,8 +329,7 @@ class _CreatePageState extends State<CreatePage> {
   }
 }
 
-InputDecoration fieldInputDeco(
-    String? labelText, String? hintText, bool pinLabel) {
+InputDecoration fieldInputDeco(String? labelText, String? hintText, bool pinLabel) {
   return InputDecoration(
     floatingLabelBehavior: pinLabel ? FloatingLabelBehavior.always : null,
     contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
@@ -343,8 +340,7 @@ InputDecoration fieldInputDeco(
             color: Colors.black.withOpacity(0.70),
             fontWeight: FontWeight.bold,
             fontSize: 13)),
-    hintStyle:
-        GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.black54)),
+    hintStyle: GoogleFonts.openSans(textStyle: const TextStyle(color: Colors.black54)),
     fillColor: Colors.black12,
     // filled: !enabled,
     disabledBorder: fieldDisableDeco,
@@ -361,6 +357,7 @@ Widget buildTextFormField(
   ValueChanged<String>? onChanged,
   TextInputType? keyboardType,
   FocusNode? focusNode,
+  String? Function(String?)? validator,
 }) {
   return TextFormField(
     // selectionControls:  FlutterSelectionControls(toolBarItems: [
@@ -370,6 +367,7 @@ Widget buildTextFormField(
     //   ToolBarItem(item: const Icon(Icons.paste), itemControl: ToolBarItemControl.paste),
     //
     // ]),
+    validator: validator,
     focusNode: focusNode,
     keyboardType: keyboardType,
     enabled: enabled,
@@ -377,8 +375,7 @@ Widget buildTextFormField(
     onChanged: onChanged,
     textDirection: TextDirection.rtl,
     style: GoogleFonts.openSans(
-        textStyle:
-            TextStyle(color: Colors.black.withOpacity(0.70), fontSize: 14)),
+        textStyle: TextStyle(color: Colors.black.withOpacity(0.70), fontSize: 14)),
     decoration: fieldInputDeco(labelText, hintText, pinLabel),
   );
 }

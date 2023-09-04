@@ -19,6 +19,15 @@ import 'common/constants.dart';
 import 'common/models/event_item.dart';
 import 'main.dart';
 
+Widget myOutlinedButton(String title, {VoidCallback? onPressed}) {
+  return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+          side: BorderSide(color: Colors.purple[500]!, width: 1.5),
+          shape: 5.roundedShape),
+      child: title.toText(bold: true, color: Colors.purple[500]!).px(20).py(10));
+}
+
 Widget flushBar(BuildContext context, String text,
     {Color bgColor = Colors.blueGrey,
     Color textColor = Colors.white,
@@ -50,15 +59,13 @@ Widget flushBar(BuildContext context, String text,
   )..show(context);
 }
 
-OutlinedButton buildModeButton(bool isShowLastedEvents,
-    {VoidCallback? onPressed}) {
+OutlinedButton buildModeButton(bool isShowLastedEvents, {VoidCallback? onPressed}) {
   return OutlinedButton.icon(
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.white12,
         // side: const BorderSide(width: 2.0, color: Colors.white),
         // foregroundColor: AppColors.darkOutline,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
       icon: (isShowLastedEvents ? Icons.schedule : Icons.place_outlined)
           .icon(color: Colors.white, size: 20),
@@ -90,21 +97,15 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
             children: [
               if (kIsWeb && adminModeV2) ...[
                 eventItem.status == "Pending"
-                    ? Icons.done
-                        .icon(color: Colors.green)
-                        .py(10)
-                        .px(10)
-                        .onTap(() async {
+                    ? Icons.done.icon(color: Colors.green).py(10).px(10).onTap(() async {
                         await Database.updateFirestore(
                           collection: 'events',
                           docName: eventItem.id,
-                          toJson:
-                              eventItem.copyWith(status: "Approved").toJson(),
+                          toJson: eventItem.copyWith(status: "Approved").toJson(),
                         );
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const Dashboard()),
+                          MaterialPageRoute(builder: (context) => const Dashboard()),
                         );
                       })
                     : const SizedBox(),
@@ -122,8 +123,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                     .py(10)
                     .px(10)
                     .onTap(() {
-                  Database.deleteDoc(
-                      collection: 'events', docName: eventItem.id);
+                  Database.deleteDoc(collection: 'events', docName: eventItem.id);
 
                   flushBar(
                     context,
@@ -201,8 +201,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                     print('START: logEvent()');
 
                     //> variables can be String / numbers ONLY
-                    var createdAt =
-                        timeFormat(eventItem.createdAt!, withDay: true);
+                    var createdAt = timeFormat(eventItem.createdAt!, withDay: true);
                     // var analyticsItem = {
                     //   'id': 'eventItem.id',
                     //   'title': 'eventItem.title',
@@ -241,8 +240,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                 // color: bgColorDark,
                 elevation: 2,
                 // elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
                 child: Column(
                   children: [
                     ListTile(
@@ -292,8 +290,7 @@ Widget buildEventCard(BuildContext context, EventItem eventItem, UserData user,
                         const SizedBox(width: 15),
                         if (!distanceMode) buildWhatsappJoin(subSize),
                         const Spacer(),
-                        buildDestinationText(eventItem, subSize, distanceMode)
-                            .py(3),
+                        buildDestinationText(eventItem, subSize, distanceMode).py(3),
                       ],
                       // ).pOnly(right: 75, top: 2),
                     ).pOnly(right: 15, top: 2),
@@ -334,8 +331,7 @@ Widget buildInfo(EventItem eventItem, double subSize, bool distanceMode) {
   );
 }
 
-Row buildDestinationText(
-    EventItem eventItem, double subSize, bool distanceMode) {
+Row buildDestinationText(EventItem eventItem, double subSize, bool distanceMode) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     mainAxisSize: MainAxisSize.min,
@@ -345,14 +341,12 @@ Row buildDestinationText(
           .toText(color: Colors.grey, fontSize: subSize)
           .sizedBox(200, null),
       const SizedBox(width: 3),
-      Icons.flag
-          .icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
+      Icons.flag.icon(color: Colors.grey, size: distanceMode ? subSize + 3 : subSize),
     ],
   );
 }
 
-Widget buildOriginAddressText(
-    EventItem eventItem, double subSize, bool distanceMode) {
+Widget buildOriginAddressText(EventItem eventItem, double subSize, bool distanceMode) {
   // var diff = DateTime.now().difference(eventItem.createdAt!).inDays;
   // var ago = '';
   // if (diff == 0) ago = 'נוסף היום!';
@@ -418,8 +412,7 @@ Widget buildShareButton(
               color: Colors.purple,
               strokeWidth: 2,
             ).sizedBox(10, 10)
-          : Icons.share
-              .icon(color: Colors.black38, size: subSize + 1), // Classic share
+          : Icons.share.icon(color: Colors.black38, size: subSize + 1), // Classic share
     ).pad(0).onTap(() async {
       isLoading = true;
       stfState(() {});
@@ -460,8 +453,7 @@ Widget buildShareButton(
         // });
       } on Exception catch (e, s) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-                'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
+            content: 'E: $e \n s: $s'.toText(color: Colors.white, maxLines: 10)));
         print(s);
       }
     });
@@ -492,9 +484,9 @@ Widget buildShareButton(
 }
 
 String? timeFormat(DateTime timestamp, {bool withDay = true}) {
-  var time = intl.DateFormat(
-          withDay ? 'EEEE ב ' 'HH:mm' ' (dd/MM)' : 'dd/MM ' 'ב HH:mm ', 'he')
-      .format(timestamp);
+  var time =
+      intl.DateFormat(withDay ? 'EEEE ב ' 'HH:mm' ' (dd/MM)' : 'dd/MM ' 'ב HH:mm ', 'he')
+          .format(timestamp);
 
   if (timestamp.day == DateTime.now().day + 1 &&
       timestamp.month == DateTime.now().month &&
@@ -546,8 +538,8 @@ void openWhatsapp(BuildContext context,
         whatsappURLIos,
       ));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Whatsapp not installed")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Whatsapp not installed")));
     }
   }
 }

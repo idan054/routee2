@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -14,6 +14,7 @@ import 'package:routee/common/models/event_item.dart';
 import 'package:routee/common/widget_ext.dart';
 import 'package:routee/pages/create_page.dart';
 import 'package:routee/pages/home_page.dart';
+import 'package:routee/pages/login_page.dart';
 
 import 'common/database.dart';
 import 'firebase_options.dart';
@@ -23,8 +24,8 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // FirebaseAnalytics.instance.logAppOpen();
-  mixpanel = await Mixpanel.init('5664c39fdf1da3a6f3e3ff3d716ebcfc',
-      trackAutomaticEvents: true);
+  mixpanel =
+      await Mixpanel.init('5664c39fdf1da3a6f3e3ff3d716ebcfc', trackAutomaticEvents: true);
 
   // final remoteConfig = FirebaseRemoteConfig.instance;
   // await remoteConfig.ensureInitialized();
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
 
 class Dashboard extends StatefulWidget {
   final EventItem? eventItem;
+
   const Dashboard({Key? key, this.eventItem}) : super(key: key);
 
   @override
@@ -79,21 +81,21 @@ class _DashboardState extends State<Dashboard> {
   void _isAdminMode() async {
     print('START: _isAdminMode()');
 
-    String hash = html.window.location.href.split('?').last;
-    print('hash $hash');
-    Uri uri = Uri.parse('http://Whatever/?$hash');
-    Map<String?, String?> queryParams = uri.queryParameters;
-    print('queryParams ${queryParams}');
-
-    // final remoteConfig = FirebaseRemoteConfig.instance;
-    // final adminPass = remoteConfig.getString('admin_password');
-
-    final queryAdminPass = queryParams['admin_password'].toString();
-    var box = Hive.box('uniBox');
-    adminModeV2 =
-        box.get('adminMode') ?? kDebugMode || (queryAdminPass == '180218');
-    if (adminModeV2) box.put('adminMode', true);
-    print('adminModeV2 $adminModeV2');
+    // /// todo Replace below
+    // String hash = html.window.location.href.split('?').last;
+    // print('hash $hash');
+    // Uri uri = Uri.parse('http://Whatever/?$hash');
+    // Map<String?, String?> queryParams = uri.queryParameters;
+    // print('queryParams $queryParams');
+    //
+    // // final remoteConfig = FirebaseRemoteConfig.instance;
+    // // final adminPass = remoteConfig.getString('admin_password');
+    //
+    // final queryAdminPass = queryParams['admin_password'].toString();
+    // var box = Hive.box('uniBox').get('isLogged');
+    // adminModeV2 = box.get('adminMode') ?? kDebugMode || (queryAdminPass == '180218');
+    // if (adminModeV2) box.put('adminMode', true);
+    // print('adminModeV2 $adminModeV2');
   }
 
   @override
@@ -109,7 +111,7 @@ class _DashboardState extends State<Dashboard> {
 
     return kIsWeb
 
-        // WEB MODE:
+        //~ WEB MODE:
         ? Scaffold(
             backgroundColor: bgColor,
             appBar: buildHomeAppBar(context),
@@ -137,7 +139,9 @@ class _DashboardState extends State<Dashboard> {
             }),
           )
 
-        // APP MODE:
-        : const MyHomePage();
+        //~ APP MODE:
+        : (Hive.box('uniBox').get('isLogged') ?? false)
+            ? const MyHomePage()
+            : const LoginPage();
   }
 }
